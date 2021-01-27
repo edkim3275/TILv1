@@ -778,4 +778,485 @@ p1([1, 2, 3, 4, 5]) # 15
     # 이 조건을 걸어주면 오로지 내 파일을 실행하고 남의 파일은 가져오긴하나 직접실행했을때 나오는건 나오지 않는다.
     ```
 
+- git 사용
+
+  - ```python
+    #Total 117 (delta 2), reused 0 (delta 0), pack-reused 0
+    #remote: Resolving deltas: 100% (2/2), done.
+    #To https://github.com/edkim3275/TIL.git
+    # * [new branch]      master -> maste
+    # bash터미널에 이런식으로 나온다면 업로드가 된것 
+    ```
+
+  - add commit push까지 왔다
+
+    ![image-20210126153016041](04_dailynote.assets/image-20210126153016041.png)
+
+    이부분에서 21.01.26... 이부분이 commit -m '메시지'했던 메시지가 나온다.
+
+    해당 파일이 당시 커밋했던 부분이라는 의미
+
+  - stage에 올린 내용을 다시 내리고 싶다면?
+
+    ```python
+    git restore --staged <파일이름>
+    ```
+
+    스테이지에 내려온다고 내용이 없어지진않는다.
+
+  - 사진 찍은 것을 지우고 stage로 내린다?
+
+    ```python
+    git reset h # help줄임말인데 도움말 같은것들이 나옴
+    git reset 8f3239 #처럼 일부만 쳐주면 된다
+    ```
+
+  - 분장실 - 무대 - 사진첩이 있었는데 사진을 지우고, 무대를 지나서 기존의 분장이 남아있는상태
+
+    ![image-20210126154948995](04_dailynote.assets/image-20210126154948995.png)
+
+  - 그렇다면 분장실로 가는게 아니라 stage로 보내고 싶다면?
+
+    ```python
+    git reset --soft 33432fads
+    ```
+
+    ![image-20210126155058445](04_dailynote.assets/image-20210126155058445.png)
+
+    이와 같은 것
+
+  - 아예 과거로 돌아가고 싶다면??? (이건 위험위험위험)
+
+    ```python
+    git reset --hard 34235352
+    ```
+
+- 시뮬레이팅을 해봅시다.  ssafy컴퓨터에는 내 TIL이 없는데 그럼 어떡함?
+
+- origin이라는 말이 무엇일까
+  
 - 
+  
+- https://scribbletogether.com/joi
+
+- ![image-20210126162216696](04_dailynote.assets/image-20210126162216696.png)
+
+  branch 나누자 할때 그 기점을 복사하기 시작함
+
+  ![image-20210126162317593](04_dailynote.assets/image-20210126162317593.png)
+
+- 한번 합치자 할때이렇게 됨
+
+- ![image-20210126162456670](04_dailynote.assets/image-20210126162456670.png)
+  
+- 이처럼 하다가 망할 경우를 대비해서 master에서 branch를 뽑고 쭉 가다가 망하면 가지 잘라내고 하다가 잘되면 master와 합해준다.
+  
+- `git branch home-page` : 내가 가지 하나 만들겠습니다. 
+
+  ![image-20210126162731706](04_dailynote.assets/image-20210126162731706.png)
+
+  이러한 상태가 된다.
+
+  ![image-20210126162747033](04_dailynote.assets/image-20210126162747033.png)
+
+  가지를 쳐놓은 상태. 하지만 아직 점을 찍지는 않았음
+
+- `git branch` : master에 불들어옴. 지금있는 master 보여주세요
+
+- `git switch home-page`: 이제 가지 치고 점을 찍은 것!
+
+  - `git checkout master`: 이것도 위 말과 같은말
+
+- `mkdir pages`: home-page에서 pages 폴더생성
+
+- `touch pages/home.md`: pages폴더에서 home.md파일 생성
+
+- `git add .`  스테이징
+
+- `git commit -m '1 . add home.md'` 커밋
+
+- `git switch master` : master로 다시 돌아가보자!
+
+  - master 상태로 다시 돌아간다.
+
+  - 이것들을 표현해주는 것이. 내가 지금 어디있냐를 말해주는 것이 **HEAD**
+
+  - 앞으로 HEAD는 '나'라고 보면된다.
+
+    ![image-20210126163342034](04_dailynote.assets/image-20210126163342034.png)
+
+    이러한 상태가 된다.
+
+- 여기서 수정 후 다시 커밋을 하면
+
+  ![image-20210126163659415](04_dailynote.assets/image-20210126163659415.png)
+
+- 이제 중요 이 모든상황들을 master 상황으로 돌아가서 합쳐줘야한다.
+
+  무엇을 병합이라고 할까
+
+  master에 있던지 home-page에 있던지 같은 상황으로 만드는 것
+
+  ![image-20210126164051348](04_dailynote.assets/image-20210126164051348.png)
+
+  이 상활일까???? Nope 
+
+  ![image-20210126164154696](04_dailynote.assets/image-20210126164154696.png)
+
+  만들어진 branch를 따라서 간다(꽃길만 걷는다.)
+
+  이 명령어는
+
+  `git merge home-page`: 이는 항상 master기준으로 해야함!!!!!!!!!!!
+
+  ![image-20210126164405997](04_dailynote.assets/image-20210126164405997.png)
+
+  1. Fast-forward가 빠른 길로 왔다는 것
+
+- 끝난 branch는 삭제한다.
+
+- `git branch -d home-page`:home-page를 삭제
+
+  ![image-20210126164615401](04_dailynote.assets/image-20210126164615401.png)
+
+- `git switch -c contact-page` : 가지를 만들고 점도 찍는다! (생성 전환을 한번에 같이해주는 명령어)
+
+- ![image-20210126165738715](04_dailynote.assets/image-20210126165738715.png)
+
+  두갈래길이 된 경우
+
+  ![image-20210126165853616](04_dailynote.assets/image-20210126165853616.png)
+
+  fast_award와는 다는 경과가 나온다.
+
+  ![image-20210126170216028](04_dailynote.assets/image-20210126170216028.png)
+
+  이런상황이 두 개의 커밋을 합치는 커밋을 찍어주는 과정
+
+  ![image-20210126171542692](04_dailynote.assets/image-20210126171542692.png)
+
+  결국 지금까진 그림처럼 코드로 확인이 가능하다(이건 따로 교수님께서 커스텀하신 명령어로 보신 것)
+
+  `git reflog` log 짧게보기
+
+- 합치기 이전
+
+  ![image-20210126171903549](04_dailynote.assets/image-20210126171903549.png)
+
+  이 경우 딱 들어맞는 상황이라서 auto merge가 일어났던 것
+
+  하지만 이런 상황이 아니라면?? 딱 들어맞는 상황이 아니라면???
+
+- `git switch -c about-page` 새로 만들어 주고
+
+- `touch pages/about.md` md파일을 만들어본다
+
+- `it commit -m 'a-p 1. create about.md'`  커밋하고
+
+- 1.about 내용 한번 더 수정 해보고 2.home에 문자를 하나 더 넣어본다
+
+- 이 때 2가지 수정사항이 한번에 일어났다.
+
+- 이때 `git add .`으로 한번에 올려도 되지만
+
+- `git add pages/about.md`하나를 올리고 `git commit -m 'a-p 2. add h1'` 한 후에 `git add pages/home.md ``git commit -m 'a-p HOTFIX home.md'`이 과정으로 따로 올려도 된다 그렇다면 현재상황은
+
+  ![image-20210126172622310](04_dailynote.assets/image-20210126172622310.png)
+
+- 다시 원래 master로 돌아가서 home.md를 수정해본다.
+
+- 현재 상황에서 
+
+  ![image-20210126173013568](04_dailynote.assets/image-20210126173013568.png)
+
+  원한느 모습은 이런데
+
+- `git memrge about-page`merge해보고
+
+- `notepad pages/home.md` 통해서 메모장을 수정하고 저장
+
+- 일단 밑의 상황처럼master|MERGING 이 되고( 이것은 수정이 좀 필요하다는 의미)
+
+- ![image-20210126173622340](04_dailynote.assets/image-20210126173622340.png)
+
+  ![image-20210126173607828](04_dailynote.assets/image-20210126173607828.png)
+
+- 위에는 아직 커밋이 없다. 점이 안찍힘 수정을 모두 완료하고 나서?
+- `git commit -m 'merge conflict'
+- ![image-20210126173744150](04_dailynote.assets/image-20210126173744150.png)
+
+![image-20210126173805041](04_dailynote.assets/image-20210126173805041.png)
+
+![image-20210126173818520](04_dailynote.assets/image-20210126173818520.png)
+
+ `git branch -d about-page contact-page  ` 이제 모두 합했으면 가지들을 자른다.
+
+- 금일 이미지 정리
+
+  ![image-20210126183029575](04_dailynote.assets/image-20210126183029575.png)
+
+![image-20210126183100556](04_dailynote.assets/image-20210126183100556.png)
+
+## 200127 Wed
+
+### 오전
+
+```python
+my_lower('HI')  # 함수의 인자 'HI'
+'HI'.lower()  # 문자열을 소문자로 변형
+#S  +  V 형식으로 코드가 짜여짐
+
+sorted([3, 2, 1])
+[3, 2, 1].sort()
+#   S	+   V
+```
+
+- 지금까지는 절차 지향 프로그래밍
+
+  ![image-20210127091508858](04_dailynote.assets/image-20210127091508858.png)
+
+- 오늘 배우는 객체 지향 프로그래밍
+
+  ![image-20210127091529577](04_dailynote.assets/image-20210127091529577.png)
+
+- 용어
+
+  > `type`: 공통 속성을 가진 객체들의 분류(class)
+
+  > `class`: 객체들의 분류(class)를 정의할 때 쓰이는 키워드
+
+- `self` : 함수를 호출 할때(인스턴스의 메서드를 호출하면) 파이썬이 내부적으로 인스턴스 자신이 전달되도록 설계되어있다.
+
+  ![image-20210127094507410](04_dailynote.assets/image-20210127094507410.png)
+
+- 인스턴스 메서드
+  - 이ㅣㄴ스턴스가 생겨날 때 함수안에있는 로직들로 인스턴스의 값, 속성등이 조정이 됨
+
+- ![image-20210127095303463](04_dailynote.assets/image-20210127095303463.png)
+
+- ![image-20210127095342618](04_dailynote.assets/image-20210127095342618.png)
+
+- ![image-20210127095514646](04_dailynote.assets/image-20210127095514646.png)
+
+- 10시
+- ![image-20210127103953683](04_dailynote.assets/image-20210127103953683.png)
+
+![image-20210127104118741](04_dailynote.assets/image-20210127104118741.png)
+
+- 
+
+- ![image-20210127110410462](04_dailynote.assets/image-20210127110410462.png)
+  ![image-20210127110427856](04_dailynote.assets/image-20210127110427856.png)
+
+  - 클래스 자체(`cls`)와 그 속성에 접근할 필요가 있다면 **클래스 메서드**로 정의한다.
+  - 클래스와 클래스 속성에 접근할 필요가 없다면 **정적 메서드**로 정의한다.
+
+![image-20210127113052038](04_dailynote.assets/image-20210127113052038.png)
+
+### 오후
+
+- 참고 : 객체지향의 사실과 오해
+
+- ```python
+  ### 교수님시간 ###
+  a = 1
+  def f():
+      pass
+  f(1)
+  # 얘네들은 공공재의 느낌
+  
+  # 하지만 보통 무언가는 무언가의 소속이기마련
+  # 행동목록과 소유목록
+  name = '김명준'
+  email = 'egkim3275@gmail.com'
+  job = 'teacher'
+  
+  def code():
+      pass
+  def eat():
+      pass
+  # 이상태는 다 따로노는 상태
+  
+  # 그나마 유사한건 dict인데
+  {
+      name = '김명준'
+      mail = 'eddfnk'
+      job = 'teacher'
+  }
+  
+  # 만약 사람이 더 많아 진다면??
+  # 딕셔너리에 다 추가하면 되는데
+  # 더 큰 문제는 ? 각 요소에 마다 행동을 적용시켜야한다는점
+  # 이것을 묶어보자하는 생각
+  
+  
+  
+  # 기존의 코딩의 '현실세계에 대한 반영'의 문제때문에 기저에 대한 고민
+  # 현실세계를 표현할 방법이없을까 때문에 나오게 됨
+  ```
+
+- 
+
+![image-20210127125918665](04_dailynote.assets/image-20210127125918665.png)
+
+![image-20210127125929052](04_dailynote.assets/image-20210127125929052.png)
+
+- 피조물이 먼저 특성을 만들때 
+  - 엘프는 활을 쏜다.
+  2. 엘프는 고기를 먹지 않는다. 이렇게 지었다.
+
+- 그리고 나서 
+
+  - 레골라스는 활을 쏜다
+  - 세레나는 고기를 먹지 않는다.
+
+- 이렇다는 것은
+
+  - (나의 피조물)은 활을 쏜다.
+  - (나의 피조물)은 고기를 먹지 않는다.
+
+- 라는 느낌으로 만들고 싶은 것
+
+  ```python
+  class Elf:
+      def __init__(self, name):  # 처음 태어났을때 받는 특성
+          self.ear = 'long'  # 공통의 속성
+          self.name = name  # 나만의 속성
+          
+      def bow(self):  # Elf에 소속되어있는 bow라는 클래스
+          print('=arrow=>')
+      
+      def breath(self):
+          print('hoo hah')  # Elf들만의 호흡법 '후하'
+          
+      def __del__(self):  # 죽음  __붙어있는 애들은 이름.del이런식이 아니라 del 이름 이런식으로
+          print('back to tree..')  # 작동한다. 이들을 매직메서드라고합니다. 근데 거의 잘 사용하
+          							#지않음
+          
+  e1 = Elf('logolas')
+  e1.bow()  # 객체의 행동
+  e1.health = 'good'  ###### 각각 개체(e2)들의 속성(인스턴스 속성)
+  e1.wife = True
+  # del e1  # 레골라스가 죽는다.... 근데 이것을 거의 사용하지 않음
+  # 레골라스가 죽을때는 잊혀질때 죽는것
+  # 더이상 e1. 으로 사용되지 않을때 죽는다.
+  # 예를들어 e1 = 1로 되었을때 더이상 레골라스에게 접글할 수 없다.
+  
+  e2 = Elf('serena')
+  e2.bow()
+  e2.maigc = True   ###### 각각 개체(e2)의 속성(인스턴스 속성)
+  e2.ear = 'short'  
+  ```
+
+  ![image-20210127132443809](04_dailynote.assets/image-20210127132443809.png)
+
+- 매직매서드는 일단 이런애들이 있다고만 알고있고
+  - 지금 중요한것은 init만 알고있자(생성자)
+- 엘프신도 사실은 누군가에 의해 만들어진 무엇이었다.........
+
+![image-20210127134103478](04_dailynote.assets/image-20210127134103478.png)
+
+```python
+# class == making instance
+class Elf: # Elf신의 주목적은 elf instance를 만드는 것
+    NAME = 'elf god'  # 와중에 이런식으로 만들게 된다면
+    
+    #나도 신이지만 밥은먹어야 겠어. 이건 내가 할 행동이야
+    @classmethod
+    def sleep():
+        pass
+    
+    
+    ### 결국 자신의 instance들을 위한 메서드들 ###
+    def __init__(self, name):
+        self.ear = 'long'
+        
+    def bow(self):
+        print('')
+        
+    def __del__(self):
+        print('hoo hah')
+        
+e1 = Elf('legolas')
+        
+print(Elf.NAME)  # 신님 이름 여쭤봐도 될까요 ..응답하소서 => elf god
+print(e1.name)  #=> legolas
+print(e1.NAME)  #=> e1입장에서 나한테는 없기 때문에 Elf신에게로 타고올라가서 elf god이 나온다.
+print(e1.NAMEE)  #=> Elf신에게도 없으므로 나오지 않는다.
+e1.NAME = 'zzzzz' # 제가 이름 바꿀게요 라고 한다면??? 접근은 가능하다
+print(e1.NAME) # 접근은 가능
+```
+
+```python
+# class == making instance
+class Elf: # Elf신의 주목적은 elf instance를 만드는 것
+    NAME = 'elf god'  # 와중에 이런식으로 만들게 된다면
+    
+    #나도 신이지만 밥은먹어야 겠어. 이건 내가 할 행동이야
+    @classmethod
+    def sleep(cls):
+        pass
+    
+Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞의 주어 이름이 들어가야한다.
+				# 비어있으면 못받는데 Elf가 뒤집고 들어간다
+    				# self라고하면 피조물들이랑 이름이 같아지니 cls라고 해주는 것#####
+        			# 그럼 이제 신도 잠을 청할 수 있게 된다.
+```
+
+- 현재 이해가 안되는건 class를 만들 일이 아직 없기때문
+  - 이해가 되려면 실제로 class를 만들고 instance를 만드는 과정을 겪어봐야됨.
+  - django에서 진행해 볼건데 그때가서 얘기를 할때 못알아들으면 곤란하니 지금 진행을 하는겁니다.
+
+- 나만의 타입(class)을 만들고, 정보를 속성으로(attribute), 로직(행동)은 메서드(method)로 표현하고 싶었다.
+- ![image-20210127141002391](04_dailynote.assets/image-20210127141002391.png)
+
+- static method는 왜 필요한가?
+
+  - 정의된 함수 내에서 클래스도 인스턴스도 필요가 없을때
+
+- ![image-20210127143214140](04_dailynote.assets/image-20210127143214140.png)
+  - 위 처럼 type검사 방법도 다르다 boolean이 int 클래스를 상속받기 때문에 True
+
+- ```python
+  class Person:
+      population = 0
+      
+      def __init__(self, name, email, phone ..):
+          self.name = name
+          self.email = email
+          ..
+          Person.populaton += 1
+      def talk(self):
+          print(f'반갑습니다. {self.name}입니다.)
+                
+  class Student(Person): ## student클래스를 만들고 Person을 상속받는다.
+      def __init__(self, name, student_id):
+          self.name = name
+          self.student_id = student_id
+  ```
+
+- Convention(PEP8)
+
+  ```python
+  a = '안녕'  # '', "" 둘 중에 하나만 쓰세요.
+  
+  if b > 0:
+      print('양수')
+      
+  # 변수/함수 이름은 snake_case 뱀처럼 _로 연결
+  snake_case = '변수'
+  
+  def function_snake_case():
+      pass
+  
+  # 클래스 이름은 CamelCase 낙타 등처럼
+  class CamelCase():
+      pass
+  
+  # Correct
+  dict(a='apple', b='banana') # 함수인자로는 최대하나 묶어서 볼 수 있도록
+  # Wrong
+  dict( a = 'apple', b = 'banana')
+  ```
+
+  
