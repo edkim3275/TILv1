@@ -1030,7 +1030,8 @@ sorted([3, 2, 1])
   ![image-20210127094507410](04_dailynote.assets/image-20210127094507410.png)
 
 - 인스턴스 메서드
-  - 이ㅣㄴ스턴스가 생겨날 때 함수안에있는 로직들로 인스턴스의 값, 속성등이 조정이 됨
+
+  - 인스턴스가 생겨날 때 함수안에있는 로직들로 인스턴스의 값, 속성등이 조정이 됨
 
 - ![image-20210127095303463](04_dailynote.assets/image-20210127095303463.png)
 
@@ -1151,6 +1152,7 @@ sorted([3, 2, 1])
   ![image-20210127132443809](04_dailynote.assets/image-20210127132443809.png)
 
 - 매직매서드는 일단 이런애들이 있다고만 알고있고
+  
   - 지금 중요한것은 init만 알고있자(생성자)
 - 엘프신도 사실은 누군가에 의해 만들어진 무엇이었다.........
 
@@ -1208,6 +1210,7 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
   - django에서 진행해 볼건데 그때가서 얘기를 할때 못알아들으면 곤란하니 지금 진행을 하는겁니다.
 
 - 나만의 타입(class)을 만들고, 정보를 속성으로(attribute), 로직(행동)은 메서드(method)로 표현하고 싶었다.
+
 - ![image-20210127141002391](04_dailynote.assets/image-20210127141002391.png)
 
 - static method는 왜 필요한가?
@@ -1215,8 +1218,9 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
   - 정의된 함수 내에서 클래스도 인스턴스도 필요가 없을때
 
 - ![image-20210127143214140](04_dailynote.assets/image-20210127143214140.png)
-  - 위 처럼 type검사 방법도 다르다 boolean이 int 클래스를 상속받기 때문에 True
-
+  
+- 위 처럼 type검사 방법도 다르다 boolean이 int 클래스를 상속받기 때문에 True
+  
 - ```python
   class Person:
       population = 0
@@ -1259,4 +1263,303 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
   dict( a = 'apple', b = 'banana')
   ```
 
+## 200128 Thrs
+
+### 오전
+
+- `pip install faker`
+- `python -m pip install --upgrade pip`
+- 오픈소스 Contribute
+  - 누군가가 소스에 추가하고 싶은 내용이 있으면 원작자에게 문의하고 추가해서 원작자에게 전달, 검수 받고 괜찮으면 실제로 수정되어서 업로드되는 현상
+- 오늘 한 번 가능하면 이 Contribution까지 가볼 것
+- TensorFlow
+  - 구글에서 만든 Framework
+
+- 모두 객체이지만 클래스와의 관계에 있어서 얘기해보면 인스턴스라고 얘기를 한다. 
+- 클래스에서 인스턴스에 접근은 가능하지만 그렇게 만든 것은 잘못된 코드
+- (), 변수에 할당, 인자로 넘어가거나 하면 모두 객체
+
+- 절대 신 시간에 졸려서 집중을 못함 Review 필요 ㅜ-ㅜ
+
+### 오후
+
+- https://docs.python.org/ko/3/reference/datamodel.html#object.__repr__
+
+  - repr, str 내용
+
+- **workshop8**
+
+  ```python
+  class Point:
+      def __init__(self, x1, y1):
+          self.x = x1  # self.x에서 x는 내가 정해준 속성의 이름  x1은 전달받은 인자
+          self.y = y1  
   
+  class Rectangle(Point):
+      def __init__(self, p1, p2):
+          self.p1 = p1  # 소속할 때 이름을 p1이라고 하자
+          self.p2 = p2  # 소속할 때 이름을 p2라고 하자
+          
+      def get_area(self):
+          # 직사각형 객체의 꼭지점 두개로
+          # 면적을 구한다
+          garo = self.p2.x - self.p1.x # p1이 좌상단, p2가 우하단이라서 가능한 식
+          sero = self.p1.y - self.p2.y
+          return garo * sero
+      
+      def get_perimeter(self):
+          garo = self.p2.x - self.p1.x # p1이 좌상단, p2가 우하단이라서 가능한 식
+          sero = self.p1.y - self.p2.y
+          return 2 = (garo + sero)
+  
+      def is_square(self):
+          garo = self.p2.x - self.p1.x # p1이 좌상단, p2가 우하단이라서 가능한 식
+          sero = self.p1.y - self.p2.y
+          retrun garo == sero
+  
+  p1 = Point(1, 3)
+  p2 = Point(3, 1)
+  r1 = Rectangle(p1, p2)
+  # r1.p1이 꼭지점 하나
+  r1.p1.x # r1소속의 p1의 x좌표  ( p1은 x좌표와 같지만 소속이 다른 것)
+  print(r1.get_area())
+  print(r1.get_perimeter())
+  print(r1.is_square())
+  
+  p3 = Point(3, 7)
+  p4 = Point(6, 4)
+  r2 = Rectangle(p3, p4)
+  print(r2.get_area())
+  print(r2.get_perimeter())
+  print(r2.is_square())
+  
+  
+  # 여기서 나아가면
+  class Point:
+      def __init__(self, x1, y1):
+          self.x = x1  # self.x에서 x는 내가 정해준 속성의 이름  x1은 전달받은 인자
+          self.y = y1  
+  
+  class Rectangle(Point):
+      def __init__(self, p1, p2):
+          self.p1 = p1  # 소속할 때 이름을 p1이라고 하자
+          self.p2 = p2  # 소속할 때 이름을 p2라고 하자
+          self.garo = self.p2.x - self.p1.x
+          self.sero = self.p1.y - self.p2.y
+          
+      def get_area(self):
+          # 직사각형 객체의 꼭지점 두개로
+          # 면적을 구한다
+          return self.garo * self.sero
+      def get_perimeter(self):
+          return 2 * (self.garo + self.sero)
+      def is_square(self):
+          retrun self.garo == self.sero
+  
+  p1 = Point(1, 3)
+  p2 = Point(3, 1)
+  r1 = Rectangle(p1, p2)
+  # r1.p1이 꼭지점 하나
+  r1.p1.x # r1소속의 p1의 x좌표  ( p1은 x좌표와 같지만 소속이 다른 것)
+  print(r1.get_area())
+  print(r1.get_perimeter())
+  print(r1.is_square())
+  
+  p3 = Point(3, 7)
+  p4 = Point(6, 4)
+  r2 = Rectangle(p3, p4)
+  print(r2.get_area())
+  print(r2.get_perimeter())
+  print(r2.is_square())
+  ```
+
+  - `self.p2.x` `self.p1.x`를 생각하는 것이 중요
+
+  ```python
+  class Point:
+      def __init__(self, x, y):
+          self.x = x
+          self.y = y
+  
+  class Rectangle(Point):
+      def __init__(self, p1, p2):
+          self.p1 = (p1.x, p1.y)
+          self.p2 = (p2.x, p2.y)
+          
+      def get_area(self):
+          return abs((p2.x - p1.x) * (p1.y - p2.y))
+      
+      def get_perimeter(self):
+          return 2*(abs((p2.x - p1.x)) + abs((p1.y - p2.y)))
+  
+      def is_square(self):
+          if abs((p2.x - p1.x)) == abs((p1.y - p2.y)):
+              return True
+          else:
+              return False
+  ```
+
+  - LEGB는 frame // instance는 object
+
+    ![image-20210128142305279](04_dailynote.assets/image-20210128142305279.png)
+
+- 잠시 월말평가 얘기
+
+  ```python
+  def dec_to_bin(n):
+      # 몫이 0일때까지
+      quotient == 0
+      while n
+  ```
+
+  ![image-20210128145745814](04_dailynote.assets/image-20210128145745814.png)
+
+  - 재귀 while로 푼 경우
+
+    ![image-20210128151101914](04_dailynote.assets/image-20210128151101914.png)
+
+- 상속
+
+  ```python
+  상속관계가 될 수록 좀 더 적절한 정보를 적재적소에 표현하여 더욱 이해가 좋아짐
+  알고리즘은 총잘쏘는능력 코딩은 상하관계 숲을 보는 능력
+  ```
+
+  - `super` 
+
+    ```python
+    super(object).__init__(name)  # 부모클래스의 init()을 실행한다는 의미
+    ```
+
+![image-20210128160222964](04_dailynote.assets/image-20210128160222964.png)
+
+![image-20210128160305884](04_dailynote.assets/image-20210128160305884.png)
+
+![image-20210128160403863](04_dailynote.assets/image-20210128160403863.png)
+
+![image-20210128160533452](04_dailynote.assets/image-20210128160533452.png)
+
+- 정리
+- ![image-20210128161718170](04_dailynote.assets/image-20210128161718170.png)
+
+![image-20210128162135946](04_dailynote.assets/image-20210128162135946.png)
+
+![image-20210128162303514](04_dailynote.assets/image-20210128162303514.png)
+
+![image-20210128162849933](04_dailynote.assets/image-20210128162849933.png)
+
+- 함수도 literal이 있다 `lambda`, 이름이 없는 익명함수라고도 불린다.
+
+![image-20210128162912880](04_dailynote.assets/image-20210128162912880.png)
+
+- 1회성으로 사용하는 함수,  기명함수를 익명함수로 바꾸는 방법
+
+![image-20210128162947638](04_dailynote.assets/image-20210128162947638.png)
+
+![image-20210128163118318](04_dailynote.assets/image-20210128163118318.png)
+
+- 리턴이 없는 함수는 사용불가
+
+![image-20210128163227836](04_dailynote.assets/image-20210128163227836.png)
+
+- 딕셔너리로 계산기 만들기 
+
+  ![image-20210128163507243](04_dailynote.assets/image-20210128163507243.png)
+
+![image-20210128163531994](04_dailynote.assets/image-20210128163531994.png)
+
+### Git
+
+- 지난 이야기 .. 
+
+![image-20210128164946135](04_dailynote.assets/image-20210128164946135.png)
+
+- 듀얼 푸시가 어떻게 가능할까
+
+  ![image-20210128165345408](04_dailynote.assets/image-20210128165345408.png)
+
+- `git remote add`까지가 명령어 뒤에가 Key value
+  - `git remote add github 주소` : 여기로 보내겠다.
+  - ![image-20210128165523306](04_dailynote.assets/image-20210128165523306.png)
+
+- `git push github master` : github은 결국 이름
+  - 지금 까지 했던 `git push origin master` 에서 origin또한 이름
+
+
+
+- 협업할때의 git
+
+- a사람이 `learn_git_together`이름으로 생성
+
+  - Description : pair 와 git remote 협업하기
+  - README file, .giitignore파일에 체크(template: Python)
+
+- 제일 눈에 띄는건 Initail commit입니다.
+
+  - ![image-20210128170525203](04_dailynote.assets/image-20210128170525203.png)
+
+  - 초반에 이렇게 commit이 찍혀버린 것
+
+  - ![image-20210128170608823](04_dailynote.assets/image-20210128170608823.png)
+
+  - 세팅 -> Manage access -> Invite a collaborator
+
+    - 등록하면 등록받은 사람은 메일로 옵니다.
+    - ![image-20210128170856022](04_dailynote.assets/image-20210128170856022.png)
+    - 들어가서 수락!
+    - 이렇게 되면 상대방의 Repo에 도달한 것
+
+  - 클론을 만듭니다
+
+  - https://github.com/DongChanKIM2/learn_git_together.git
+
+    ![image-20210128171555371](04_dailynote.assets/image-20210128171555371.png)
+
+  - 코드를 복사 후 깃 배쉬에서
+
+  - ![image-20210128171543939](04_dailynote.assets/image-20210128171543939.png)
+
+  - learn_git_together라는 클론을 생성합니다.(중복해서 생성 가능)
+
+  - 현재상황은
+
+    ![image-20210128171659173](04_dailynote.assets/image-20210128171659173.png)
+
+  - vs code로 들어와서 `git log`해보면
+
+    ![image-20210128171815562](04_dailynote.assets/image-20210128171815562.png)
+
+  - `git config user.name` : 이름 확인
+
+  - `git config --global user.email` : 서명의 의미
+
+  - `git config user.name 'B student'`하면 이 파일에 한해서 이름이 바뀜
+
+  - 내부를 일부 수정해보고 난 뒤에
+
+  - `git remote -v`: 로 푸쉬할 이름을 확인하고 푸쉬를 진행
+
+  - `git push origin main`
+
+    ![image-20210128172444702](04_dailynote.assets/image-20210128172444702.png)
+
+  - 현재상황은
+
+  - ![image-20210128172515480](04_dailynote.assets/image-20210128172515480.png)
+
+  - 이제 푸쉬를 했으니 파일을 받았으니 `git pull` 하게 되면
+  - ![image-20210128172743117](04_dailynote.assets/image-20210128172743117.png)
+  - 다시 a학생이 수정 후 커밋 turn 2 후 
+  - `git push`만 해도 가능 branch랑 origin이름 생략해도 가능하도록 git이 설정을 해뒀음
+  - 그럼 다시 b학생이 git pull로 받아온다
+
+- 주관식, 객관식, 서술형 4지선다 (분반테스트와 같은 형식)
+
+  - 서술형은 부분점수 없으니 모르면 넘어갑시다
+  - 범위는 전 범위
+  - 주관식 : 단축평가 영어로 작성하시오 이런건 잘 안나옴 short circut evalutaion은 제외
+  - 보통 코드결과에 대해서 어떻게 나오는지를 쓰는 문제(수능 수리 답안정도)
+  - 이면지 사용가능
+  - 모바일 응시불가 pc,노트북만 가능
+
+- 2/15일 교육지원금 지급.
