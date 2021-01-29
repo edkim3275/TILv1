@@ -1483,6 +1483,7 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
   - ![image-20210128165523306](04_dailynote.assets/image-20210128165523306.png)
 
 - `git push github master` : github은 결국 이름
+  
   - 지금 까지 했던 `git push origin master` 에서 origin또한 이름
 
 
@@ -1563,3 +1564,377 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
   - 모바일 응시불가 pc,노트북만 가능
 
 - 2/15일 교육지원금 지급.
+
+## 200129 Fri
+
+- 지난주..
+  - json파일을 만들어서 파일을 수정해서 return하는 project를 진행
+
+- 이번주
+
+  - json이라는 폴더 안에 여러 json파일들이 있었는데, 그 파일들이 실제로 웹어딘가에 존재합니다. 오늘은 웹어딘가의 json파일을 가져와서 그것을 조작해보는 활동을 해볼것입니다.
+
+    ![image-20210129090811172](04_dailynote.assets/image-20210129090811172.png)
+    - 이 과정을 **1 요청 2 응답** 이라고합니다. (request: 요청, response: 응답)
+
+    - 요청을 보내지 않았는데 응답이 올 수 없고, 요청을 보냈는데 응답이 오지않을 수 없다.
+
+    - 지금 중요하게 봐야할 부분은 **''요청''**부분.
+
+    - `url`로 서버에 요청을 보내면 응답이 올 것 !
+
+      - 주소창에 우리가 원하는 `url`을 보내면 웹브라우저(ex. `chrome`)가 서버에 요청을 보내준다.
+
+      - 그렇게 되면 서버가 웹브라우저에게 응답을 보냅니다.
+
+        ![image-20210129091638792](04_dailynote.assets/image-20210129091638792.png)
+
+        - html이라는 문서형식을 받아온 것
+
+    - git bash에서
+
+      - `crul http:s// ...`이런식으로하면 해당 서버에 요청을 보내는 명령어가 됩니다.
+
+  - `API`
+
+    - 컴퓨터간에 소통할 수 있는 일종의 규약
+
+- 추후에는....
+  - 우리가 직접 서버를 개발하는 것을 배울 것.
+
+- url을 클릭해보니...
+
+  ![image-20210129091910565](04_dailynote.assets/image-20210129091910565.png)
+
+  json이라는 형식을 받아와서 Json Viewer로 변경해서 보니
+
+  ![image-20210129091941543](04_dailynote.assets/image-20210129091941543.png)
+
+  이런 데이터 구조를 가지고 있고
+
+- url정보를 뜯어봅시다
+
+  ![image-20210129092220953](04_dailynote.assets/image-20210129092220953.png)
+  - `https://` 프로토콜 방식이 https(요청방식)
+
+  - `api.themoviedb.org` : 우리가 요청보내고, 응답을 받는데, 요청을 보내기 위해서는 주소가 존재해야하는데 그 컴퓨터 주소라고 생각하면됨(~구)
+
+  - `/3/movie/top_rated` : 상세주소(~동 ~호) // 여기까지 어디로 가야한다는 주소
+
+  - `?`를 기준으로 좌측은 **`주소`**, 우측은 **`키 밸류`**쌍(쿼리)으로 이루어져 있다
+
+    ![image-20210129092629756](04_dailynote.assets/image-20210129092629756.png)
+
+  - `api_key = 1156516` : 키 밸류쌍으로 정보를 표현
+
+  - `&` : 다른 정보를 쓰기 위해 표시해줍니다.
+
+- requests
+
+  - 주소창에 url을 쳐서 enter를 누르면 요청을 보낸것
+  - bash에서는 `curl`을 통해 요청을 보낸 것
+  - 그렇다면 파이썬에서는??? `라이브러리`를 사용해볼 것 그것이 `requests`
+
+  ```python
+  # requests.test.py를 만들어봅니다.
+  import requests  # import를 통해서 request해줘.
+  # 근데 오류가 나기때문에 requests를 가져와야합니다.
+  $ pip install requests  # requests라는 라이브러리를 받아줍니다.
+  
+  r = requests.get('https://api.github.com/events') # 이렇게 하는것이 주소창에 url치고 엔터치는 것과 마찬가지
+  ```
+
+  ```python
+  # url이 너무 기니까 따로 둬 보자
+  url = 'https://api.github.com/events'
+  r = requests.get(url)  # response의 약자 'r'. response라 다적어도 좋다
+  print(response)  #=> <Response [200]>  __str__가 내부에 다르게 정의되어있는 것
+  				 # response라는 변수안에 어떠한 객체가 저장되어있다는 것을 알 수 있습니다.
+  
+  ```
+
+  ![image-20210129093559939](04_dailynote.assets/image-20210129093559939.png)
+
+  이러한 주소에 요청을 보내고 싶다면 아래와 같이 코드를 적어줘!
+
+  ![image-20210129093629948](04_dailynote.assets/image-20210129093629948.png)
+
+  그러면 내가 주소를 아래처럼 바꿔서 보내줄게 !
+
+- json이라는 파일은 눈에 보기에는 딕셔너리 형식이지만 파이썬 내부에서 type을 보면 str로 나온다. 따라서 파이썬에 편하게 사용하기 위해서 json을 조금 바꿔줘야한다.
+
+  ![image-20210129093951761](04_dailynote.assets/image-20210129093951761.png)
+
+  ```python
+  type(r.json())  # <class 'dict'>
+  # 이제 json파일을 딕셔너리로 사용이 가능한 것
+  movie_dict = r.json()
+  ```
+
+  ```python
+  from pprint import pprint
+  pprint(movie_dict)  #=> 이쁘게 볼 수 있다.
+  ```
+
+- 영화정보 가져오기 
+
+- ![image-20210129094259279](04_dailynote.assets/image-20210129094259279.png)
+
+- ![image-20210129094404966](04_dailynote.assets/image-20210129094404966.png)
+
+  `?`기준으로 왼쪽 주소와 오른쪽 정보를 같이 보내야 합니다.
+
+  여기서 `api_key`가 오늘 사용할 비빌번호라고 이해하시면 됩니다.
+
+  ![image-20210129094534913](04_dailynote.assets/image-20210129094534913.png)
+
+  이렇게 key를 입력하면 우리가 요청하는 정보들을 받아오는 것이 가능합니다.
+
+- ![image-20210129094857582](04_dailynote.assets/image-20210129094857582.png)
+- 개괄적으로 어떤 기능이 있는지 가늠해볼 수 있다
+  - `movie/popular `인기도 중심으로 영화 검색
+  - `movie/496243` 496243이라는 영화를 가져오기
+  - `search/movie` 영화를 검색
+  - `genre/movie/list`  영화장르데이터를 출력
+
+- `?`뒤의 정보를 `query`라고 부릅니다.
+
+  - 그 중에서 `required`는 필수로 기입해야하는 정보라는 의미
+  - `optional`은 선택가능한 정보
+
+- 오늘은 popular, detail, top_rated 등 4개정도의 url을 사용해 볼것
+
+  - 이러려면 여러개의 url을 사용해야하는데 이것을 클래스로 적용해봅시다.
+
+    ![image-20210129100712690](04_dailynote.assets/image-20210129100712690.png)
+
+    이러한 과정을 통해서url을 만들어봅시다.
+
+  ```python
+  class URLMaker():
+      base_url = 'https://api.themoviedb.org/3'  # api의 공통된 주소
+      # URLMaker('abcd1234') 키를 인스턴스 변수에 저장해서 url을 만드는 것을 만들고싶다!
+      def __init__(self, key): 
+          self.key = key
+      # movie안에 있는 카테고리, 특징(세부주소)을 가져오기
+      def get_url(self, category, feature):
+          url = f'{URLMaker.base_url}/{categoty}/{feature}'
+          url += f'?api_key={self.key}'
+      	return url
+      
+  maker = URLMaker('197ds179f9ds97sfd19afv1r9')  # 내가 원하는 인스턴스에 key를 담음
+  maker.get_url('movie', 'top_rated')  #=> https://api.themoviedb.org/3/movie/top_rated
+  maker.get_url('genre', 'movie/list')
+  ```
+
+  ![image-20210129101750982](04_dailynote.assets/image-20210129101750982.png)
+
+  `get_url`: 너가 할 일은 url만들어서 반환해라.
+
+  ```python
+  class URLMaker():
+      base_url = 'https://api.themoviedb.org/3'  # api의 공통된 주소
+      # URLMaker('abcd1234') 키를 인스턴스 변수에 저장해서 url을 만드는 것을 만들고싶다!
+      def __init__(self, key): 
+          self.key = key
+      # movie안에 있는 카테고리, 특징(세부주소)을 가져오기
+      def get_url(self, category, feature, **kwargs):
+          url = f'{URLMaker.base_url}/{categoty}/{feature}'
+          url += f'?api_key={self.key}'
+          
+          for k, v in kwargs.items():  # 키워드 인자에서 가져온 내용을 키 밸류를 추출해서 url에 									 # 추가
+              url += f'&{k}={v}'
+      	return url
+      
+  maker = URLMaker('197ds179f9ds97sfd19afv1r9')  # 내가 원하는 인스턴스에 key를 담음
+  maker.get_url('movie', 'top_rated', region = 'KR', query = 'asdf')  
+  maker.get_url('genre', 'movie/list', region = 'KR')
+  ```
+
+- 기생충의 경우 주소가 movie/{movie_id} 처럼 고유 id가 있다.
+
+  ```python
+  # 기생충이라는 영화가 있으면 그 정보에서 id를 찾는 기능을 추가한다.
+  class URLMaker():
+      base_url = 'https://api.themoviedb.org/3'  # api의 공통된 주소
+      # URLMaker('abcd1234') 키를 인스턴스 변수에 저장해서 url을 만드는 것을 만들고싶다!
+      def __init__(self, key): 
+          self.key = key
+      # movie안에 있는 카테고리, 특징(세부주소)을 가져오기
+      def get_url(self, category, feature, **kwargs):
+          url = f'{URLMaker.base_url}/{categoty}/{feature}'
+          url += f'?api_key={self.key}'
+          
+          for k, v in kwargs.items():  # 키워드 인자에서 가져온 내용을 키 밸류를 추출해서 url에 									 # 추가
+              url += f'&{k}={v}'
+      	return url
+      
+       #제목을 기반으로 검색하는 url을 만들어서 요청을 보내고 응답안에 id가 있을것이고 그 id를 반환 
+      # 할 것입니다.
+      def movie_id(self, title):
+          # 우리가 가야하는 주소는 /search/movie
+          url = self.get_url('search', 'movie', region='KR', language='ko', query=title)
+          return url
+  maker = URLMaker('197ds179f9ds97sfd19afv1r9')  # 내가 원하는 인스턴스에 key를 담음
+  # maker.get_url('movie', 'top_rated', region = 'KR', query = 'asdf')  
+  # maker.get_url('genre', 'movie/list', region = 'KR')
+  maker.movie_id('기생충')
+  ```
+
+  ![image-20210129103741075](04_dailynote.assets/image-20210129103741075.png)
+
+  ![image-20210129103810598](04_dailynote.assets/image-20210129103810598.png)
+
+  ![image-20210129103835300](04_dailynote.assets/image-20210129103835300.png)
+
+  ![image-20210129104057658](04_dailynote.assets/image-20210129104057658.png)
+
+- 요청을합니다.
+
+  ```python
+  import requests
+  # 기생충이라는 영화가 있으면 그 정보에서 id를 찾는 기능을 추가한다.
+  class URLMaker():
+      base_url = 'https://api.themoviedb.org/3'  # api의 공통된 주소
+      # URLMaker('abcd1234') 키를 인스턴스 변수에 저장해서 url을 만드는 것을 만들고싶다!
+      def __init__(self, key): 
+          self.key = key
+      # movie안에 있는 카테고리, 특징(세부주소)을 가져오기
+      def get_url(self, category, feature, **kwargs):
+          url = f'{URLMaker.base_url}/{categoty}/{feature}'
+          url += f'?api_key={self.key}'
+          
+          for k, v in kwargs.items():  # 키워드 인자에서 가져온 내용을 키 밸류를 추출해서 url에 									 # 추가
+              url += f'&{k}={v}'
+      	return url
+      
+       #제목을 기반으로 검색하는 url을 만들어서 요청을 보내고 응답안에 id가 있을것이고 그 id를 반환 
+      # 할 것입니다.
+      def movie_id(self, title):
+          # 우리가 가야하는 주소는 /search/movie
+          url = self.get_url('search', 'movie', region='KR', language='ko', query=title)
+          res = requests.get(url)
+          movie_dict = res.json()  # url로 요청을 해서 .json파일로 변경후 변수에 담는다.
+      	
+          # 만약에 궁금한 내용이 찾는 정보에 없다면?? => 조건을 만들어줍니다.
+          if movie_dict.get('results'):
+          	return result = movie_dict.get('results')[0].get('id')
+          else:
+          	return None
+          
+  maker = URLMaker('197ds179f9ds97sfd19afv1r9')  # 내가 원하는 인스턴스에 key를 담음
+  maker.movie_id('기생충')
+  ```
+
+  ![image-20210129104610570](04_dailynote.assets/image-20210129104610570.png)
+
+  ![image-20210129104619516](04_dailynote.assets/image-20210129104619516.png)
+
+- 간단한 명세 해결
+
+  ![image-20210129110034599](04_dailynote.assets/image-20210129110034599.png)
+
+```python
+import requests
+from tmdb import URLMaker #tmdb 모듈에서 URLMaker라는 클래를 가져옵니다.
+from pprint import pprint
+
+def top_rated_movie():
+    maker = URLMaker('197ds179f9ds97sfd19afv1r9')
+    url = maker.get_url('movie', 'top_rated')
+	res = requests.get(url).json()
+    movie_dict = res.json()
+    
+    result = []
+    movie_list = movie_dict('results')
+    for movie in movie_list:
+        result.append(movie.get('title'))
+    return result
+
+pprint(top_rated_movie())
+```
+
+- query string의 순서는 바뀌어도 상관없습니다.
+- README.md
+- api는 : 설정 ->  api들어가서 -> 동의하고 요청하면 됨
+
+- 과목평가
+
+  - 범위는 전체범위
+  - 객관식(4지선다형), 주관식, 서술형
+  - 코드를 보고 실행한 결과, 이 코드를 보고 옳은 것, 옳지 않은 것
+  - 시험에서 직접 코딩하지는 않습니다. (머릿속으로 출력결과 상상하기)
+  - **남들이 짜놓은 Comprehension을 읽고 이해할 수는 있어야하기때문**
+  - **hw는 끝까지 체크하시고 시험에 임하시길**
+  - 
+  - 05_error_exception 08_Module 범위 제외합니다.
+
+  - 00 intro
+    - 변수 int float
+    - {} 3개식 쌍으로나오는 것 문제내기 좋겠죠??
+    - 암시적, 명시적 형변환 어떠한 함수 사용했는지.
+    - 비교,논리 연산자
+    - Concatenation
+  - 01 data_container
+    - 데이터 분류(시퀀스, 비시퀀스 / mutable, immutable)
+    - 시퀀스 내의 mutable, immutable의 특징
+    - range
+    - 시퀀스 내의 연산자
+    - 비시퀀스 데이터
+    - 컨테이너 형변환 표
+  - 02 contro_flow
+    - 잘 알아야겠죠?
+    - 조건, 반복문
+  - 03 function
+    - 함수에서 중요한 것은 정의와 실행
+    - 선언, 인자
+    - **kwarg
+    - 호출
+    - **스코프(LEGB) 문제 이a가 어디에있는 a일까??**
+    - 재귀
+  - 06 data_structure
+    - **서로 비교를 해봤던 함수들** 왜 비교를 해보라고했을지,차이가 뭔지 알아보기
+  - 09 OOP
+    - 클래스를 정의
+    - 인스턴스를 생성(인스턴스, 메소드)
+    - 속성 개념정리
+    - 생성자, 소멸자메서드
+    - 매직메서드는 이런것들이 있다정도만
+  - 10 OOP2
+    - Puppy만드는것 Review. 코드가 어떻게 돌아가는지 이해하세요
+  - 11 OOP3
+    - 상속(부모가 가진 메서드, 속성을 모두 가져옴)
+      - 이를 수정하고 싶으면 overring이라는 것을 함
+      - 그중에서 부모 클래스의 내용을 사용하고자 한다면 super라는 것을 사용
+    - 상속에서의 이름공간
+    - **다중상속에서의 순서**
+
+- `Pypi` : 파이썬 패키지(모듈들이 모여있는 폴더)를 Publishing해주는 사이트. 우리 패키지를 업로드할 수 있고, 업로드 되어있는 패키지를 받아올 수있습니다.
+
+  - 우리가  `pip`해오는 것이 여기서 다운받아 오는 것.
+
+  - 우리가 업로드 하기 위해선 가이드를 따라야함
+
+    - 어떤 폴더에 패키지 폴더를 만듭니다
+
+      ![image-20210129115424682](04_dailynote.assets/image-20210129115424682.png)
+
+    - `set.py`도 만들고 `README.md`도 만들고 합니다.
+
+    - `license`는 저작권을 표시하는 부분. 일반적으로 
+
+      ![image-20210129115603574](04_dailynote.assets/image-20210129115603574.png)
+
+      이러한 MIT 라이센스를 자주 사용합니다. (오픈소스 생태계와 제일 맞는 규약이 없는 
+
+      라이센스)
+
+### 교수님 시간
+
+- 안풀리는 문제는 두가지 방법
+  - 직접구현과 검색
+    - 정렬을 하는 6~7가지 방법
+
+- API key발급 받는 페이지
+- ![image-20210129132556311](04_dailynote.assets/image-20210129132556311.png)
+- 
