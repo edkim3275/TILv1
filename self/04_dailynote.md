@@ -1568,8 +1568,9 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
 ## 200129 Fri
 
 - 지난주..
-  - json파일을 만들어서 파일을 수정해서 return하는 project를 진행
-
+  
+- json파일을 만들어서 파일을 수정해서 return하는 project를 진행
+  
 - 이번주
 
   - json이라는 폴더 안에 여러 json파일들이 있었는데, 그 파일들이 실제로 웹어딘가에 존재합니다. 오늘은 웹어딘가의 json파일을 가져와서 그것을 조작해보는 활동을 해볼것입니다.
@@ -1600,8 +1601,9 @@ Elf.sleep()  # Elf신이 잠을 청하는 방법 근데 여기서 ()안에 앞�
     - 컴퓨터간에 소통할 수 있는 일종의 규약
 
 - 추후에는....
-  - 우리가 직접 서버를 개발하는 것을 배울 것.
-
+  
+- 우리가 직접 서버를 개발하는 것을 배울 것.
+  
 - url을 클릭해보니...
 
   ![image-20210129091910565](04_dailynote.assets/image-20210129091910565.png)
@@ -1840,9 +1842,12 @@ from tmdb import URLMaker #tmdb 모듈에서 URLMaker라는 클래를 가져옵�
 from pprint import pprint
 
 def top_rated_movie():
+    # URLMaker를 인스턴스화
     maker = URLMaker('197ds179f9ds97sfd19afv1r9')
+    # get_url을 통해 top_rated_movie를 가져와줘!
     url = maker.get_url('movie', 'top_rated')
-	res = requests.get(url).json()
+    # url을 요청 후 json파일로 변형
+	res = requests.get(url)
     movie_dict = res.json()
     
     result = []
@@ -1866,10 +1871,9 @@ pprint(top_rated_movie())
   - 시험에서 직접 코딩하지는 않습니다. (머릿속으로 출력결과 상상하기)
   - **남들이 짜놓은 Comprehension을 읽고 이해할 수는 있어야하기때문**
   - **hw는 끝까지 체크하시고 시험에 임하시길**
-  - 
   - 05_error_exception 08_Module 범위 제외합니다.
-
-  - 00 intro
+  
+- 00 intro
     - 변수 int float
     - {} 3개식 쌍으로나오는 것 문제내기 좋겠죠??
     - 암시적, 명시적 형변환 어떠한 함수 사용했는지.
@@ -1908,7 +1912,7 @@ pprint(top_rated_movie())
       - 그중에서 부모 클래스의 내용을 사용하고자 한다면 super라는 것을 사용
     - 상속에서의 이름공간
     - **다중상속에서의 순서**
-
+  
 - `Pypi` : 파이썬 패키지(모듈들이 모여있는 폴더)를 Publishing해주는 사이트. 우리 패키지를 업로드할 수 있고, 업로드 되어있는 패키지를 받아올 수있습니다.
 
   - 우리가  `pip`해오는 것이 여기서 다운받아 오는 것.
