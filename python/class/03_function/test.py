@@ -1,15 +1,18 @@
-class Person():
+# class Person():
 
-    def __init__(self, name):
-        self.name = name
-        print(f'응애 난 아기 {self.name}')
+#     def __init__(self, name):
+#         self.name = name
+#         print(f'응애 난 아기 {self.name}')
 
-    def talk(self):
-        print('응애응애')
+#     def talk(self):
+#         print('응애응애')
 
     
-    def __del__(self):
-        print(f'저는 갑니다...{self.name}')
+#     def __del__(self):
+#         print(f'저는 갑니다...{self.name}')
 
-hong = Person('길동')
-hong.talk()
+# hong = Person('길동')
+# hong.talk()
+word = 'python'
+i = word[3:8]
+print(i)

@@ -127,6 +127,7 @@
    식별자의 이름은 영문알파벳(대문자와 소문자), 밑줄(_), 숫자로 구성된다.
    4 v
    첫 글자에 숫자가 올 수 없다.
+   숫자만으로 구성될 수 없다.
    5
    식별자의 이름은 영문알파벳(대문자와 소문자), 밑줄(_), 숫자로 구성된다.
    ```
@@ -167,6 +168,62 @@
    False  # type(a)는 float, type(b)는 int
    False  # 서로 다른 변수에 할당되었기에 id가 다름
    True  # int의 경우 -5 ~ 256까지는 같은id로 설정
+   ```
+
+## 06_data_structure
+
+1. 다음중 오류가 나지않는 코드는?
+
+   ```python
+   string = 'ssafy gogo'
+   ch_lsts = [1, 2, 3, 4, 5]
+   #####################################################
+   # 1
+   string.find('l')  # -1 .find(x)는 x의 첫번째 위치를 반환합니다. 없으면 -1을 반환합니다.
+   # 2
+   string.index('l')  # ValueError: substring not found  .index(x)는 x의 첫번째 위치를 반환합니다. 없으면 오류가 발생합니다.
+   # 3
+   ch_lsts.pop()  #=> 5 .pop(i) 지정 되지 않으면 마지막 항목을 삭제하고 삭제한 값을 반환
+   # 4
+   ch_lsts.remove()  # TypeError: remove() takes exactly one argument (0 given) 값이 없으면 오류
+   ```
+
+2. 'seperator'.join(iterable) 다음 코드의 실행결과로 올바른것은?
+
+   ```python
+   stirng = '오늘 하루'
+   '!'.join(string)
+   
+   오!늘! !하!루  # 1
+   오!늘! !하!루! # 2
+   오!늘! 하!루  # 3
+   오!늘! 하!루!  # 4
+   ```
+
+   ```
+   정답은 (1)
+   ```
+
+3. 다음중 출력결과가 오류가 나는 것은?
+
+   ```python
+   lst_1 = [1, 2, 3, 4]
+   lst_2 = (1, 2, 3, 4)
+   lst_3 = {1, 2, 3, 4}
+   lst_4 = {'a': 1, 'b':2}
+   lst_5 = {1:'a', 2:'b'}
+   
+   print(','.join(lst_1))  # 1
+   print(','.join(lst_2))  # 2
+   print(','.join(lst_3))  # 3
+   print(','.join(lst_4))  # 4
+   print(','.join(lst_5))  # 5
+   
+   1, 2, 3, 4
+   1, 2, 3, 4
+   1, 2, 3, 4
+   a, b
+   TypeError: sequence item 0: expected str instance, int found
    ```
 
    
