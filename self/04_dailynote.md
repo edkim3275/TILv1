@@ -1941,4 +1941,13 @@ pprint(top_rated_movie())
 
 - API key발급 받는 페이지
 - ![image-20210129132556311](04_dailynote.assets/image-20210129132556311.png)
-- 
+
+## 200202 Tue
+
+- git push origin main : 지금 나는 main branch에 있는데 origin(github)에 푸시르 ㄹ하겠다. 
+
+  ![image-20210202174043280](04_dailynote.assets/image-20210202174043280.png)
+
+![image-20210202174501369](04_dailynote.assets/image-20210202174501369.png)
+
+![image-20210202175859438](04_dailynote.assets/image-20210202175859438.png)
