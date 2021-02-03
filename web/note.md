@@ -1589,3 +1589,11 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 #### 오후
 
 vh75% : viewport height 화면의 75%
+
+- 밑줄 지우기
+  - ![image-20210203171147554](note.assets/image-20210203171147554.png)
+  - 마우스 올렸을때 text-decoration
+  - ![image-20210203171233636](note.assets/image-20210203171233636.png)
+
+- 모든 인라인 요소를 버튼으로 만들 수 있다.
+- ![image-20210203172547711](note.assets/image-20210203172547711.png)

@@ -508,5 +508,165 @@
 - `fixed` : 아무리 텍스트가 많아도 고정
   - `%`를 활용해서 조정
 
-## 4 Workshop
+## 4 CSS layoout
 
+> 웹 페이지에 포함되는 요소들을 **취합**하고, 그것들이 **어느 위치에 놓일 것인지를 제어**하는 기술
+
+- Display
+- Position : `static`, `relative`, `absolute`, `fixed`
+- Float : 
+- Flexbox : 1차원 레이아웃 모델(메인축과 교차축)
+- Grid : 강력한, 모바일, 그리드 시스템(12col, 6tiers)
+- ~~Table layout~~
+- ~~Multiple-column layout~~
+
+### 4.1 Float
+
+- Float : `html`을 벗어나서 텍스트나 인라인 요소로 감싸는 기술.
+
+  ![image-20210203090718713](15_Web.assets/image-20210203090718713-1612349515478.png)
+
+  ![image-20210203090826384](15_Web.assets/image-20210203090826384.png)
+
+  시간이 지나면서 점점 발전하다보니 웹페이지 구조를 담당하는 역할까지 하게 됨
+
+- 특징
+
+  ![image-20210203091934527](15_Web.assets/image-20210203091934527.png)
+
+  float하게 된다면 그 아래 빈공간이 생겨서 float를 하지 않은 요소(div)가 그 자리를 채우게 됨(기존의 레이아웃이 깨지게 됨)
+
+  float로 인해 방해 받는걸 막기위해 나머지 요소들이 float를 무시할 수 있어야 합니다.
+
+  ![image-20210203092034873](15_Web.assets/image-20210203092034873.png)
+
+  float로 설정 될 요소의 부모요소(가장의 요소)를 만듭니다. 그리고
+
+  ```css
+  /* CSS */
+  .clearfix::after {
+      content: "";
+      display: block;
+      clear: both;
+  }
+  ```
+
+  ```html
+  # html
+  <header class="clearfix">
+      <div class="box1 left">
+          float left
+      </div>
+  </header>
+  ```
+
+  위와같이 내부속성을 정해주면 외부 요소들이 float를 무시하게 됩니다.
+
+  보통 클래스 이름을 `clearfix`로 정해줍니다. (CSS에서 가상 선택자 `after`는 맞춰줘야하고, `clearfix`라는 이름은 바꿔도 되지만 관례적으로 해당 이름을 맞춰주시는게 좋습니다.)
+
+  ![image-20210203092808365](15_Web.assets/image-20210203092808365.png)
+
+  이런식으로 html에 추가가 됩니다.
+
+### 4.2 Flexbox
+
+> CSS Flexible Box Layout
+
+- 요소 간 공간 배분과 정렬 기능을 위한 1차원(단방향) 레이아웃
+- 크게 딱 2가지만 기억하자! **'요소'와 '축'!**
+- 요소
+  - Flex Container(부모요소)
+  - Flex Item(자식요소)
+- 축
+  - main axis(메인축)
+  - cross axis(교차축)
+
+![image-20210203113036621](15_Web.assets/image-20210203113036621.png)
+
+​		Flex Container를 통해서 이 안의 요소(각각의 Item)를 정렬합니다.
+
+- Flexbox의 기본방향
+
+  ![image-20210203093316297](15_Web.assets/image-20210203093316297.png)
+
+- Flexbox의 시작
+
+  ![image-20210203093411526](15_Web.assets/image-20210203093411526.png)
+
+  부모요소에 `display: flex`값을 주면 그 안의 요소들이 flex요소들이 되는 것입니다.
+
+  `display: flex`로 지정된 Flex Container는 Block요소와 같은 성향(수직 쌓임)을 가지며,
+
+  `display: inlin-flex`로 지정된 Flex Container는 Inline(Inline Block)요소와 같은 성향(수평 쌓임을 가집니다.)
+
+- Flex에 적용하는 속성
+  - 배치 방향 설정
+    - `flex-direction`
+      - `row`: 요소들을 텍스트의 방향과 동일하게 정렬합니다.
+      - `row-reverse`: 요소들을 텍스트의 반대 방향으로 정렬합니다.
+      - `column`: 요소들을 위에서 아래로 정렬합니다.
+      - `column-reverse`: 요소들을 아래에서 위로 정렬합니다.
+  - 메인축 방향 정렬
+    - `justify-content`
+  - 교차축 방향 정렬
+    - `align-items`, `align-self`, `align-content`
+  - 기타
+    - `flex-wrap`, `flex-flow`, `flex-grow`, `order`
+    - `flex-grow` : 메인축에서 남는 여백의 비율을 나눠 줍니다.
+
+- content & items & self
+
+  - content : 여러 줄
+  - items : 한 줄
+  - self : flex item 개별 요소
+  - 예시
+    - justify-content : 메인축 기준 여러 줄 정렬
+    - align-items : 교차죽 기준 한 줄 정렬
+    - align-self : 교차축 기준 선택한 요소 하나 정렬
+
+  - `justify-content`
+
+    - `flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `space-evenly`
+    - `justify`는 `content`일 수 밖에 없는게 축안에 content가 다수 존재하기 때문.( WC3에 의하면 content말고는 ignore된다고 합니다. items나 self가 사용되는 것은 CSS grid라는 곳에서 사용됩니다.)
+    - `flex-start`: 요소들을 컨테이너의 왼쪽으로 정렬합니다.
+    - `flex-end`: 요소들을 컨테이너의 오른쪽으로 정렬합니다.
+    - `center`: 요소들을 컨테이너의 가운데로 정렬합니다.
+    - `space-between`: 요소들 사이에 동일한 간격을 둡니다.
+    - `space-around`: 요소들 주위에 동일한 간격을 둡니다.
+
+  - `align-items` : 교차축 덩어리로 묶어서 처리. 
+
+    - `flex-start`, `flex-end`, `center`, `stretch`, `baseline`
+    - `flex-start`: 요소들을 컨테이너의 꼭대기로 정렬합니다.
+    - `flex-end`: 요소들을 컨테이너의 바닥으로 정렬합니다.
+    - `center`: 요소들을 컨테이너의 세로선 상의 가운데로 정렬합니다.
+    - `baseline`: 요소들을 컨테이너의 시작 위치에 정렬합니다.
+    - `stretch`: 요소들을 컨테이너에 맞도록 늘립니다.
+
+  - `align-content` : 교차축 하나하나
+
+    - `flex-start`, `flex-end`, `center`, `stretch`, `space-between`, `space-around`
+
+  - `align-self`
+
+    - `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch`
+
+  - 항목이 래핑되지 않은 경우에는 해당 영역이 항상 플렉스 박스 영역으로 확장되는 한 줄만 있고, `align-content`는 한 줄에 영향을 주지 않습니다. 따라서 래핑되지 않은 항목에는 영향을주지 않으며 모든 항목이 한 줄에 있을 때 항목 `align-items`만 항목 위치를 변경하거나 늘릴 수 있습니다.
+
+    그러나 줄 바꿈(래핑)된 경우 각 줄안에 여러 줄과 항목이 있습니다. 그리고 각 라인의 모든 항목이 동일한 높이(행 방향)를 갖는 경우 해당 라인의 높이는 해당 항목 높이와 동일하며 `align-items`값을 변경해도 효과가 나타나지 않습니다.
+
+- 때때로 컨테이너의 row나 column의 순서를 역으로 바꾸는 것만으로는 충분하지 않습니다. 이러한 경우에는 `order` 속성을 각 요소에 적용할 수 있습니다. order의 기본 값은 0이며, 양수나 음수로 바꿀 수 있습니다.
+
+- `flex-wrap`
+
+  - `nowrap`: 모든 요소들을 한 줄에 정렬합니다.
+  - `wrap`: 요소들을 여러 줄에 걸쳐 정렬합니다.
+  - `wrap-reverse`: 요소들을 여러 줄에 걸쳐 반대로 정렬합니다.
+
+- `flex-direction`과 `flex-wrap`이 자주 같이 사용되기 때문에, `flex-flow`가 이를 대신할 수 있습니다. 이 속성은 공백문자를 이용하여 두 속성의 값들을 인자로 받습니다.
+
+  예를 들어, 요소들을 가로선 상의 여러줄에 걸쳐 정렬하기 위해 `flex-flow: row wrap`을 사용할 수 있습니다.
+
+- Flexbox(실제 이름은 Flexible Box Layout Module)를 사용할 수 있는 html을 확인해봐야합니다.**can i use**를 이용! 사이트 내의 검색창에 `flexible`,`float`등 검색해서 확인해보면 됩니다.
+
+  ![image-20210203103140353](15_Web.assets/image-20210203103140353.png)
