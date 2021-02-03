@@ -906,3 +906,686 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 - css
   - codeacademy문제 다 풀어오세요.
   - 내용은 poiemaweb에서 배우세요
+
+## 210202_Tue
+
+- 어제 배운 것
+
+- 클래스는 `.`	아이디는 `#`
+  - 절대로 CSS를 주기위해서 id를 셋팅할 일은 없을겁니다. 배우는 입장이기에 일단 id를 배운 것
+- `em`, `rem`, `vw`, `vh` 단위 알고있자!
+  - vw, vh는 이따 배울 것
+- box model
+  - content box 와 border box
+- Display 줄과네모
+  - blck 줄바꿈 inline 줄바꿈 x
+  - ![image-20210202091059438](note.assets/image-20210202091059438.png)
+
+### (7) CSS Position
+
+- display는 보여지는 것을 결정
+
+- position은 보이게 할 것인데 어디게 보이게 할 것이냐?? 위치에 대한 얘기
+
+  ![image-20210202091321694](note.assets/image-20210202091321694.png)
+
+  margin은 contents 바깥의 이동(block속성에서만 가지는 것이 margin)
+
+  이것은 진짜 contents의 이동(진짜 이동하고 싶은 곳으로의 이동)
+
+  - 여기서 중요한 것은 '정렬'
+
+- `static` : 디폴트 값(기준 위치)
+
+  - static속성을 가지면 기본적으로 **안 움직입니다.**
+
+- 우선 구분을 좀 해봅시다(**이런 구분이 필요합니다.**)
+
+  - ![image-20210202091949682](note.assets/image-20210202091949682.png)
+    - ![image-20210202092146760](note.assets/image-20210202092146760.png)
+    - height, width, background-color는 `div`에 대한 내용
+    - color line-height, text-align은 `content`에 대한 내용
+    - color 글짜색
+    - line-height 행간
+    - text-align 정렬
+  - ![image-20210202092515301](note.assets/image-20210202092515301.png)
+    - 이 친구는 지금 static합니다.
+  - ![image-20210202092734288](note.assets/image-20210202092734288.png)
+
+- `relative `이친구는 relative합니다.
+
+  - ![image-20210202092759049](note.assets/image-20210202092759049.png)
+  - `relative`는 원래 있어야만 했던 자리를 기준으로 이동합니다.
+  - `position: relative`를 해줌으로써 relative가 된다.
+  - 끄면 다시 static이 됨
+
+- `absolute`
+
+- 이름부터 강한 '절대적인'애
+
+- 부모가 부모다워야 부모를 따른다.
+
+- 부모요소가 평범하면 말을 듣지 않습니다(일반적인 요소 = static인 경우 말을 안듣습니다.)
+
+  ![image-20210202100929230](note.assets/image-20210202100929230.png)
+
+- 이런애들이 보통 absolute 속성을 갖습니다.
+
+- ![image-20210202102342076](note.assets/image-20210202102342076.png)
+
+`div.parent>div.abs+div.sibling`
+
+![image-20210202101430172](note.assets/image-20210202101430172.png)
+
+- `fixed` 아무리 텍스트가 많아도 고정
+
+  ![image-20210202095110867](note.assets/image-20210202095110867.png)
+
+  - 카카오톡 상담과 같은 느낌
+
+  - 제대로 잡으려면??  `%`의 활용
+
+    ![image-20210202095240922](note.assets/image-20210202095240922.png)
+
+  - ![image-20210202100524954](note.assets/image-20210202100524954.png)
+
+    - 아 그런데 저 약간 남은공간이 답답하다
+
+      브라우저의 배려때문에 생기는불편함
+
+- resetcss : css개발자들이 사용하는 프로그램
+
+  - 기존의 모든 css들이 해주는 것들에 대해서 날려버리는 것
+
+- practice1
+
+  - https://flukeout.github.io
+
+5. #fancy > plate
+
+6. d
+7. orange.small
+8. bento > orange
+9. plate, bento
+10. *
+11. plate > *
+12. plate + apple
+13. 
+
+- practice2
+- 교수님 후배중...
+  - web design example을 쳐서 그냥 이리저리 둘러봄
+  - 이미지만 띄워놓고 0부터 무작적 자신이 만들면서 연습.
+- 참고 `모바일 디자인 패러다임`을 검색
+- pure-css art gallery
+- neumorphism css
+
+### workshop
+
+- 클래스 이름짓기는 `-`로 합니다.
+
+  - 클래스 이름 `red`, `small-box`이런것은 구림. 실제로 색깔이 red인지도 정확하지않고 바뀌는 경우도있음. `main`, `identity`나 **역할을 이름으로 해주는 것이 좋음** small또한 애매한 이름입니다. 더 작은 어떠한 것이 나올 수도 있고 small의 개념이 너무 상대적입니다. 
+
+- 클래스 구분은 띄어쓰기
+
+- 실용 css library는 회사마다 가지고 있습니다.
+
+  - 우리가 사용하는 오픈소스 3가지
+    - bootstrap
+    - materilize css
+    - semantic ui
+  - 교수님이 만드신 css파일을 우리가 받으면 우리가 할 일은 html에 클래스이름을 넣어주기만 하면된다. 이처럼 다른 회사에서도 이와같은 행위를 하기위해서 라이브러리를 만들어놓았다.
+  - 만줄 가까이되는 css파일을 가지고 우리는 이것을 쓰는법을 활용하면 됩니다.
+    - 클래스만 요소에 잘 때려박으면 됩니다.
+
+- 여기까지 와서 느꼇으면 하는 마음
+
+  - css에대한 기본느끼기(정렬, height)
+  - 생각보다 레이아웃짜는것이 쉽지않다...
+  - 나중에 웹만들때 아 마진이 좀 작은데? 할때 마진이 뭔지는 알아야 만질수 있는거 아닙니까. 
+
+- TIL관리
+
+  - 유튜브 EO 배민 개발자분
+    - 구조갈아엎기
+  - 사냥개처럼 물어지는 개발자. 사람과 소통하는 개발자.
+  - 코드리뷰에대해서 열린마음을 가져야합니다
+  - 누군가를 가르쳐보면서 스스로 배우는 점이 정말 많습니다.
+  - 꾸준히 꾸준히 읽어보고, 준비해야합니다. 학습하고 노력해야합니다.
+
+- 기업의 문화
+
+  - 넥슨, 카카오, 네이버...
+  - 사실 별반 다르지 않다.
+  - 결국 TIL하세요.
+
+- 너무 앞만 보고 달리려고 했던 것을 아닐까
+
+- hw에서 끝내도 되지만 ... 아 이거 한번해볼까.. 한스텝이 중요한 것.
+
+- 한 걸음 더 내딛여볼까
+
+- 배운것을 복습 
+
+- **뭐라도 하나 만들어 보겠다 (사이드 프로젝트를 하셔야 내가 성장하고 배울 수 있습니다 .)**
+
+  교수님이 설명해 주신 부분만 복습하고 배우면 거기가 목표의 끝입니다.
+
+  스스로의 프로젝트를 진행하면서 알게되는 것이 진짜 성장하는 것
+
+  단순히 읽어보는 것은 수동적인것
+
+  **뭐라도 던져놓고 해보는것 그것이 능동적인것**
+
+  - 근데 언제 가능하겠습니까..? 그건 확실하지않지만.. 그와중에 하시는 분들도 계시더라구요..
+
+## 210203_Wed
+
+- 오늘은 Grid / Responsive Web을 배울예정입니다.
+
+### CSS layout
+
+![image-20210203090600016](note.assets/image-20210203090600016.png)
+
+![image-20210203090622276](note.assets/image-20210203090622276.png)
+
+- Float Flexbox Grid가 오늘 배울 내용입니다.
+- 웹 페이지에 포함되는 요소들을 **취합**하고, 그것들이 어느 **위치에 놓일 것인지를 제어**하는 기술.
+
+### 1 Float
+
+![image-20210203090718713](note.assets/image-20210203090718713.png)
+
+- Float 뜨나 html을 벗어나서 **텍스트나 인라인 요소로 감싸는** 기술
+  - 점점 발전하다보니 웹페이지 구조를 담당하는 역할까지 하게 됨
+
+![image-20210203090826384](note.assets/image-20210203090826384.png)
+
+- 시간이 지나면서 웹페이지 구조를 담당하는 기술까지 발전하게 됨
+
+- ![image-20210203091412410](note.assets/image-20210203091412410.png)
+
+  이런식의 배치를
+
+  ![image-20210203091746104](note.assets/image-20210203091746104.png)
+
+  이렇게 해줍니다
+
+  ![image-20210203091934527](note.assets/image-20210203091934527.png)
+
+  float를 하게 된다면 빈공간이 생겨서 float를 하지 않은 요소(div)가 그 자리를 채우게 됨
+
+  float로 인해서 방해를 받게는걸 막기위해 나머지 요소들이 float를 무시할 수 있어야합니다. 
+
+  ![image-20210203092034873](note.assets/image-20210203092034873.png)
+
+  float로 설정 될 요소의 부모요소(가상의 요소)를 만듭니다. 그리고 `.clearfix::after{}`를 사용합니다. `content: ""; display: block; cleaer: both;` 내부 속성을 정해주면 외부 요소들이 float를 무시하게 됩니다.
+
+  내용이 빈 블록을 만든다는 개념
+
+  보통 클래스 이름을 `clearfix`로 정해줍니다.
+
+  클래스 이름은 `clearfix::after`로 안해도 되나요?? 교수님 답변 : 가상 선택자 after는 맞춰줘야하고, clearfix라는 이름은 바꿔도 되지만 관례적으로 해당 이름을 맞춰주시는게 좋습니다. 추가해주셨네요  float를 가진 요소에 추가해주시면 됩니다.
+
+  ![image-20210203092808365](note.assets/image-20210203092808365.png)
+
+  이런식으로 추가가 됩니다.
+
+### 2 Flexbox
+
+![image-20210203093056217](note.assets/image-20210203093056217.png)
+
+- 정식명칭은 CSS Flexible Box Layout
+- 요소 간 공간 배분과 정렬 기능을 위한 1차원(단방향, 한방향) 레이아웃
+  - 한 방향으로만 레이아웃해줍니다
+  - Flexbox에서 기억해야할 것은?
+    - **요소**
+    - **축**
+
+![image-20210203113036621](note.assets/image-20210203113036621.png)
+
+- `Flex container`를 통해서 이 안의 요소(각각의 `item`)를 정렬합니다.
+
+- 시작은 주축에서 시작
+
+  ![image-20210203093246770](note.assets/image-20210203093246770.png)
+
+- 교차축
+
+  ![image-20210203093301578](note.assets/image-20210203093301578.png)
+
+- 기본값은 이 방향으로 갑니다
+
+  ![image-20210203093316297](note.assets/image-20210203093316297.png)
+
+- ![image-20210203093411526](note.assets/image-20210203093411526.png)
+
+  - 이것이 flexbox의 시작
+  - 부모에 해당하는 요소에 `display: flex`값을 주면 그 안의 요소들이 flex요소들이 되는것입니다.(이것이 flexbox의 선언!)
+
+- ![image-20210203093543165](note.assets/image-20210203093543165.png)
+
+  - `flex-direction` : 축방향을 메인으로할지 교차로 할지
+  - `justify-content` : 메인축 방향 정렬
+  - 교차축 방향 정렬
+  - 기타
+
+- ![image-20210203093615139](note.assets/image-20210203093615139.png)
+
+  - 축이 바뀐다라 함은 main-axis가 바뀐다는 겁니다.
+
+  - row(default)는 좌측 -> 우측
+
+  - row-reverse는 반대
+
+  - colun은 위 -> 아래
+
+  - column-reverse. 이경우 메인축이 아래에서 위로가 메인축이 된 것
+
+    ![image-20210203093727987](note.assets/image-20210203093727987.png)
+
+- ![image-20210203093825717](note.assets/image-20210203093825717.png)
+
+  - **`justiy`** 메인축 정렬
+
+  - **`align`**은 교차축 정렬
+
+  - 중요 중요!
+
+  - ![image-20210203093922072](note.assets/image-20210203093922072.png)
+
+    위 처럼 ->가 메인이면 메인축 정렬을 justify가 됨
+
+- ![image-20210203094007178](note.assets/image-20210203094007178.png)
+
+  justify는 메인축 정렬 content는 여러줄 따라서 justify-content는 메인축 기준 여러 줄 정렬
+
+  ![image-20210203094100830](note.assets/image-20210203094100830.png)
+
+  따로따로 생각해보면 됩니다.
+
+- 그렇다면 정렬을 어떻게 할 것인가???? 어떤 방향으로??
+
+  ![image-20210203094147892](note.assets/image-20210203094147892.png)
+
+  ![image-20210203094206234](note.assets/image-20210203094206234.png)
+
+  ![image-20210203094134484](note.assets/image-20210203094134484.png)
+
+  align items : 교차축 덩어리로 묶어서, align content: 교차축 하나하나
+
+  self만 개별요소에 align-self값을 적용합니다. 다른 것들은 부모요소의 클래스에 적용하지만..
+
+  order또한 각각의 개별요소에 적용해줍니다.
+
+  flex-grow또한 개별요소에 적용해줍니다.
+
+  justify는 content일수밖에 없는게 축안에 content가 다수 존재하기 때문.( WC3에 의하면 content말고는 ignore된다고 합니다. items나 self가 사용되는 것은 CSS grid라는 곳에서 사용됩니다.)
+
+  - space-between : 요소들 사이에 동일한 간격을 둡니다.
+  - space-around: 요소들 주위에 동일한 간격을 둡니다.(외곽1, 내부2)
+  - `flex-start`: 요소들을 컨테이너의 왼쪽으로 정렬합니다.
+  - `flex-end`: 요소들을 컨테이너의 오른쪽으로 정렬합니다.
+  - `center`: 요소들을 컨테이너의 가운데로 정렬합니다.
+  - `space-between`: 요소들 사이에 동일한 간격을 둡니다.
+  - `space-around`: 요소들 주위에 동일한 간격을 둡니다.
+  - 
+  - `flex-start`: 요소들을 컨테이너의 꼭대기로 정렬합니다.
+  - `flex-end`: 요소들을 컨테이너의 바닥으로 정렬합니다.
+  - `center`: 요소들을 컨테이너의 세로선 상의 가운데로 정렬합니다.
+  - `baseline`: 요소들을 컨테이너의 시작 위치에 정렬합니다.
+  - `stretch`: 요소들을 컨테이너에 맞도록 늘립니다.
+  - 
+  - `row`: 요소들을 텍스트의 방향과 동일하게 정렬합니다.
+  - `row-reverse`: 요소들을 텍스트의 반대 방향으로 정렬합니다.
+  - `column`: 요소들을 위에서 아래로 정렬합니다.
+  - `column-reverse`: 요소들을 아래에서 위로 정렬합니다.
+  - 
+
+  - 때때로 컨테이너의 row나 column의 순서를 역으로 바꾸는 것만으로는 충분하지 않습니다. 이러한 경우에는 `order` 속성을 각 요소에 적용할 수 있습니다. order의 기본 값은 0이며, 양수나 음수로 바꿀 수 있습니다.
+
+  - `align-self`는 개별 요소에 적용할 수 있는 또 다른 속성입니다. 이 속성은 `align-items`가 사용하는 값들을 인자로 받으며, 그 값들은 지정한 요소에만 적용됩니다.
+
+  - 오 이런! 개구리들이 한 줄 위에 비좁게 앉아있네요. 다음의 값들을 인자로 받는 `flex-wrap` 속성을 사용하여 개구리들이 넓게 앉을 수 있도록 해주세요:
+
+    - `nowrap`: 모든 요소들을 한 줄에 정렬합니다.
+    - `wrap`: 요소들을 여러 줄에 걸쳐 정렬합니다.
+    - `wrap-reverse`: 요소들을 여러 줄에 걸쳐 반대로 정렬합니다.
+
+  - `flex-direction`과 `flex-wrap`이 자주 같이 사용되기 때문에, `flex-flow`가 이를 대신할 수 있습니다. 이 속성은 공백문자를 이용하여 두 속성의 값들을 인자로 받습니다.
+
+    예를 들어, 요소들을 가로선 상의 여러줄에 걸쳐 정렬하기 위해 `flex-flow: row wrap`을 사용할 수 있습니다.
+
+    `flex-flow`를 사용하여 이전 단계를 반복해보세요.
+
+  - 이제 연못의 조류에 의해 수련잎들이 연못의 아래쪽으로 떠내려 갔습니다. `align-content`를 사용하여 개구리들이 수련잎 위로 이동할 수 있도록 도와주세요.
+
+  ![image-20210203101739475](note.assets/image-20210203101739475.png)
+
+- 예제
+
+  ![image-20210203094639774](note.assets/image-20210203094639774.png)
+
+  이랬던 애들이 flex선언을 해주면
+
+  ![image-20210203094704254](note.assets/image-20210203094704254.png)
+
+  이렇게 바로 바뀝니다
+
+  ![image-20210203094749773](note.assets/image-20210203094749773.png)
+
+  inlinelex까지 한 경우
+
+  ![image-20210203095146011](note.assets/image-20210203095146011.png)
+
+  이런식으로 사용해도 우선순위가 밑에서 시작하므로 이경우 column으로 적용됩니다.
+
+  교차축정렬은 ->게 메인이면 아래방향이 교차축
+
+![image-20210203100749137](note.assets/image-20210203100749137.png)
+
+- `flex-grow`
+
+![image-20210203102125826](note.assets/image-20210203102125826.png)
+
+![image-20210203102140733](note.assets/image-20210203102140733.png)
+
+​	주축에서 남는 부분의 비율을 나눠서 줍니다.
+
+​	음수는 불가능
+
+- 간단히 정리해보면.. (다정리는 못했음메 ㅜ)
+  - flex는 항상 display: 이런식으로 시작시켜 줘야합니다.
+  - self가 적힌 것들은 자식요소에 적용시켜줘야합니다.
+  - flex-flow : direction과 wrap의
+  - `order` 작은숫자일수록 배치방향의 앞으로 갑니다. 따라서 1을줬을때 기본값이 0이라서 맨뒤로 이동
+- ![image-20210203102910793](note.assets/image-20210203102910793.png)
+  - 메인축을 기억하고 있어야합니다.
+
+- flexbox(실제 이름은 Flexible Box Layout Module)를 사용할 수 있는 html을 확인해봐야합니다.**can i use**를 이용! 사이트 내의 검색창에 `flexible`,`float`등 검색해서 확인해보면 됩니다.
+
+  ![image-20210203103140353](note.assets/image-20210203103140353.png)
+
+- 어제실습중 일출봉에 flex적용해보면
+
+  ![image-20210203103833835](note.assets/image-20210203103833835.png)
+
+  이렇게 바뀌고 column으로 메인축을 변경
+
+  ![image-20210203103935289](note.assets/image-20210203103935289.png)
+
+  ![image-20210203110624700](note.assets/image-20210203110624700.png)
+
+  이 공백은 CSS 버그라서 이미지 선택자 부분에서 `display: block`을 주면 없어집니다.
+
+### 3 Bootstrap
+
+![image-20210203111737089](note.assets/image-20210203111737089.png)
+
+- 빠르고, **반응형**(우리가 어떤 디바이스를 사용하던지 bootstrap이 적용을 해줄 것), **grid system**, prebuit(미리 만들어놓음)
+
+  javascript 라이브러리(front end에서 가져다 쓰는 )
+
+- 반응형 웹페이지는 'one source muilti use'를 지향합니다.
+
+  소스코드는 하나만 쓰는데 거기에 설정값만 더해서 보이도록합니다.
+
+- Bootsrap 얼마나 유명한가
+
+  ![image-20210203112135822](note.assets/image-20210203112135822.png)
+
+  github에 fron-end open source Repositories 랭킹(gitstar ranking)
+
+  5 react 7 tensorflow 3 vue
+
+  1 2 위는 중국꺼
+
+  ![image-20210203112410108](note.assets/image-20210203112410108.png)
+
+  우리가 사용하는 프로그램이 어떤언어로 되어있는지(UI Framework) 말해주는 프로그램
+
+  bootstrap으로 VOGUE, NETFLIX 만들어짐
+
+  ![image-20210203112850517](note.assets/image-20210203112850517.png)
+
+  html에 비해서 bootsrap을 하면 약간 좀 바뀝니다. 둘이 좀 다르게 보입니다
+
+- 정리
+
+  - float
+  - flexbox : 1차원 레이아웃, 한 축으로 정렬
+    - 요소와 축!
+
+- 오후시간 이어서 시작!
+
+  ![image-20210203141045793](note.assets/image-20210203141045793.png)
+
+  - bootstrap.css == bootstrap.min.css는 사실 같은 파일이지만 min.css파일은 10000줄을 한줄로 묶어서 처리(minified처리해놓은 파일)
+
+    - 보기에는 css가 편합니다.
+
+  - bootstrap.css.map은 브라우저가 디버깅시에 사용하는 파일로서 우리가 직접적으로 사용하지는 않습니다.
+
+  - 우리는 보기가 편한 css파일을 사용할 거지만 어떤것을 사용해야 하느냐???? 사이트를 가봅시다.
+
+    ![image-20210203141409648](note.assets/image-20210203141409648.png)
+
+    ![image-20210203141501618](note.assets/image-20210203141501618.png)
+
+    - 우리는 다들어가 있는 bootstrap.css 파일과 bootstrap.bundle.js을 사용하겠습니다.
+
+- 이렇게 옮겨서 실행해보면 CSS가 초기화가 됩니다.
+
+  - Why???
+
+    ![image-20210203142036926](note.assets/image-20210203142036926.png)
+
+    기본적으로 브라우저가 CSS에 주는 설정이 있기때문에 이를 초기화 시켜주는 것입니다.
+
+    초기화 시켜주는 파일이 무엇이냐면`bootstrap-roboot.css`파일입니다.
+
+    ![image-20210203142125474](note.assets/image-20210203142125474.png)
+
+    우리가 개발을 깨끗한 환경에서 할 수 있도록 초기화 시켜주는 파일(브라우저 간의 차이를 없애줍니다.)
+
+  - 이것은 부트스트랩에서 만든건가요?? 아니요
+
+    ![image-20210203142257733](note.assets/image-20210203142257733.png)
+
+    Normalize.css라는 파일을 부트스트랩에서 커스터마이즈한 것입니다. 
+
+    최근에 CSS 초기화하는 방법은 Normallize입니다. Reset은 조금 강하게 스타일을 없애버리는 것. Normalize는 어느정도는 유지하면서 초기화시키는 방법. 그러다 보니 Normalize는 gentle한 solution. Reset은 aggresive한 solution이라고 합니다.
+
+- 사실 부트스트랩보다 더 편한 방법이 있습니다.
+
+  - **부트스트랩을 사용한다는 것은 부트스트랩 CDN을 사용한다는 의미입니다.**
+
+  ![image-20210203142518833](note.assets/image-20210203142518833.png)
+
+  CDN상으로 불러오면 캐시로 남아있기때문에 다시 불러올때 시간이 단축될 수 있다.
+
+  ![image-20210203151620654](note.assets/image-20210203151620654.png)
+
+  ![image-20210203143137757](note.assets/image-20210203143137757.png)
+
+  - .mt-1 : margin-top: 0.25rem !important;
+    - 0.25rem = 4px
+
+  ![image-20210203143309250](note.assets/image-20210203143309250.png)
+
+  Bootsrapt상의 CSS규칙
+
+  ![image-20210203143333077](note.assets/image-20210203143333077.png)
+
+  - margin의 x축
+
+    ![image-20210203143422781](note.assets/image-20210203143422781.png)
+
+    자연스럽게 y는 상하로 볼 수 있습니다.
+
+  - ![image-20210203143457377](note.assets/image-20210203143457377.png)
+
+    ​	수평 중앙 정렬
+
+  - ![image-20210203143516793](note.assets/image-20210203143516793.png)
+    - padding top과 bottom이 0이다.
+
+- ![image-20210203143555281](note.assets/image-20210203143555281.png)
+
+  - s(start)가 left, e(end)가 right
+
+- ![image-20210203143659926](note.assets/image-20210203143659926.png)
+
+  - 부트스트랩 미적용
+
+- ![image-20210203143712252](note.assets/image-20210203143712252.png)
+
+  - 부트스트랩 적용(이미 색또한 적용해놨습니다.)
+
+    ![image-20210203143756689](note.assets/image-20210203143756689.png)
+
+- **부트스트랩은???? 클래스로 움직인다!!** 클래스를 가져다 쓰는 것 뿐.
+
+  ![image-20210203144256257](note.assets/image-20210203144256257.png)
+
+- ![image-20210203150544413](note.assets/image-20210203150544413.png)
+  - flex box에 대한 클래스 명칭이 약간 달라지기때문에한번 확인해봐야합니다.
+
+- ![image-20210203150624642](note.assets/image-20210203150624642.png)
+
+  같은 컨텐츠를 보는 각기 다른 디바이스
+
+  하나의 파일로 여러가지 디바이스에 반응, 구동할 수 있도록 만드는 것이 Responsive Web Design
+
+  ![image-20210203150703209](note.assets/image-20210203150703209.png)
+
+  ![image-20210203150749177](note.assets/image-20210203150749177.png)
+
+  bootstrap의 내부 시스템은 flexbox로 되어있음. 12개의 column과 6개의 반응형 tiers를 가지고 있음.
+
+  ![image-20210203150825349](note.assets/image-20210203150825349.png)
+
+  **12개의 column**(12개의 계층구조)
+
+  **6개의 grid breakpoints**
+
+  ![image-20210203150903435](note.assets/image-20210203150903435.png)
+
+  ![image-20210203150939941](note.assets/image-20210203150939941.png)
+
+  이건 하나의 행에 3개의 column이 있다는 의미
+
+  근데 왜 **12개의 cllumn**(12개의 계층구조)일까?????? => 약수가 많아서
+
+  ​	약수가 많다라는 것은??? => 그만큼 레이아웃을 다양하게 짤 수 있다.
+
+  그렇다면 **6개의 grid breakpoints**는 ????
+
+  ![image-20210203151220034](note.assets/image-20210203151220034.png)
+
+  `d-sm-none` display가 sm으로 된다면 none
+
+  `d-md-block` width가 768이상이 된다면 block을 하겠다.
+
+  이 처럼 그 breakpoint가 6개 라는 의미입니다.
+
+  576이하는 직접 쓰지는 않습니다. 
+
+  내부적으로는 이렇게 되어있습니다.
+
+  ![image-20210203154925867](note.assets/image-20210203154925867.png)
+
+- practice
+
+  - `.box.col-1{$}*13`
+
+    ![image-20210203152458965](note.assets/image-20210203152458965.png)
+
+- ![image-20210203153824902](note.assets/image-20210203153824902.png)
+
+  - 부트스트랩 내부적으로 flex box를 사용하기 때문
+
+  - col -> flex item이 되는것
+
+    ![image-20210203154255962](note.assets/image-20210203154255962.png)
+
+    **class에서 flex요소들을 사용할 수 있고 이들 layout을 짜면서 구성할 수 있다는 점**
+
+- 마무리
+
+  - grid system사용이유 ? 반응형웹사용을 위해(12col, 6개응 반응형 tiers, 내부적으로는 flexbox grid)  *css의 자체적인 grid도있지만 부트스트랩의 그리드와 다른것임!
+
+  - container row column
+
+  - **기억합시다! 12개 column 6개 breakpoint!**
+
+    - 그리드 시스템의 6개 계층구조
+
+  - CSS layout
+
+    - position : 상대 고정 절대 위치
+    - float : 한 요소가 정상흐름을 빠져나와서 텍스트나 인라인 요소들에 대해서 주위를 감싸는 배치를 하기위해서 탄생. 조금 더 나아가서 열 layout에 사용했었다
+    - flexbox : 아이템간의 공간배분과 강력한 정렬기술을 통해서 1차원 레이아웃모델을 정의 (메인축과 교차축!)
+    - grid system : 강력한, 모바일, 우선 그리드 시스템. 12개 col 6개 반응형 계층이 존재. 모든 디바이스의 웹 구축이 가능하다
+    - 결국 목적이 뭐냐?? Responsiv Web Design
+
+  - 취합, 적재적소에 배치!
+
+  - 어? 그럼 grid가 flexbox보다 좋은건가?? => 그건 상황마다 다릅니다.
+
+    ![image-20210203155620133](note.assets/image-20210203155620133.png)
+
+    상황이 단순한 상환인지. 아니면 좀 복잡한지 상황에 따라서 적절한 것이 존재합니다.
+
+    상황에 따라서 둘다 적절하게 사용해야합니다
+
+    flexbox는 grid의 대체재가 아닙니다.
+
+    ![image-20210203155809240](note.assets/image-20210203155809240.png)
+
+앞으로 4주간 알고리즘 을 배우게됩니다 3월에 django시간에 다시만나요ㅕ!!!
+
+### 교수님시간
+
+- 텍스트가 브라우저에 들어가야 소화가 되고 그것이 비로소 의미를 갖게 되는데
+- DOM(Document Object Model) tree 트리구조
+  - 단일 노드가 있고 아래로 뻗어 나가면서 증가하는 것
+  - 시작점은 하나, 그리고 나서 밑으로 뻗어나가는 것
+  - 무엇이 연상되나? 1 **폴더**(디렉토리 구조) 2 **html**구조
+    - 근데 이것도 결국 텍스트 덩이리입니다. 근데 이 덩어리를 브라우저에 보내면 브라우저가 이것을 이해하고 '트리'로 재구성을 하는겁니다.
+    - 그렇게 소화 된 모습을 내부적으로 DOM Tree
+    - html이 Document. -> Document Object Model로 브라우저가 이해하고 만들어 주게 됩니다.
+
+- hw
+
+  ![image-20210203124640113](note.assets/image-20210203124640113.png)
+
+  `로그인`의 경우 단순히 텍스트가 아니라 어떤 기능을 가진 것
+
+  ![image-20210203124740533](note.assets/image-20210203124740533.png)
+
+  등본처럼 어떠한 양식을 만들고 그 양식에 도장같은 것이 찍히면 비로소 어떠한 특정 데이터, 문서가 됩니다.(따라서 서버에 **제출**을 할 수 있게 됩니다.) 이름 위해서 `<form>`태그 내부에 `<input>`태그를 넣어야합니다.
+
+  ![image-20210203125124285](note.assets/image-20210203125124285.png)
+
+  여기서 id있는 input은 의미가 있기에 label을 달아줍니다.
+
+  ![image-20210203125214476](note.assets/image-20210203125214476.png)
+
+  보이는건 달라지진 않지만 input을 위한 `label`이 만들어 진것(이렇게 하면 의미론적으로 완성 된 것) => 친절한 브라우저의 추가기능 label을 클릭하면 id가 엮여있는 해당 input으로 focus를 움직이게 해줍니다.
+
+  그렇다면 저 label for=""부분에 무엇이 들어가야 할까..??? 바로 **`id`**
+
+  `id`이름은 그냥 짓지만 for와 id를 같게 해주어야합니다.
+
+  ![image-20210203125411903](note.assets/image-20210203125411903.png)
+
+  - `input`은 `label`과 같이다닌다
+  - `input` 내부에는 `id type name`이 들어가야한다 id class는 브라우저 내에서만 의미가 있습니다.(브라우저가 셀렉트하기위해서 name은 서버가 처리하기위해서 필요한 속성)
+
+- flexbox 연습 사이트 https://flexboxfroggy.com/#ko
+  - 개개인은 못움직이고 박스를 흔들어서 움직이는 게임
+
+#### 오후
+
+vh75% : viewport height 화면의 75%

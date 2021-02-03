@@ -36,6 +36,8 @@
 ## 2 HTML
 
 > Hyper Text Markup Language
+>
+> 웹 페이지가 어떻게 구조화되어 있는지 알 수 있도록 하는 마크업 언어
 
 ### 2.1 HTML?
 
@@ -257,6 +259,8 @@
 ## 3 CSS
 
 > Cascading Style Sheets
+>
+> 사용자에게 문서(HTML)를 표시하는 방법을 지정하는 언어
 
 ### 3.1 CSS?
 
@@ -439,26 +443,70 @@
 
 앞에서 배운 인라인과 블록 또한 Display의 요소였습니다.
 
-![image-20210201155715738](15_Web.assets/image-20210201155715738-1612202748937.png)
-
-​	![image-20210201155754830](15_Web.assets/image-20210201155754830.png)
+- `display: block`
+  - 줄 바꿈이 일어나는 요소
+  - 화면 크기 전체의 가로 폭을 차지한다
+  - 블록 레벨 요소 안에 인라인 레벨 요소가 들어갈 수 있음.
+- `display: inline`
+  - 줄 바꿈이 일어나지 않는 행의 일부 요소
+  - content 너비만큼 가로 폭을 차지한다.
+  - width, height, margin-top, margin-bottom을 지정할 수 없다.
+  - 상하 여백은 line-height로 지정한다.
+- 대표적인 블록 레벨 요소
+  - `div / ul, ol li / p / hr / form` 등
 
 ![image-20210201155816171](15_Web.assets/image-20210201155816171.png)
 
 ![image-20210201155828746](15_Web.assets/image-20210201155828746.png)
 
+- 대표적인 인라인 레벨 요소
+  - `span / a / img / input, label / b, em, i, strong` 등
+
 ![image-20210201155847538](15_Web.assets/image-20210201155847538.png)
+
+- 속성에 따른 수평 정렬
+- 블록요소의 경우
+  - `margin-right: auto;` : 좌측정렬
+  - `margin-left: auto;` : 우측정렬
+  - `margin-right: auto; margin-left: auto;` : 가운데 정렬
+- 인라인요소의 경우
+  - `text-align: left;` : 좌측정렬
+  - `text-align: right;` : 우측정렬
+  - `text-align: center;` : 가운데 정렬
 
 ![image-20210201155903778](15_Web.assets/image-20210201155903778.png)
 
-좌측 : 블럭요소의 수평정렬
+- `display: inline-block`
+  - blcok과 inline 레벨 요소의 특징을 모두 갖는다.
+  - inline처럼 한 줄에 표시 가능하며,
+  - block처럼 width, height, margin 속성을 모두 지정할 수 있다.
+- `display: none`
+  - 해당 요소를 화면에 표시하지 않는다. (공간조차 사라진다.)
+  - 이와 비슷한 `visibility: hidden`은 해당 요소가 공간은 차지하나 화면에 표시만 하지 않는다.
 
-우측 : 인라인요소의 수평정렬
+### 3.8 CSS Position
 
-![image-20210201155949348](15_Web.assets/image-20210201155949348.png)
+- display는 보여지는 것을 결정합니다. position은 사용자에게 보이게 할 것인데 어디에 보이게 할 것이냐에대한 얘기입니다.
+- Box model같은 경우는 contents 바깥의 이동(margin은 block속성만 가집니다.)이었는데 CSS Position은 진짜 contents의 이동입니다.
 
-![image-20210201160050605](15_Web.assets/image-20210201160050605.png)
+- 문서 상에서 요소를 배치하는 방법을 지정한다.
+- `static` : 디폴트 값(기준위치)
+  - 기본적인 요소의 배치 순서에 따름(**좌측 상단**)
+  - 부모 요소 내에서 배치될 때는 부모 요소의 위치를 기준으로 배치 된다.
+  - `static`속성을 가지면 기본적으로 안움직입니다.
+- 아래는 좌표 프로퍼티(`top`, `bottom`, `left`, `right`)를 사용하여 이동이 가능하다. (음수 값도 가능)
+  - `relative` : **static 위치를 기준**으로 이동(상대 위치)
+  - `absolute` : **static이 아닌 가장 가까이 있는 부모/조상 요소를 기준**으로 이동(절대 위치)
+  - `fixed` : 부모 요소와 관계 없이 **브라우저를 기준**으로 이동(고정 위치)
 
-![image-20210201160244633](15_Web.assets/image-20210201160244633.png)
+- `static` : 기본적으로 움직이지 않습니다.
+- `relative` : 원래 있어야만 하는 자리를 기준으로 이동합니다.
+  - `position: ralative;`를 해줌으로써 적용됩니다.
+  - 해제하면 다시 `static`이 됨
+- `absolute` : 이름부터 강력한 '절대적인'친구
+  - 부모가 static이라면 말을 듣지 않습니다.
+- `fixed` : 아무리 텍스트가 많아도 고정
+  - `%`를 활용해서 조정
 
-![image-20210201160222780](15_Web.assets/image-20210201160222780.png)
+## 4 Workshop
+
