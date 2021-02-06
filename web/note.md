@@ -1300,8 +1300,9 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
   - flex-flow : direction과 wrap의
   - `order` 작은숫자일수록 배치방향의 앞으로 갑니다. 따라서 1을줬을때 기본값이 0이라서 맨뒤로 이동
 - ![image-20210203102910793](note.assets/image-20210203102910793.png)
-  - 메인축을 기억하고 있어야합니다.
-
+  
+- 메인축을 기억하고 있어야합니다.
+  
 - flexbox(실제 이름은 Flexible Box Layout Module)를 사용할 수 있는 html을 확인해봐야합니다.**can i use**를 이용! 사이트 내의 검색창에 `flexible`,`float`등 검색해서 확인해보면 됩니다.
 
   ![image-20210203103140353](note.assets/image-20210203103140353.png)
@@ -1428,6 +1429,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
     ​	수평 중앙 정렬
 
   - ![image-20210203143516793](note.assets/image-20210203143516793.png)
+    
     - padding top과 bottom이 0이다.
 
 - ![image-20210203143555281](note.assets/image-20210203143555281.png)
@@ -1449,8 +1451,9 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
   ![image-20210203144256257](note.assets/image-20210203144256257.png)
 
 - ![image-20210203150544413](note.assets/image-20210203150544413.png)
-  - flex box에 대한 클래스 명칭이 약간 달라지기때문에한번 확인해봐야합니다.
-
+  
+- flex box에 대한 클래스 명칭이 약간 달라지기때문에한번 확인해봐야합니다.
+  
 - ![image-20210203150624642](note.assets/image-20210203150624642.png)
 
   같은 컨텐츠를 보는 각기 다른 디바이스
@@ -1584,6 +1587,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
   - `input` 내부에는 `id type name`이 들어가야한다 id class는 브라우저 내에서만 의미가 있습니다.(브라우저가 셀렉트하기위해서 name은 서버가 처리하기위해서 필요한 속성)
 
 - flexbox 연습 사이트 https://flexboxfroggy.com/#ko
+  
   - 개개인은 못움직이고 박스를 흔들어서 움직이는 게임
 
 #### 오후
@@ -1597,3 +1601,424 @@ vh75% : viewport height 화면의 75%
 
 - 모든 인라인 요소를 버튼으로 만들 수 있다.
 - ![image-20210203172547711](note.assets/image-20210203172547711.png)
+
+## 210204
+
+### practice
+
+![image-20210204093108871](note.assets/image-20210204093108871.png)
+
+- `#` 은 placeholder. 
+- `Carousel`캐러셀 이라는 친구가 필요합니다. 클릭을하거나 시간단위에 따라서 움직이는 것들
+  
+- 이렇게 동적인 것들은 대부분 자바스크립트가 관여를 하고있습니다.
+  
+- <img>, <inuput> hr, br 은 클로징 태그가 없습니다. 이들을 셀프태그라고도 합니다. 모든 태그가 클로징 태그를 필요로 하는 것은 아닙니다
+- container는 좌우를 없애는 것 container-fluid는 화면 전체를 차지하는 것
+
+- components - card
+
+- Minumum Viable Product 최소한의 움직임을 만들어내는 결과물. 
+
+  - Agile하게 움직여야 한다
+  - 핵심은 Fast Start Fast Fail
+  - native app과 web의 차이 : native app은 업데이트시에 사용자가 다시 업데이트를 해줘야하는데 web의 경우에는 **새로고침**만 하면 된다는 점 ( 속도 )
+
+  - 반응형의 핵심은 **보고있는 화면의 가로폭**
+
+- 모든 `.row`는 기본적으로 `.container`에 존재합니다. 모든 `.column`은 기본적으로 row내에 존재합니다.
+
+  ![image-20210204104603310](note.assets/image-20210204104603310.png)
+
+  - row의 역할
+
+    ![image-20210204104921523](note.assets/image-20210204104921523.png)
+
+    화면은 12칸으로 나누어주는 일
+
+  - col의 역할
+
+    ![image-20210204105019703](note.assets/image-20210204105019703.png)
+
+- breakpoint
+
+  - col-xs-3  576보다 작으면 3칸을 먹는다
+
+  - col-md-3 576이상 768미만 이라면 3칸을 먹는다
+
+  - col-sm-12 col-md-6 col-lg-3
+
+    - 카드가 row에서 차지하는 칸은
+    - sm일때 12칸 12/12 => 1row에 1개
+    - md일때 6칸 6/12 => 1row에 2개
+    - lg일때 3칸 3/12 => 1row에 개
+      - 그렇다면 col-md-7 이 된다면??? 1row에 1개
+
+  - 이러한 규칙을 따릅니다.
+
+    - xs:  12(xs는 기본값이 12)
+
+    - sm:    12
+
+    - md:        6
+
+    - lg:              3
+
+    - xl:                  -
+
+    - xxl:                   -
+
+      ![image-20210204112453053](note.assets/image-20210204112453053.png)
+
+  - row-cols-sm-1 sm일때 1개
+
+  - row-cols-md-2 md일때 2개
+
+  - row-cols-lg-4 lg일때 4개
+
+- gutter는 padding을 더주는 것
+
+  - ![image-20210204124435220](note.assets/image-20210204124435220.png)
+
+    여기서 gutter를 주게되면
+
+    ![image-20210204124453674](note.assets/image-20210204124453674.png)
+
+    내부의 패딩이 늘어나기 때문에 안의 card크기가 줄어들게 됩니다 .
+
+    ![image-20210204124512936](note.assets/image-20210204124512936.png)
+
+![image-20210204131951194](note.assets/image-20210204131951194.png)
+
+![image-20210204131958978](note.assets/image-20210204131958978.png)
+
+알아서 배치 된 경우
+
+- 이미지의 크기는 그대로 갑니다.
+
+- workshop 1-3
+
+- ![image-20210204154658617](note.assets/image-20210204154658617.png)
+
+- ![image-20210204154732815](note.assets/image-20210204154732815.png)
+
+- 부트스트랩을 배웠는데 이걸 어따 써먹나
+
+- 클라우드 컴퓨팅
+  
+- 구글 클라우드, AWS, 마소 에져
+  
+- 깃헙
+
+- 뉴리포 -> eduyu.github.io
+
+  ![image-20210204164450002](note.assets/image-20210204164450002.png)
+
+- vim index.html 을 배쉬에서 치게되면
+
+  ![image-20210204165053153](note.assets/image-20210204165053153.png)
+
+  vs code에서 수정하는 것과 마찬가지임
+
+  ![image-20210204165143647](note.assets/image-20210204165143647.png)
+
+  이런 화면이 나오게 됨
+
+  i를 누르면 insert 예를들어 doctype, html태그까지만 만들고 끄려면??
+
+  저장을 해야함 esc 누르고 콜론(`:`)을 찍고 그 상태에서q누르면 끄겠다는 의미
+
+  저장은 `:w`
+
+  강제종료는 `:q!`
+
+  되돌리기는 `u`
+
+  `hjkl`은 상하좌우
+
+  저장종료는 `:wq`
+
+  이런것들이 어디있었느냐.. 
+
+## 210205
+
+### 1 Today..
+
+- 다하지 못한 이야기..
+
+  - 우리는 지금까지 html, css, bootstrap을 어떤것을 보여주기 위해서 배워왔습니다.
+  - 웹에있는 ~(Django) 를 잘 보여주기 위해서 html, css, bootstrap을 배웠는데 이를 잠시 보도록 합니다.
+  - htmll에서는
+    - html소개, 멀티미디어와 임베딩, html표, **html양식(form)**
+
+  - css
+    - 언어 구문
+    - 상속
+    - CSS 단위(사이즈, 색)
+    - Box model, 여백 상쇄
+    - 컨테이닝 블록(박스 모델 내의 여백조절-컨텐트, 보더, 패딩, 마진)
+    - CSS 단축 속성
+    - CSS 플렉스 박스 레이아웃
+    - CSS 그리드 레이아웃
+    - *미디어 쿼리(오늘 잠시 배워볼 부분)*
+      - grid시스템이 본질적으로 어떻게 돌아가는 걸까?
+    - *애니메이션(오늘 잠시 배워볼 부분)*
+
+- `미디어쿼리`를 배워봅시다(mdn문서 참고)
+
+  ![image-20210205091944138](note.assets/image-20210205091944138.png)
+
+  출력시에 red로 적용
+
+  ![image-20210205092340891](note.assets/image-20210205092340891.png)
+
+  가로길이가 600px을 넘게 된다면 text의 색상을 red로 변경
+
+  screen은 우리가 화면을 보는 일반적인 상황을 말해줍니다.
+
+  ![image-20210205092419223](note.assets/image-20210205092419223.png)
+
+  600px을 넘기 전까지 red.
+
+  반대로 600px을 넘으면 red를 적용시키고 싶다면 `min-width`를 적용
+
+  ![image-20210205092602426](note.assets/image-20210205092602426.png)
+
+  가로로 바뀌면 글씨 색상이 바뀜
+
+  ![image-20210205092752205](note.assets/image-20210205092752205.png)
+
+  여러 조건을 걸어주는 경우
+
+  or조건을 걸어주기 위해서는 `,`를 사용
+
+- `애니메이션`(mdn문서 참고)
+
+  ![image-20210205094202388](note.assets/image-20210205094202388.png)
+
+  함수라고 생각되는 slidein을 위 처럼 적용
+
+  개체가 직접움직이기 보다는 margin값을 변화시켜주는 것
+
+  여기서 %는 시점으로 생각하면 됩니다.
+
+  0%는 시작시점, 100%는 끝나는 시점
+
+  ![image-20210205100154566](note.assets/image-20210205100154566.png)
+
+- `애니메이트`도 한번 살펴봅시다!(참고 https://animate.style/)
+
+  - cdn을 가져온 후에 원하는 애니메이션을 적용하면 됩니다.
+  - ![image-20210205101146157](note.assets/image-20210205101146157.png)
+
+- 클릭을하거나, 스크롤을 내리면, (특정한 조건에서의 상황) 이러한 것들은 자바스크립트에서 배울 예정입니다.
+- `폰트`
+  - https://icons.getbootstrap.com/
+  - ![image-20210205103002080](note.assets/image-20210205103002080.png)
+  - https://fontawesome.com/icons?d=gallery
+
+- `aria-describedby`(bootstrap-docs-forms-overview에서)
+
+  ![image-20210205103154829](note.assets/image-20210205103154829.png)
+
+  **웹 접근성**에 대하여.. 다양한 사람들을 위한 웹
+
+  대표적으로 이미지의 `alt` 라는 속성. `alternative`의 속성인데 그림을 보지 못하는 사람들에 대한 적용입니다
+
+  참고 : https://nuli.navercorp.com/
+
+### 2 금일의 pjt
+
+어제 오늘 한 hw,workshop의 확장판
+
+flex, grid 깨부수자!
+
+부트스트랩을 이용하여 **반응형 웹페이지**를 만들어봅시다.
+
+- 상단고정 `fixed-top`, `sticky`
+
+- nav라는 녀석은 `ul`, `li`요소로 이루어져있습니다.
+
+- 오른쪽으로 설정 `d-flex`이용한 정렬
+
+- ![image-20210205110428402](note.assets/image-20210205110428402.png)
+
+- ![image-20210205110830763](note.assets/image-20210205110830763.png)
+
+  `Carousel`을 사용
+
+- `table`을 이용하여 표를 생성
+
+  ![image-20210205111019564](note.assets/image-20210205111019564.png)
+
+  색깔이 중요한 것이 아니라 interface의 구조(layout)가 중요!
+
+- Readme
+
+### 3 과목평가
+
+![image-20210205111244335](note.assets/image-20210205111244335.png)
+
+이번주에 한 내용입니다.
+
+- 오늘 pjt내용(웹접근성, 미디어쿼리, 애니메이션 등)은 포함되지 않습니다.
+
+- HTML / CSS / Bootstrap 크게 3가지를 배웠습니다.
+
+- HTML
+
+  - **HTML의 이론** 정의 (Hyper Text Markup Language) 인터넷의 문서들을 구조화 하는 것!
+
+  - Hyper Text. 링크가 중요합니다.
+
+  - HTML이 하고자 하는것? Markup. 의미부여
+
+  - **HTML의 기본구조**
+
+    - ![image-20210205111505561](note.assets/image-20210205111505561.png)
+
+      의미적으로 head와 body를 구분하는 것.
+
+    - 여는태그와 닫느태그
+
+  - 속성(attribute)
+
+    ![image-20210205111554362](note.assets/image-20210205111554362.png)
+
+    **태그자체에 대한 기능에대해서 이해하고 있어야합니다.**
+
+    예를들어 a태그는 href가 없으면 기능을 못하는 태그
+
+  - **시맨틱태그** : 의미를 담고있다!
+
+    - header, nav, aside, section, article, footer들이 어떤 의미를 가지고 있는지
+    - '의미'를 가지는 태그, 검색엔진최적화를 위해서 사용됩니다.
+
+  - 기본적으로 ppt에 올라가 있는 요소 (p, a, li, ul, ol, em, b, strong, i, br, img... 등 기본적인 태그)
+
+  - form은 넘어가도 좋습니다.
+
+- CSS
+
+  - CSS 문법
+
+    ![image-20210205111949682](note.assets/image-20210205111949682.png)
+
+  - 선택자 : 저거 색을 어떻게 바꾸지? 할때 저거를 선택해주는 것
+
+    - **선택자의 종류**
+    - 클래스 선택자 `.`, 아이디 선택자 `#`
+
+  - **CSS 우선순위**
+
+    - important, 인라인, id선택자, class선택자, 요소선택자, 요소순서
+    - **어떤 속성이 적용될까??? 하는 개념**
+
+  - **상속**
+
+  - CSS단위
+
+    - px, % em, rem, Viewport(vw, vh, vmin, vmax의 차이
+
+    - 색상단위 : rgb()
+
+    - `h1 { color: blue}`이런식으로 사용하게 됩니다.
+
+      ![image-20210205112241286](note.assets/image-20210205112241286.png)
+
+  - **Box Model**의 구성(margin, border, padding, content의미)
+
+    - 요소 자체의 크기는 padding
+    - 요소 사이의 간격은 margin이라고 생각해보면 편합니다 
+
+  - Box sizing은 그닥 중요 x
+
+  - **Display**
+
+    - block : 
+    - inline : 자기 컨텐츠 영역만큼차지
+    - inlin-block : 두가지를 모두 가지는 것
+
+  - **정렬방법**
+    - margin을 이용 `margin-left-auto` ... 
+    - flex를 이용
+    - grid를 이용
+
+  - **CSS Position**
+    
+    - static, relative, absolute, fixed의 차이점
+
+- Bootstrap
+
+  - **CSS layout**
+
+    - Flexbox, Grid
+
+  - Float
+
+    - Float는 잘 안쓰임 아 이런게 있구나 하면서 훑고 지나가기
+
+  - **FlexBox** 중요!!!!!
+
+    - **요소와 축**
+
+    - 요소 : container, item
+
+    - 축 : main axis, cross axis
+
+    - **시작**
+
+      `.x {display: flex;}`로 flexbox를 선언해줍니다. flex는 자신이 박스가 되기보다는 자신의 자식들을 정렬시키는 것!
+
+    - Flex에 적용하는 속성 우리가 많이 사용했던것을 보면됩니다.
+      - **flex-direction, justify-content, align-items**집중해서 볼 것
+      - content & itmes & self에서 각각의 요소가 어떤 효과를 볼 수 있는지 이해해볼 것
+
+  - CDN(Content Delivery Network)으로 가져옵니다.
+
+  - ![image-20210205113459537](note.assets/image-20210205113459537.png)
+
+    **위와 같은 모양에 들어갈 것들을 이해해야합니다.**
+
+  - ![image-20210205113612959](note.assets/image-20210205113612959.png)
+
+  - **bootstrap에서 색상의 이름**(primary, warning, success, light ... 색상들의 이해)
+
+    ![image-20210205113737606](note.assets/image-20210205113737606.png)
+
+  - `d-flex` 라는 클래스는 `display: flex`라는 속성을 편하게 사용하기 위해서 클래스로 만들어 놓은것
+
+    - **flex에 적용하는 속성들을 bootstrap에 어떻게 사용하는지**
+
+      ![image-20210205114037434](note.assets/image-20210205114037434.png)
+
+  - Responsive Web
+
+    - Grid system
+
+      - flexbox로 제작됨
+        - container, row, column으로 컨텐츠를 배치하고 정렬
+      - **반드시 기억해야하는 2가지!**
+        - **12개의 column**
+        - **6개의 계층요소 gird breakpoints**
+
+      ![image-20210205114201258](note.assets/image-20210205114201258.png)
+
+      - Nesting
+        - 그리드 안에 다시 그리드를 적용해 주는 것
+      - offset
+
+- homework, workshop에서 다루었던 내용들
+- 4지선다형, 주관식, 서술형 문제가 존재.
+
+### 4 정리
+
+지금까지 python, web은 튜토리얼이었습니다.
+
+### 교수님시간
+
+modal, carousel, navbar에서 주의 id, 이들은 js로 구성되어있습니다.
+
+카드는 클릭해도 안움직입니다.
+
+Community불 들어오도록

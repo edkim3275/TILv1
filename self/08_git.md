@@ -247,3 +247,15 @@
   `git pull --rebase master`
 
   입력하고 난 뒤 다시 push를하면 해결됩니다.
+
+- ![image-20210204203015052](08_git.assets/image-20210204203015052.png)
+
+  gitlab에서 필요없는 파일을 삭제하고난 뒤 다음 날 푸쉬를 하려고하니 이러한 에러가 발생했습니다.
+
+  ![image-20210204205626175](08_git.assets/image-20210204205626175.png)
+
+  우선 `git pull`을 하라는 것 같아서 `git pull`을 하니 위와 같이 두가지 중 선택을 하라고 하네요.
+
+  ![image-20210204205823660](08_git.assets/image-20210204205823660.png)
+
+  `git pull origin master`를 하니 그제서야 풀이 땡겨지고 push가 됐습니다.
