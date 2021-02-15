@@ -575,7 +575,8 @@
 
 > CSS Flexible Box Layout
 
-- 요소 간 공간 배분과 정렬 기능을 위한 1차원(단방향) 레이아웃
+- 요소 간 공간 배분과 정렬 기능을 위한 **1차원(단방향) 레이아웃**
+- **한 축**으로 정렬
 - 크게 딱 2가지만 기억하자! **'요소'와 '축'!**
 - 요소
   - Flex Container(부모요소)
@@ -673,3 +674,50 @@
 - Flexbox(실제 이름은 Flexible Box Layout Module)를 사용할 수 있는 html을 확인해봐야합니다.**can i use**를 이용! 사이트 내의 검색창에 `flexible`,`float`등 검색해서 확인해보면 됩니다.
 
   ![image-20210203103140353](15_Web.assets/image-20210203103140353.png)
+
+### 4.3 Bootstrap
+
+- Quickly, Responsive, the world's most popular, responsive grid system, probuilt components
+- Responsive web page는 'One source Multi use'를 지향
+
+- bootstrap의 클래스를 사용하기 위해서...
+
+  ![image-20210203141045793](15_Web.assets/image-20210203141045793.png)
+
+  - bootstrap.css == bootstrap.min.css 같은 파일이지만 min.css파일은 10000줄 정도를 한줄로 묶어서 처리
+
+  - bootstrap.css.map은 브라우저가 디버깅시에 사용하는 파일로서 우리가 직접적으로 사용하지는 않습니다.
+
+- Bootstrap상의 CSS규칙
+
+  - Spacing
+
+    | class name | rem  | px   |
+    | ---------- | ---- | ---- |
+    | m-1        | 0.25 | 4px  |
+    | m-2        | 0.5  | 8px  |
+    | m-3        | 1    | 16px |
+    | m-4        | 1.5  | 24px |
+    | m-5        | 3    | 48px |
+
+  - color
+
+    ![image-20210203143756689](15_Web.assets/image-20210203143756689.png)
+
+### 4.4 정리
+
+- grid system의 사용이유?
+
+  - 반응형 웹 사용을 위해
+  - 문서를 취합하고 적재적소에 배치!
+
+- 기억합시다 12개의 column, 6개의 breakpoint
+
+- 어? 그럼 grid가 flexbox보다 좋은건가?? => 그건 상황마다 다릅니다.
+
+  - 상황이 단순한 상황인지. 아니면 좀 복잡한지 상황에 따라서 적절한 것이 존재합니다.
+
+    상황에 따라서 둘다 적절하게 사용해야합니다
+
+  - flexbox는 grid의 대체재가 아닙니다.
+  - 각각의 기술은 저마다 용도가 있고, 장단점이 잇으며, 어떤 기술도 독립적인 용도를 갖추도록 설계되지는 않았습니다. 특정 상황에 어떤 기술이 가장 적합한 도구가 될 것인지 파악하는 데에는 ㅁ낳은 경험이 뒷받침되어야 합니다.

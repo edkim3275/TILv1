@@ -1033,7 +1033,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
   - 우리가 사용하는 오픈소스 3가지
     - bootstrap
-    - materilize css
+    - materilize css (구글)
     - semantic ui
   - 교수님이 만드신 css파일을 우리가 받으면 우리가 할 일은 html에 클래스이름을 넣어주기만 하면된다. 이처럼 다른 회사에서도 이와같은 행위를 하기위해서 라이브러리를 만들어놓았다.
   - 만줄 가까이되는 css파일을 가지고 우리는 이것을 쓰는법을 활용하면 됩니다.
@@ -1043,7 +1043,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
   - css에대한 기본느끼기(정렬, height)
   - 생각보다 레이아웃짜는것이 쉽지않다...
-  - 나중에 웹만들때 아 마진이 좀 작은데? 할때 마진이 뭔지는 알아야 만질수 있는거 아닙니까. 
+  - 나중에 웹만들때 아 마진이 좀 작은데? 할때 마진이 뭔지는 알아야 만질수 있는거 아닙니까.
 
 - TIL관리
 
@@ -1336,7 +1336,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
   ![image-20210203112135822](note.assets/image-20210203112135822.png)
 
-  github에 fron-end open source Repositories 랭킹(gitstar ranking)
+  github에 front-end open source Repositories 랭킹(gitstar ranking)
 
   5 react 7 tensorflow 3 vue
 
@@ -1384,7 +1384,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
     기본적으로 브라우저가 CSS에 주는 설정이 있기때문에 이를 초기화 시켜주는 것입니다.
 
-    초기화 시켜주는 파일이 무엇이냐면`bootstrap-roboot.css`파일입니다.
+    초기화 시켜주는 파일이 무엇이냐면`bootstrap-reboot.css`파일입니다.
 
     ![image-20210203142125474](note.assets/image-20210203142125474.png)
 
@@ -1398,7 +1398,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
     최근에 CSS 초기화하는 방법은 Normallize입니다. Reset은 조금 강하게 스타일을 없애버리는 것. Normalize는 어느정도는 유지하면서 초기화시키는 방법. 그러다 보니 Normalize는 gentle한 solution. Reset은 aggresive한 solution이라고 합니다.
 
-- 사실 부트스트랩보다 더 편한 방법이 있습니다.
+- 사실 부트스트랩파일을 가지고 오는 것보다 더 편한 방법이 있습니다.
 
   - **부트스트랩을 사용한다는 것은 부트스트랩 CDN을 사용한다는 의미입니다.**
 
@@ -1479,7 +1479,7 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
   이건 하나의 행에 3개의 column이 있다는 의미
 
-  근데 왜 **12개의 cllumn**(12개의 계층구조)일까?????? => 약수가 많아서
+  근데 왜 **12개의 column**(12개의 계층구조)일까?????? => 약수가 많아서
 
   ​	약수가 많다라는 것은??? => 그만큼 레이아웃을 다양하게 짤 수 있다.
 
@@ -1487,9 +1487,9 @@ CSS에서는 모든것을 네모로 바라봐야합니다.
 
   ![image-20210203151220034](note.assets/image-20210203151220034.png)
 
-  `d-sm-none` display가 sm으로 된다면 none
+  `d-sm-none` display가 sm(576px이상)으로 된다면 none
 
-  `d-md-block` width가 768이상이 된다면 block을 하겠다.
+  `d-md-block` width가 768px이상이 된다면 block을 하겠다.
 
   이 처럼 그 breakpoint가 6개 라는 의미입니다.
 
@@ -1614,12 +1614,12 @@ vh75% : viewport height 화면의 75%
   
 - 이렇게 동적인 것들은 대부분 자바스크립트가 관여를 하고있습니다.
   
-- <img>, <inuput> hr, br 은 클로징 태그가 없습니다. 이들을 셀프태그라고도 합니다. 모든 태그가 클로징 태그를 필요로 하는 것은 아닙니다
+- `<img>`, `<input>`, `hr`, `br` 은 클로징 태그가 없습니다. 이들을 셀프태그라고도 합니다. 모든 태그가 클로징 태그를 필요로 하는 것은 아닙니다
 - container는 좌우를 없애는 것 container-fluid는 화면 전체를 차지하는 것
 
 - components - card
 
-- Minumum Viable Product 최소한의 움직임을 만들어내는 결과물. 
+- Minimum Viable Product 최소한의 움직임을 만들어내는 결과물. 
 
   - Agile하게 움직여야 한다
   - 핵심은 Fast Start Fast Fail
