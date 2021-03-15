@@ -786,3 +786,744 @@ Articles Index
 - `urls.py` : 이것도 중요, requests 가장 먼저 만나는 친구. 사용자 요청을 가장 먼저 맞닿뜨리는 곳
 - `wsgi.py` : asgi와 비슷한 역할. 배포할 때 도움을 주는 친구인데 지금은 사용 x
 
+## CRUD system 관통 PJT(django project) 210312
+
+CRUD로직이 이번주는 가장 중요한 부분이었습니다. 다만 이걸 외운다고 접근하면 안되고, 흐름을 익히는 것이 중요합니다. 한 달 내내 CRUD할 것이기 때문에(약간 개념이 바뀌긴 하지만) 이 흐름을 이해해야 다음 부분도 좋을 것입니다. 많이써보는 연습을 하면 좋을 겁니다 ㅎㅎ
+
+![image-20210312090400221](16_django.assets/image-20210312090400221.png)
+
+지금까지는 각자 pjt를 했는데 이번부터는 pair programming으로 진행될 것.
+
+### 가상환경(Virtual Environment)
+
+먼저 '가상환경'에 대해 설명드리겠습니다.
+
+![image-20210312090520981](16_django.assets/image-20210312090520981.png)
+
+우리의 프로그래밍 환경을 어떻게 다른사람과 공유를 할지.
+
+![image-20210312090618086](16_django.assets/image-20210312090618086.png)
+
+지금까지 사용한 환경은 파이썬 프로그램이었습니다. 그래서 파이썬 실행하고 싶으면 `pyhon *.py`라는 명령어를 통해서 파이썬 파일을 실행 시켰습니다. 이 프로그램을 어디서 사용할 수 있게 설정을 한 것이냐면 터미널(쉘프로그램) 에서 사용할 수 있도록 환경을 맞춰준 상황이라서 `python manage.py ...`라고 명령을 주면서 사용중인 것.
+
+파이썬 인터프리터를 설정함으로서 우리가 `python manage.py ... `  이러한 명령을 줄 때 명령을 받도록 설정을 해놓은거임. 
+
+![image-20210312090901025](16_django.assets/image-20210312090901025.png)
+
+이러한 시스템환경변수에 저장을 해놓고 이렇게 사용을 하고있는 거임.
+
+![image-20210312090933193](16_django.assets/image-20210312090933193.png)
+
+근데 이것이 다른 사람과 컴퓨터를 할 경우에 문제가 생길 수가있다. 다른 컴퓨터와 일을하게될 때(버전이 다르거나, 프로그램이 깔려있지 않거나 ...) 따라서 용도에 따라서 ''가상환경''이라는 복제본을 만들게 되고, 그 안에서 다시 파이썬을 다운로드 하게됨. 
+
+![image-20210312090818406](16_django.assets/image-20210312090818406.png)
+
+'이 프로그램들은 이번 프로젝트에 필요한 파일이야'라는 파일들을 설치하고 그것들을 사용하게 되는 것.
+
+우리는 venv를 앞으로 사용하게 될 것임. 파이썬 3.3부터 기본 모듈로 내장되어있기 때문에 기본적으로 venv를 가져올 수 있습니다.
+
+`pip install ...`이게 가능 한 이유는 Scripts경로에 pip.exe 라는 파일이 있기 때문에 가능한 것.
+
+![image-20210312091635795](16_django.assets/image-20210312091635795.png)
+
+이말은 즉슨 인터넷에 있는 django프로젝트를 우리 컴퓨터로 가져오겠다는 의미이고 path라는 것으로 관리를 하게 됨.
+
+![image-20210312091827055](16_django.assets/image-20210312091827055.png)
+
+![image-20210312092056959](16_django.assets/image-20210312092056959.png)
+
+이제 폴더를 하나 만들고 그 폴더를 가상환경으로 만들어 볼 것입니다. `99_virtual` 만들고 python.exe를 실행해서(`python`) venv라는 모듈(`-m venv`)을 실행시키고 venv라는 이름의 가상환경을 만들어 달라(`venv`)는 `python -m venv venv`명령어를 실행. 그러면 venv라는 폴더가 하나 생기게 된다.
+
+![image-20210312092337558](16_django.assets/image-20210312092337558.png)
+
+![image-20210312092458451](16_django.assets/image-20210312092458451.png)
+
+venv폴더를 열어보면 python이 설치된 경로가 있었는데 그안의 폴더들과 비슷한게 있다. 이 말은 저 좌측의 환경을 가져와서 우리가 만들어 주었던 폴더내에서 사용하는 환경을 만들어 준 것이됨
+
+![image-20210312092648275](16_django.assets/image-20210312092648275.png)
+
+뭐가 깔렸나 pip를 통해서 받아진 모든 목록을 확인해보면
+
+![image-20210312092759564](16_django.assets/image-20210312092759564.png)
+
+현재는 엄청 많이 나온다. 그러면 가상환경을 한번 실행해봅시다. venv폴더의 Scripts폴더의 activate라는 것을 실행한다고 생각하자.  `source venv/Scripts/activate` (source는 리눅스 시스템의 명령어인데 만들어주라는 명령어로 생각하면 됩니다 )
+
+![image-20210312100203972](16_django.assets/image-20210312100203972.png)
+
+![image-20210312092920812](16_django.assets/image-20210312092920812.png)
+
+이제 pip list하는 순간 많이 달라져있다. 
+
+![image-20210312092950939](16_django.assets/image-20210312092950939.png)
+
+이제 새롭게 라이브러리를 설치하면서 진행을 해야됨. 이렇게 되면 완전히 독립된 형태의 환경에서 프로젝트를 진행할 수 있게됨.
+
+활성화 끄는 방법은 `deactivate` 명령어를 치면 venv가 사라진다.(가상환경 상황에서 나오는 것)
+
+![image-20210312093317640](16_django.assets/image-20210312093317640.png)
+
+그러면 이제 여기서 장고프로젝트를 시작할겁니다. 
+
+![image-20210312093724908](16_django.assets/image-20210312093724908.png)
+
+장고를 새롭게 받아주면 가상환경 내에 django가 다시 생기게 되는 겁니다.
+
+![image-20210312093750783](16_django.assets/image-20210312093750783.png)
+
+pip list를 해보면 다른 라이브러리가 추가 된 것을 확인할 수 있습니다.
+
+![image-20210312093816645](16_django.assets/image-20210312093816645.png)
+
+근데 GIT에 올릴때 venv는 관리를 하지 않는것이 보통의 룰이기 때문에 .gitignore라는 파일을 만들어준다.
+
+![image-20210312094043295](16_django.assets/image-20210312094043295.png)
+
+가상환경에 대한 파일을 무시하기 위해서 venv라는 이름을 설정해주었습니다. gitignore에서 venv로 치면 바로 설정할 수 있도록. venv라는 폴더를 관리하지 말하주세요라는 설정을 해주는 겁니다.
+
+![image-20210312094238595](16_django.assets/image-20210312094238595.png)
+
+bin Bin lib.. 이라는 폴더를 관리하지 말아달라는 표현
+
+![image-20210312094459843](16_django.assets/image-20210312094459843.png)
+
+db.sqlite3도 관리하지말아주세요라는 설정
+
+README.md까지 만들어주면 기본세팅은 끝나게 된 것
+
+이제 프로젝트를 시작하기 위해서 `django-admin startproject crud .`명령어를 해준다. 여기서 . 을 빼면 crud라는 큰 폴더 안에 프로젝트가 생성 된다.
+
+![image-20210312094634521](16_django.assets/image-20210312094634521.png)
+
+![image-20210312094726022](16_django.assets/image-20210312094726022.png)
+
+
+
+자 이제 패키지 관리를 한번 해볼겁니다. 현재 받아져 있는 pip list는
+
+![image-20210312100254173](16_django.assets/image-20210312100254173.png)
+
+이 리스트를 그대로 가져와야하기 때문에 pip에 관련된 명령어를 실행해줍니다. `python -m pip freeze` 또는 `pip freeze`라는 명령어를 실행해봅니다. 내가 사용하는 라이브러리들의 이름과 버전들을 저장을 해줍니다 
+
+![image-20210312100501418](16_django.assets/image-20210312100501418.png)
+
+![image-20210312100622163](16_django.assets/image-20210312100622163.png)
+
+그리고나서 이것들을 저장시켜주는 requirements.txt라는 파일에 내용들을 저장해줍니다. 근데 이 작업은 조금 번거롭다(항상 복붙을 해주어야하기 때문에) 여기서부터는 리눅스에서 사용하는 명령어 `pip freeze > requirments.txt`를 해보면 pip freeze해준 데이터를 requirements.txt에 저장해주세요를 의미. 그럼이제 사람들이 requirements.txt를 보면 '아 이프로젝트를 사용하기 위해서는 이러한 파일들이 필요하구나'라고 생각할 수있게됩니다. 우리 또한 이것을 바탕으로 필요한 파일을 다운 받아야한다.
+
+새로 가상환경을 지웠다가 새로 만들고 확인하면 리스트가 비어있는데 여기에 이제 필요한 파일을 받기위한 명령어 `pip install -r requirements.txt`를 해준다.
+
+![image-20210312101227248](16_django.assets/image-20210312101227248.png)
+
+![image-20210312101109398](16_django.assets/image-20210312101109398.png)
+
+pip가 궁금하다면?? pip공식문서를 확인하세요~
+
+![image-20210312101340721](16_django.assets/image-20210312101340721.png)
+
+오늘 실습은 영화정보 생성, 읽어오기만 먼저 해볼겁니다. UD는 시간이 남으면 해보시길
+
+자 오늘 프로젝트를 다른사람과 한다고 했습니다. 한명은 네비게이터, 한명은 드라이버로 불릴 것입니다. 운전석의 옆자가 조수석인데 이처럼 이번 프로젝트에서도 조수와 운전자로 역할을 나누어서. 조수는 길을 안내해주는, 운전자는 직접 프로그래밍을하는 업무를 분담해서 진행할 것. 조수:운전자 = 7:3 비율로 소통이 아마 이루어 질겁니다. 
+
+협업과 분업의 차이인데 C까지 내가할께 너 R까지해는 분업 이번은 하나의 화면을 같이 개발을 하는 협업을 해볼 겁니다.
+
+driver의 화면을 공유하고(driver는 큰 생각을하지않고 주도적으로 작업을 하지않을겁니다) navigator의 지시대로 움직일 겁니다. 
+
+약간 추천드리는 방법중 하나는 현재 django이해도가 조금 다릅니다. 장고가 익숙한 분이 운전자로! 어색한 분을 조수자로! 한다면 서로 도움이 많이 될 것.
+
+![image-20210312102309027](16_django.assets/image-20210312102309027.png)
+
+![image-20210312102951346](16_django.assets/image-20210312102951346.png)
+
+db.sqllite3는 아까 gitignore에서 관리를 안한다고 설정을 해놨음.
+
+![image-20210312101755344](16_django.assets/image-20210312101755344.png)
+
+그러면 이 프로젝트를 올리면 이 프로젝트를 받은 사람이 DB를 확인을 하지 못해서 내가 한 작업을 다시 해버릴 수도 있습니다. 따라서 db.sqlite3는 깃으로 관리를 안하지만 직접적인 데이터를 movies.json파일로 관리를 할 것입니다.
+
+![image-20210312101956687](16_django.assets/image-20210312101956687.png)
+
+
+
+
+
+## pair programming
+
+![image-20210312103323720](16_django.assets/image-20210312103323720.png)
+
+A에 해당하는 사람이 CRUD시스템을 만들었다. 그럼 이제 이걸 B에게 보내주어야 합니다. 우리는 이 과정을 GIT을 사용할겁니다. 플젝 만들고
+
+![image-20210312103449792](16_django.assets/image-20210312103449792.png)
+
+A사람이 이제 깃에 올리게 됩니다. `git add .` `git commit -m '올립니당~'` 
+
+![image-20210312103419995](16_django.assets/image-20210312103419995.png)
+
+이제 B라는 사람이 A가 깃에올린 파일을 가지고 올 겁니다 GIT에서 페어를 추가
+
+A가 페어를 추가해서(add to project) 코드를 올렸다고 가정
+
+![image-20210312103536405](16_django.assets/image-20210312103536405.png)
+
+![image-20210312103616519](16_django.assets/image-20210312103616519.png)
+
+이제 B는 pjt04로 들와서 클로을 해서
+
+![image-20210312103628880](16_django.assets/image-20210312103628880.png)
+
+배쉬로 들어와서 `git clone 주소`을 해줍니다.
+
+![image-20210312113428251](16_django.assets/image-20210312113428251.png)
+
+![image-20210312103659069](16_django.assets/image-20210312103659069.png)
+
+`python manage.py runserver`를 B가 해보면 에러가 발생하게 된다.
+
+![image-20210312103805629](16_django.assets/image-20210312103805629.png)
+
+따라서 이제 DB를 줄수는 없지만 fixture라는 개념을 사용하게 될겁니다. DB는 옮기지 않습니다. 가장 큰 이유는 DB를 옮기는 순간 어떤문제가 생기냐. A라는 사람이 test하기위해서 asdf라는 게시물 생성하고 B는 ㅁㄴㅇㄹ라는 게시물 생성하게되면 계속 겹치는 상황이 만들어질 것
+
+![image-20210312103853539](16_django.assets/image-20210312103853539.png)
+
+따라서 DB에 대한 데이터의 구조를 가져와서 json파일을 이용하여 dump data툴을 사용하게 될겁니다. django fixture 검색해보면
+
+![image-20210312103953934](16_django.assets/image-20210312103953934.png)
+
+우리가 만든 Db를 하나의 파일로 저장하고 그것을 사용하려고한다 .  그파일이 초기 데이터
+
+![image-20210312104042963](16_django.assets/image-20210312104042963.png)
+
+django에서 사용하는 데이터를 다음과 같이 저장하게 될 겁니다.
+
+![image-20210312104112645](16_django.assets/image-20210312104112645.png)
+
+근데 이 문서는 꼭 json이 아니어도 된다 YAM이란 것도 있는데 데이터를 보여주고자하는 목적은 동일하다(json을 좀 더 많이 사용하긴 함)
+
+![image-20210312104142008](16_django.assets/image-20210312104142008.png)
+
+이런것을 fixture라고하는데 django가 사용하는 admin기능을 사용할 겁니다 검색에서 django admin dumpdata 검색해보면
+
+![image-20210312104243616](16_django.assets/image-20210312104243616.png)
+
+덤프는 지금 저장되어있는 데이터를 상태를 저장하는 것을 의미합니다. 더미데이터의 느낌. 어떤 명령어를 사용하냐 앱의 라벨을 붙여주는 것을 '덤프를 떠준다'고합니다.
+
+![image-20210312104346344](16_django.assets/image-20210312104346344.png)
+
+A라는 사람이 파이선에서 movies(앱이름)안의 models안 데이터(movie모델의 이름은 소문자로)를 덤프뜨면 `python manage.py dumdata movies.movie` 하나의 영화에 대한 정보가 나온다는 것을 알 수 있다.
+
+![image-20210312104546892](16_django.assets/image-20210312104546892.png)
+
+**이걸 공유하면 DB는 공유하지 않지만 DB안의 데이터는 공유가 가능하게 될 것.**
+
+`python manage.py dumpdata --indent 4 movies.movie` 인덴트를 4칸으로 맞춰주세요
+
+![image-20210312104707384](16_django.assets/image-20210312104707384.png)
+
+이 결과물을 json 파일에 저장해줄 겁니다. DB의 모든 정보를 하나의 파일로 뽑은 것
+
+![image-20210312104844788](16_django.assets/image-20210312104844788.png)
+
+![image-20210312104858710](16_django.assets/image-20210312104858710.png)
+
+movies라는 폴더에 새로운 폴더를 하나 추가합니다. fixtures라는 폴더를 추가(templates이름 지었던 이유와 동일) 여기에 movies.json을 넣고 푸쉬를 합니다.
+
+![image-20210312110115999](16_django.assets/image-20210312110115999.png)
+
+
+
+makemigrations : 번역작업(models.py => migration파일로 번역작업)
+
+migrate : 적용
+
+db.sqlite3를 지우는 것은 저 DB를 지우는 적용된 표를 지우는 것과 마찬가지 
+
+![image-20210312110731900](16_django.assets/image-20210312110731900.png)
+
+![image-20210312110901862](16_django.assets/image-20210312110901862.png)
+
+B라는 사람은 runserver를 해보면 현재 비어있다. 이상태는 표만 그려져있는 상태(정보가 없음)
+
+![image-20210312111013266](16_django.assets/image-20210312111013266.png)
+
+따라서 json파일 내용은 db.sqlite3에 불러와야한다. fixtures안에있는 movies.index를 불러오게 할 거임
+
+![image-20210312110252273](16_django.assets/image-20210312110252273.png)
+
+이러한 명령어 인데 templates와 마찬가지로 폴더를 맞춰준다. 그리고 movies폴더의 movies.json을 로드해줘라는 명령어를 실행한다
+
+![image-20210312110400452](16_django.assets/image-20210312110400452.png)
+
+![image-20210312110411846](16_django.assets/image-20210312110411846.png)
+
+20개의 데이터를 불러와서 이제 db.sqlite3에 저장하게 되는 것.
+
+![image-20210312110433189](16_django.assets/image-20210312110433189.png)
+
+비어있든 비어있지않든 만들어진 표에 json파일을 주입시키는것 (기존의 데이터에 덮어씌우기)
+
+![image-20210312111130205](16_django.assets/image-20210312111130205.png)
+
+
+
+정리해보자면 
+
+1. models.py에 선언(구조를 선언)을 하게 된다(나는 이러한 데이터베이스를 사용할거야라는 선언)
+
+2. makemigrations를 통해 번역본(구조에 대한 번역본)을 만들게 된다.(migrations/의 0001, 002 파일들)
+
+3. migrate를 통해서 번역본에 대해서 표를 그려준다. 여기에서는 db.sqlite3가 그려주게 되는것
+
+   ![image-20210312111532566](16_django.assets/image-20210312111532566.png)
+
+파이썬 세상에서는 표를 표현할 수있는 방법이 존재하지 않는다. 따라서 이를 딕셔너리와 같은 형태로 잡아주는 것. 우측하단의 표를 통해서 딕셔너리로 만들어주는 것이 dumpdata라는 녀석이 하는 역할
+
+![image-20210312111700320](16_django.assets/image-20210312111700320.png)
+
+비어있는 DB의 테이블에 딕셔너리형태의 파일 dumpdata를 토대로 표를 만들어주는것이 loaddata
+
+![image-20210312111757019](16_django.assets/image-20210312111757019.png)
+
+
+
+db.sqlite3를 지웠다면 다시 migrate를 해줘야하는 상황인 것
+
+![image-20210312112311258](16_django.assets/image-20210312112311258.png)
+
+이처럼 테이블이 없다? 그럼 그려주면됨 그려주기위해서? migrate하면 된다.
+
+![image-20210312112022093](16_django.assets/image-20210312112022093.png)
+
+![image-20210312112224940](16_django.assets/image-20210312112224940.png)
+
+
+
+모델에서 하나의 칼럼(필드)을 추가할 경우 기존의 데이터를 들어가지를 못하게 된다. 그러면 다시 데이터를 수정해야하는데 이건 정말 번거로운 일입니다. 따라서 처음 모델링을 하는것이 정말 중요하게 됩니다 .  미리 구조를 잘 잡아놓고 진행하는 것이 중요합니다.
+
+![image-20210312112929165](16_django.assets/image-20210312112929165.png)
+
+컬럼 추가하고 makemigrations를 해보면 에러가 뜬다(이미 테이블이 있고 정보가 담겨져있는데 컬럼추가했네? 그러면 어떻게 할거야?? default값을 줄 수도있고, 내가 바로 만들 수도있는 선택지를 준다)
+
+![image-20210312112933913](16_django.assets/image-20210312112933913.png)
+
+
+
+A,B가 같은 상황에서 A에서 만약 계정을 하나 생성했다
+
+![image-20210312113557840](16_django.assets/image-20210312113557840.png)
+
+똑같이 B에서도 계정을 하나 생성했다
+
+![image-20210312113614403](16_django.assets/image-20210312113614403.png)
+
+그렇면 둘의 상황이 똑같을까?? sqlite explorers의 auth 파일을 확인해보면 서로의 pw가 다르다.
+
+![image-20210312113702912](16_django.assets/image-20210312113702912.png)
+
+다른 시간대에 만들어 진것은 다른 파일을 서로가 만든게 된다 
+
+![image-20210312113843684](16_django.assets/image-20210312113843684.png)
+
+그러면 둘중의 하나를 선택을 해야만 하는 상황이 벌어지게 된다.
+
+실제로 합쳐보기위해서 A에서 푸시하고 B에서 풀하면 Conflict가 일어난것이 확인이 된다.
+
+![image-20210312113927650](16_django.assets/image-20210312113927650.png)
+
+따라서 fixture를 사용하게 되는거
+
+
+
+플젝
+
+![image-20210312114520912](16_django.assets/image-20210312114520912.png)
+
+title, poster는 CharField overview는 TextField
+
+![image-20210312114534602](16_django.assets/image-20210312114534602.png)
+
+오늘은 CR까지가 목표
+
+![image-20210312114621863](16_django.assets/image-20210312114621863.png)
+
+이제 협업을 할건데 A가 플젝을 만들면 B는 이것을 받아서 추후에 자신의 플젝을 만들어서 업로드를 해줄 것
+
+협업은 같이하지만 최종플젝 제출을 따로
+
+![image-20210312114711682](16_django.assets/image-20210312114711682.png)
+
+![image-20210312114758718](16_django.assets/image-20210312114758718.png)
+
+## 웹엑스
+
+pjt04 폴더 생성 > 폴더로 이동 > .gitignore README.md 생성 > vs code켜기 > ignore내용채우기 > README.md 내용채우기
+
+![image-20210312130728927](16_django.assets/image-20210312130728927.png)
+
+`git init`으로 깃에 올리기
+
+![image-20210312130909976](16_django.assets/image-20210312130909976.png)
+
+`python -m venv venv` 가상환경 만들기
+
+![image-20210312130936717](16_django.assets/image-20210312130936717.png)
+
+`source venv/Scripts/activate` == ctrl shift p 해서 select interpreter하기
+
+**venv환경에서**
+
+`pip install django django_extensions ipython` 다운받아주기
+
+![image-20210312131056868](16_django.assets/image-20210312131056868.png)
+
+`start README.md` 타이포라 켜기
+
+A :`pip freeze > requirements.txt`로 깔아야할 파일들 적어주기`
+
+B :그러면 페어가 클론뜨고나서 `pip install -r requirements.txt`하면 가상환경설정이 만들어짐. 디펜던시관리, 환경분리의 핵심
+
+B :**페어가 해야할것**
+
+```
+$ git clone <remote-repo-url>
+$ cd pjt04
+$ python -m venv venv
+$ source venv/Scripts/activate
+(venv)
+$ pip install -r requirements.txt
+```
+
+A : `django-admin projectstart pjt04 .`
+
+
+
+A: 깃 사이트에서 name slog이름 pjt04로 하고 descriptions 쓰고 페어를 설정
+
+![image-20210312131923579](16_django.assets/image-20210312131923579.png)
+
+![image-20210312132203440](16_django.assets/image-20210312132203440.png)
+
+![image-20210312132231941](16_django.assets/image-20210312132231941.png)
+
+B : 메일확인
+
+A:
+
+![image-20210312132425879](16_django.assets/image-20210312132425879.png)
+
+![image-20210312132432296](16_django.assets/image-20210312132432296.png)
+
+
+
+## SSAFY 모의 SW 역량테스트
+
+수준을 알면 올바른 학습을 할 수가 있다.
+
+![image-20210312143408281](16_django.assets/image-20210312143408281.png)
+
+:Intermediate : 초,중급 정도의 코딩을 해보았느냐. 취득을 못하면 SSAFY 2하기 수업을 수료하기 어렵다..
+
+Advanced : 모든 테스트케이스에 대해서 에러없이 설계를 할 수 있느냐. 명세를 따라서 설계할 수 있는가(완전탐색형 문제)
+
+Professional : 자료구조로 optimal solution을 해결할 수 있는가. 조합으로 해결할 수 있는가. => 구현, **최적화를 할 수 있는가**
+
+Expert : 적어도 문제에 대해서는 최적의 솔루션을 제시할 수 있는가. 기존 expert들이 참여해서 같이봅니다. 그러니 그 기존의 expert분들의 코드보다 더 최적, 최고의 코드를 제시해야 딸 수있다.
+
+![image-20210312144152123](16_django.assets/image-20210312144152123.png)
+
+가운데는 평균 점점 끝으로 가야만 프로의 경지로 갈수있다...
+
+발전을 위해서 .. => 자료구조 알고리즘을 통한 문제 해결학습
+
+![image-20210312145022169](16_django.assets/image-20210312145022169.png)
+
+B형은 SWEA D456 수준
+
+파이썬보다는 C++를 추천합니다
+
+먼저 풀고, 이론학습을 한 후에 도움을 받는 것
+
+![image-20210312145139566](16_django.assets/image-20210312145139566.png)
+
+## 일타싸피
+
+![image-20210312152154091](16_django.assets/image-20210312152154091.png)
+
+![image-20210312152231646](16_django.assets/image-20210312152231646.png)
+
+![image-20210312152720065](16_django.assets/image-20210312152720065.png)
+
+![image-20210312152746867](16_django.assets/image-20210312152746867.png)
+
+1
+
+![image-20210312152811138](16_django.assets/image-20210312152811138.png)
+
+2
+
+![image-20210312152824373](16_django.assets/image-20210312152824373.png)
+
+3
+
+![image-20210312152838764](16_django.assets/image-20210312152838764.png)
+
+![image-20210312154710448](16_django.assets/image-20210312154710448.png)
+
+![image-20210312155031041](16_django.assets/image-20210312155031041.png)
+
+## 종례
+
+- 다시보기
+
+  ![image-20210312175815967](16_django.assets/image-20210312175815967.png)
+
+  ![image-20210312175901208](16_django.assets/image-20210312175901208.png)
+
+![image-20210312175941231](16_django.assets/image-20210312175941231.png)
+
+![image-20210312180009709](16_django.assets/image-20210312180009709.png)
+
+![image-20210312180115542](16_django.assets/image-20210312180115542.png)
+
+## 보충 210315
+
+- 가상환경
+
+```bash
+$ python -m venv venv
+$ source venv/Scripts/activate  # 활성화
+$ pip list  # 확인
+$ pip install django  # 장고설치
+$ pip freeze  # 리스트 뽑아주기
+$ pip freeze > requirements.txt  # txt파일로 export
+$ pip install -r requirements.txt  # venv다시깔때 빠르게 필요한 파일 설치가능 -r(ruquirements옵션이라는 것)
+```
+
+- README.md와 .gitignore파일 생성
+
+  - gitignore에는 venv django python vscode window
+
+- git init(git status하면 확인가능)
+
+  ![image-20210315184827832](16_django.assets/image-20210315184827832.png)
+
+- 장고
+
+```bash
+$ django-admin startproject repeat_crud .
+$ python manage.py startapp articles
+```
+
+- DB설계
+
+  - articles의 models.py
+
+    ```python
+    from django.db import models
+    class Article(models.Model):
+        title = models.CharField(max_length=20)
+        content = models.TextField()
+        created_at = models.DateTimeField(auto_now_add=True) # 추가 되었을때만
+        updated_at = models.DateTimeField(auto_now=True)  # 계속해서 바뀌는 값
+    ```
+
+  - migration
+
+    ```bash
+    $ python manage.py makemigrations
+    $ python manage.py migrate  # 실제 db에 적용
+    ```
+
+    우리가 추가한 모델과 그외 장고가 가지고있는 migrate파일들
+
+    ![image-20210315185739265](16_django.assets/image-20210315185739265.png)
+
+- path
+
+  - 마스터앱의 urls.py
+
+    ```python
+    from django.urls import path, include
+    
+    urlpatterns = [
+        path('articles/', include('articles.urls')),
+    ]
+    ```
+
+    ![image-20210315185903317](16_django.assets/image-20210315185903317.png)
+
+  - articles앱의 urls.py
+
+    ```python
+    form django.urls import path
+    from . import views
+    
+    app_name = 'articles'
+    urlpatterns = [
+        # ~/articles/
+        path('', views.index, name='index'),
+        
+        # ~/articles/new :
+        path('new/', views.new, name='new')
+    ]
+    ```
+
+- views.py
+
+  ```python
+  form django.shortcuts import render
+  from .models import Article
+  def index(request):
+      # 모든 게시물을 보여주는 페이지를 렌더하는 함수
+      # db정보를 실제 객체형태로 저장하는 과정
+      articles = Article.objects.all()
+      # 불러온것을 넘겨주기
+      context = [
+          'articles': articles
+      ]
+      return render(request, 'articles/index.html', context)
+  ```
+
+  ![image-20210315190308562](16_django.assets/image-20210315190308562.png)
+
+	- index.html
+
+```html
+{{ articles}}
+```
+
+게시물이 하나도 작성되지 않은 상태
+
+![image-20210315190704498](16_django.assets/image-20210315190704498.png)
+
+navbar를 사용해보겠습니다.
+
+그전에 settings.py에 기본경로 설정 BASE_DIR / 'repeat_crud' / 'templates'(templates찾게 될때 가장 먼저 찾게되는 경로)
+
+![image-20210315190913209](16_django.assets/image-20210315190913209.png)
+
+![image-20210315190929420](16_django.assets/image-20210315190929420.png)
+
+bootstrap CDN가져오고 사용할 navbar 가져온다
+
+![image-20210315191107067](16_django.assets/image-20210315191107067.png)
+
+이러면 이제 모든 템플릿에서 navbar를 사용하게 되는 것
+
+이제 articles의 index.html로 돌아와서
+
+```html
+{% extends 'base.html' %}
+
+{% block content %}
+	{{ articles }}
+{% endblock  content %}
+```
+
+![image-20210315191739813](16_django.assets/image-20210315191739813.png)
+
+![image-20210315191805411](16_django.assets/image-20210315191805411.png)
+
+- views.py 생성
+  - 새글을 작성하는 템플릿릿을 상산하다는 것을
+
+- news.html
+
+```python
+{% extend 'base.html'}
+{% block con(tent)}ㅏ  안된네(삭제, 변경
+
+```
+
+~ 해줘 :POST(dnmhhh) 
+
+](16_django.assets/image-20210315192211953.png)
+
+![image-20210315192319263](16_django.assets/image-20210315192319263.png)
+
+![image-20210315192408281](16_django.assets/image-20210315192408281.png)
+
+![image-20210315192715811](16_django.assets/image-20210315192715811.png)
+
+csrf토큰이 반드시 필요
+
+- urls.py
+
+```python
+path('create/', views.create, name='create')
+```
+
+- views.py
+
+```python
+def create(request):
+    # 실제 DB에 게시물을 생성(CREATE)
+    title = request.POST.get('title')
+    content = request.POST.get('content')
+    
+    article = Article(title=title, content=content)
+    article.save()
+    
+    return redirect('articles:index')
+```
+
+![image-20210315193426449](16_django.assets/image-20210315193426449.png)
+
+사용자들이 사용하기 좋게 꾸며주기(tables로 꾸며주기)
+
+![image-20210315193619784](16_django.assets/image-20210315193619784.png)
+
+![image-20210315193740252](16_django.assets/image-20210315193740252.png)
+
+- views.py에서
+
+- ```python
+  def index(request):
+      # 모든 게시물을 pk의 역숙은로 가져오기
+      articles = Article.objects.order_by('-pk')
+  ```
+
+- id가 역순으로나오도록
+
+![image-20210315193844322](16_django.assets/image-20210315193844322.png)
+
+![image-20210315194054715](16_django.assets/image-20210315194054715.png)
+
+.container tab하면 div만들어지고 테이블을 넣어주면 block 콘텐츠가 된다 . 
+
+- urls.py
+
+  ```python
+  ~/articles/게시물번호/ : 상세 페이지를 랜더
+   path('<int:pk>/ views.detail, 'detail')
+  ```
+
+- views.py
+- pk에 해당하는 게시물 페이즐 렌더한다.
+- article
+
+![image-20210315194424138](16_django.assets/image-20210315194424138.png)
+
+```python
+def detail(request, pk):
+    Article.objects.get(pk=pk)
+    context = [
+        'article.= dance'
+    ]
+```
+
+- detail.html
+
+```html
+{% extends %}
+{% block %}
+```
+
+- index.html
+
+![image-20210315194704286](16_django.assets/image-20210315194704286.png)
+
+- 함수 합치기 create하나만으로 url을 합치기
+
+![image-20210315200727191](16_django.assets/image-20210315200727191.png)
+
+![image-20210315201013107](16_django.assets/image-20210315201013107.png)
+
