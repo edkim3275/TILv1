@@ -1243,32 +1243,6 @@ B형은 SWEA D456 수준
 
 ![image-20210312145139566](16_django.assets/image-20210312145139566.png)
 
-## 일타싸피
-
-![image-20210312152154091](16_django.assets/image-20210312152154091.png)
-
-![image-20210312152231646](16_django.assets/image-20210312152231646.png)
-
-![image-20210312152720065](16_django.assets/image-20210312152720065.png)
-
-![image-20210312152746867](16_django.assets/image-20210312152746867.png)
-
-1
-
-![image-20210312152811138](16_django.assets/image-20210312152811138.png)
-
-2
-
-![image-20210312152824373](16_django.assets/image-20210312152824373.png)
-
-3
-
-![image-20210312152838764](16_django.assets/image-20210312152838764.png)
-
-![image-20210312154710448](16_django.assets/image-20210312154710448.png)
-
-![image-20210312155031041](16_django.assets/image-20210312155031041.png)
-
 ## 종례
 
 - 다시보기
@@ -1755,3 +1729,394 @@ D : 유일하게 하나로만 이루어져있음.
 GET: 달라는 요청(받아보고싶은 사람들이 하고싶은 것)
 
 POST: 받으라는 요청을 보낼때 (데이터를 보내는 사람들이 하는 말), DB에 변경을 주는 요청들은 전부 POST방식으로 들어오도록 설계를 해야만한다.
+
+## 210317 Wed
+
+- 이번주 일정
+
+  ![image-20210317090201443](16_django.assets/image-20210317090201443.png)
+
+### 가벼운 복습
+
+- Database
+- ORM
+- Migrations
+- DB API
+- QuerySet API
+  - QuerySet 리턴해주는 것과 안해주는 것으로 나뉜다.
+- CRUD
+  - 우리가 구현하고자 하는 것
+
+### 어제의 주제 : django Form
+
+![image-20210317090424026](16_django.assets/image-20210317090424026.png)
+
+input태그 사용시 검증이 없었다.(예를들어 CharField의 max_length가 5임에도 불구하고 5이상의 정보를 받아들이는 경우) 이러한 경우를 방어하기 위해서 django Form이 나오게 된다.
+
+![image-20210317090548259](16_django.assets/image-20210317090548259.png)
+
+![image-20210317090657946](16_django.assets/image-20210317090657946.png)
+
+Form위치가 굳이 forms.py일 필요는 없지만(다른곳에서도 동작한다) 일반적으로 forms.py에 작성한다.
+
+models.CharField와 CharField라는 이름은 동일하지만 기능이 다르다. widger이라는 것을 추가해서 인풋 타입을 변경해줄 수 있다.
+
+![image-20210317090858730](16_django.assets/image-20210317090858730.png)
+
+일반적으로 특별한 요구사항이 없다면 `as_p`를 사용하게 된다.
+
+
+
+![image-20210317090923452](16_django.assets/image-20210317090923452.png)
+
+widgets(우리가 CharField사용했을때 input태그의 기본적인 type은 text였다. 그렇다면 태그나, type을 어떻게 바꿀것이냐?? 그 해결방법이 바로 `Widgets` 독자적으로 사용될 수 없고 반드시 form fields에 할당되어야 한다.)
+
+![image-20210317091101210](16_django.assets/image-20210317091101210.png)
+
+유형성 검사 x 단순한 랜더링 처리만 가능하다.
+
+![image-20210317091132568](16_django.assets/image-20210317091132568.png)
+
+모델을 기준으로 연결해주는 ModelForm
+
+정식적으로는 'Helper'라고 한다.
+
+![image-20210317091417435](16_django.assets/image-20210317091417435.png)
+
+Meta클래스(모델클래스에대한 정보를 등록하는 부분) : 필드를 재정의 하는대신 Form이 어떤 모델을 기반으로 만들어지는지를 명명하고 fields는 무엇을 사용할건지를 지정
+
+주의: 함수를 호출하듯이 Article()이런식으로 사용할 수 없다.
+
+![image-20210317091434718](16_django.assets/image-20210317091434718.png)
+
+Form과 ModelForm 무엇이다른가? 서로 목적이 다르다.
+
+Form : 모델에 연관되지 않은 데이터 수신을 위해서 사용. 어떠한 레코드를 만들어야 할 지 알 수 없다.
+
+ModelForm : 게시글 작성하는 것처럼 데이터를 받기위해서 모델을 기반으로 만들어진 모델폼을 사용. 어떤 레코드를 만들어야 할 지 알고있다. 데이터를 받은다음에 검증하고 바로 저장.(원래는 title, content .. 등에 넣어는 과정이 있어야만 했었다.)
+
+### 오늘의 주제
+
+- django_form git pull받고 가상환경 설정
+
+  vs code에서 ctrl+shift+p -> interpreter검색-> venv설정해주기
+
+- requirements.txt에 저장된 내용을 설치
+
+  ```bash
+  $pip install -r requirements.txt
+  ```
+
+- 중간질문
+
+![image-20210317092343551](16_django.assets/image-20210317092343551.png)
+
+![image-20210317092352679](16_django.assets/image-20210317092352679.png)
+
+- froms.py
+
+  Meta클래스에는 모델폼의 정보를 담아내는 것을 권장(* django coding style)
+
+  ![image-20210317092814436](16_django.assets/image-20210317092814436.png)
+
+  들여쓰기, 닫는태그 위치 잘 확인할 것! form field에서 사용하고 있는 빌드인 키워드 인자(CharField같은것들) * django fields를 참고
+
+  attrs(attributes)라는 딕셔너리가 존재 여기에 클래스값들을 작성
+
+  django model form검색해보면 Model field와 Form Field 각각에서 사용하는 Field를 확인 가능하다.
+
+  ![image-20210317093035709](16_django.assets/image-20210317093035709.png)
+
+- views.py
+
+  new(작성할 문자를 줘!) : GET요청에 대한 처리
+
+  create(데이터 작성해줘!) : new.html로 부터 받은 정보를 저장. POST요청에 대한 처리
+
+  ![image-20210317093554697](16_django.assets/image-20210317093554697.png)
+
+  여기서 문제는 유효성 검사를 통과하지 못했을 때 return될 object가 없기때문에 valueerror가 출력. 따라서 형태가 변화한다(리팩토링)
+
+  ![image-20210317093657397](16_django.assets/image-20210317093657397.png)
+
+  
+
+### 복격적인 수업
+
+detail에 좀 불편한게 있다
+
+![image-20210317094222200](16_django.assets/image-20210317094222200.png)
+
+form.as_p에는 title, content가 있는데, 
+
+![image-20210317094243300](16_django.assets/image-20210317094243300.png)
+
+index에서 하는 행동은 article에 있는 내용을 조회하는 명령어를 수행하는데 DB가 현재 비어있기때문에 생기는 오류. => `python manage.py migrate`만 해주면 된다.
+
+![image-20210317094527428](16_django.assets/image-20210317094527428.png)
+
+네개의 내용이 한줄로나오기때문에 설정 주기가 어렵다.
+
+![image-20210317094556810](16_django.assets/image-20210317094556810.png)
+
+이를 위해서 django에서 제공해주는 것이 있다. django forms를 검색
+
+![image-20210317094748792](16_django.assets/image-20210317094748792.png)
+
+저 사이에 있는 것이 field명이라서 우리는 form.title, form.content이런 식으로 사용이 가능.
+
+![image-20210317094919823](16_django.assets/image-20210317094919823.png)
+
+![image-20210317094927526](16_django.assets/image-20210317094927526.png)
+
+title만 따로 분할해서 활용이 가능해짐.
+
+![image-20210317100227380](16_django.assets/image-20210317100227380.png)
+
+![image-20210317100358232](16_django.assets/image-20210317100358232.png)
+
+![image-20210317100404006](16_django.assets/image-20210317100404006.png)
+
+---
+
+bootstrap에 form지원을 해준다. bootstrap검색해서 form확인해보면
+
+![image-20210317100537420](16_django.assets/image-20210317100537420.png)
+
+현재 우리에게 필요한 핵심 클래스는 form-control
+
+근데 현재 html에 할 수는 없다. 우리는 어디서 클래스를 적용시킬 수 있을까??? widgets의 attrs에 적용
+
+![image-20210317100723505](16_django.assets/image-20210317100723505.png)
+
+![image-20210317100833423](16_django.assets/image-20210317100833423.png)
+
+![image-20210317100821581](16_django.assets/image-20210317100821581.png)
+
+---
+
+![image-20210317101129661](16_django.assets/image-20210317101129661.png)
+
+이번에는 bootstrap alert를 확인해보면
+
+![image-20210317101145381](16_django.assets/image-20210317101145381.png)
+
+노란색 적용을 위해서
+
+![image-20210317101204146](16_django.assets/image-20210317101204146.png)
+
+![image-20210317101256678](16_django.assets/image-20210317101256678.png)
+
+![image-20210317101246583](16_django.assets/image-20210317101246583.png)
+
+---
+
+django bootstrap library또한 존재. django bootstrap 5검색
+
+![image-20210317101434560](16_django.assets/image-20210317101434560.png)
+
+3rd 파티 라이브러리라서 설치 필요
+
+![image-20210317101451842](16_django.assets/image-20210317101451842.png)
+
+설치후 pip freeze > requirements.txt 해서 추가해주는게 좋다 
+
+![image-20210317101723543](16_django.assets/image-20210317101723543.png)
+
+settings.py에 추가해주고
+
+![image-20210317101748936](16_django.assets/image-20210317101748936.png)
+
+template상에서 bootstrap을 load해주어야 한다.
+
+![image-20210317101906779](16_django.assets/image-20210317101906779.png)
+
+![image-20210317102012448](16_django.assets/image-20210317102012448.png)
+
+![image-20210317102020524](16_django.assets/image-20210317102020524.png)
+
+bootstrap_form 이라는 태그와 buttons라는 태그를 사용 해봤음.
+
+
+
+이번에는 두번째 문서(라이브러리 자체)로 들어가보겠습니다.
+
+![image-20210317102312555](16_django.assets/image-20210317102312555.png)
+
+![image-20210317102355106](16_django.assets/image-20210317102355106.png)
+
+base.html에 2줄 추가
+
+![image-20210317102556329](16_django.assets/image-20210317102556329.png)
+
+여러가지 찾아보면서 적용해보세요
+
+![image-20210317103008931](16_django.assets/image-20210317103008931.png)
+
+
+
+django template tag검색 load찾아보면
+
+![image-20210317103141520](16_django.assets/image-20210317103141520.png)
+
+load해서 새로운 템플릿을 사용하겠다라는 것. 그럴때 load를 사용.
+
+
+
+---
+
+태그 하나만 더 보겠습니다.
+
+상속이라는 것은 지금 extends하나로 상속을 받고있다. 근데 상속이 부족한거 같다 여러가지 상속을 못 받으니까.
+
+![image-20210317103254575](16_django.assets/image-20210317103254575.png)
+
+이런식으로 2개의 상속을 받을 수가 없다 그러면 확장성의 문제가 있는 것 아닌가?? 이 때문에 나온 태그가 또 있다. 바로 include라는 태그. 탬플릿에서 다른 탬플릿을 사용하는거 
+
+![image-20210317103348226](16_django.assets/image-20210317103348226.png)
+
+예를들어 base.html에 navbar를 만들면 모든곳에서 navbar가 나올것
+
+![image-20210317103428369](16_django.assets/image-20210317103428369.png)
+
+근데 navbar도 크기가 만만치 않고, 이런게 많아지면 base.html이 너무 커지게 되고 유지보수측면에서 너무 관리가 어려워진다.
+
+따라서 navbar태그만 따로 만들어주는 것 project templates에 nav.html을 만들고 여기에 길게 만들어진 템플릿 내용을 옮긴다
+
+![image-20210317103545267](16_django.assets/image-20210317103545267.png)
+
+그리고 나서 include태그로 경로를 적어준다.(settings.py에서 경로를 지정해주는 방식과 동일)
+
+![image-20210317103613122](16_django.assets/image-20210317103613122.png)
+
+![image-20210317103630711](16_django.assets/image-20210317103630711.png)
+
+내부적으로 독자적인 템플릿을 만들어 놓으면 나중에 유지보수 측면에 편리해진다
+
+나중에 base.html에서 모듈,컴포넌트 단위로 관리하는것이 가능해질 것 base.html이 정말 간략해진다.
+
+![image-20210317103809828](16_django.assets/image-20210317103809828.png)
+
+include되는 html문서는 기본양식은 필요없고 필요한 부분만 적어두면 되는 것
+
+### View decorators
+
+![image-20210317104007543](16_django.assets/image-20210317104007543.png)
+
+
+
+django view decorators검색
+
+![image-20210317104215773](16_django.assets/image-20210317104215773.png)
+
+![image-20210317104336332](16_django.assets/image-20210317104336332.png)
+
+![image-20210317104453161](16_django.assets/image-20210317104453161.png)
+
+views.py들어가보자
+
+모듈 추가해주고(require_GET은 권장하지 않기때문에 require_safe)
+
+![image-20210317104756951](16_django.assets/image-20210317104756951.png)
+
+데코레이터를 적어준다.
+
+![image-20210317104826241](16_django.assets/image-20210317104826241.png)
+
+![image-20210317104913924](16_django.assets/image-20210317104913924.png)
+
+
+
+이번에는 Create를 보면(POST와 GET요청만 받는것이 이상적)
+
+![image-20210317105001927](16_django.assets/image-20210317105001927.png)
+
+![image-20210317105017790](16_django.assets/image-20210317105017790.png)
+
+
+
+이번에는 Update를 보면
+
+![image-20210317110253715](16_django.assets/image-20210317110253715.png)
+
+delete를 보면 POST로 받아오는데 그렇게 되면 밑줄쳐진 부분은 필요없어지게된다.
+
+![image-20210317110241488](16_django.assets/image-20210317110241488.png)
+
+이렇게 한 후에 url로 삭제요청을 하게 된다면 405에러가 뜨게 된다.
+
+![image-20210317110434629](16_django.assets/image-20210317110434629.png)
+
+![image-20210317110443052](16_django.assets/image-20210317110443052.png)
+
+405에러가 뭐지? http status code검색해서 확인해보면
+
+![image-20210317110536907](16_django.assets/image-20210317110536907.png)
+
+![image-20210317110611691](16_django.assets/image-20210317110611691.png)
+
+403 Forbidden은 csrf token시 떴었던 메시지. from태그 처음으로 POST로 바꾸어서 보낼 때 봤던 에러메시지. 누구인지 알고있으나 접근할수없다는 메시지(토큰이 필요하다는 의미)
+
+405 POST로 설정해두었지만 GET을 받게된다면 데코레이터가 자동적으로 거절하게된다. 405를 보면 '아 내가 메서드를 잘못 보냈구나'라고 유추가능
+
+---
+
+postman이라는 프로그램이 있습니다. API를 위한 개발 플랫폼
+
+![image-20210317110944084](16_django.assets/image-20210317110944084.png)
+
+우리사이트가 이만큼 단단해졌다라는 것을 알 수있다. 
+
+![image-20210317111113932](16_django.assets/image-20210317111113932.png)
+
+앞에 메서드 선택, 요청을 보낼 URL 
+
+일단 GET으로 요청을 보내보면
+
+![image-20210317111208062](16_django.assets/image-20210317111208062.png)
+
+html문서로 응답을 줍니다.
+
+![image-20210317111219017](16_django.assets/image-20210317111219017.png)
+
+
+
+그러면 글 작성을 시도해보면
+
+POST로 바꿔서 
+
+![image-20210317111303240](16_django.assets/image-20210317111303240.png)
+
+body form data에서 key, value값으로 보내게 됩니다
+
+![image-20210317111330383](16_django.assets/image-20210317111330383.png)
+
+404가 뜬다. 토큰을 같이 보내주지 못했기 때문에
+
+![image-20210317111404201](16_django.assets/image-20210317111404201.png)
+
+토큰을 복붙해서 보내줘도 안된다
+
+![image-20210317111454853](16_django.assets/image-20210317111454853.png)
+
+django MIDDLEWARE에서 요청이 들어오고, 나갈때 중간점검을 해주는 프로그램들
+
+그렇다면 MIDDLEWARE에서 csrf부분을 지우고나서 다시해보면(토큰을 꺼버리면) 검사를 하지 않고 진해이 되기 때문에 응답이 200이 된다.
+
+![image-20210317111922386](16_django.assets/image-20210317111922386.png)
+
+메서드가 만약 PUT이라면?? 데코레이터가 접근을 막아준다
+
+![image-20210317111804446](16_django.assets/image-20210317111804446.png)
+
+![image-20210317112436845](16_django.assets/image-20210317112436845.png)
+
+### 마무리
+
+데이터 유효성검사, 유지보수(input표현을 바꾸기위해서 widget을 사용)
+
+Form과 ModelForm
+
+View decorators : 허용되는 메서드들을 결정하여 좀 더 단단한 사이트가 되도록 도와주는 것들
+
+![image-20210317112655023](16_django.assets/image-20210317112655023.png)
