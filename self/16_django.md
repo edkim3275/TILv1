@@ -2120,3 +2120,282 @@ Form과 ModelForm
 View decorators : 허용되는 메서드들을 결정하여 좀 더 단단한 사이트가 되도록 도와주는 것들
 
 ![image-20210317112655023](16_django.assets/image-20210317112655023.png)
+
+## 210318 Thrs
+
+### 실습중 부족했던 부분
+
+---
+
+- 
+
+![image-20210318101254323](16_django.assets/image-20210318101254323.png)
+
+create는 더해주는것 => auto_now_add 해줄 것.
+
+---
+
+- ![image-20210318101757544](16_django.assets/image-20210318101757544.png)
+
+pk이름 선정시 앱이름_pk를 했는데 그게 아니라 클래스이름__pk를 해주어야만 한다.
+
+board_pk가 아니라 reservation_pk로 지정해준다.
+
+---
+
+- path에서의 variable routing변수이름과 views에서 함수인자의 이름이 같아야하는 이유
+
+  path함수가  detail이라는함수를 실행하게 되는데
+
+  ![image-20210318102503734](16_django.assets/image-20210318102503734.png)
+
+  이런식으로 들어온다고 한다면
+
+  ![image-20210318102632641](16_django.assets/image-20210318102632641.png)
+
+  **view함수가 실행될때 path에서 지정해준 변수이름 그대로 이름을 받아야만 한다.**
+
+---
+
+- ![image-20210318103449475](16_django.assets/image-20210318103449475.png)
+
+else부분을 elif requeset.method == 'GET'이라고 하는 경우가있고, 관리자의 의도대로 원하는 메서드만을 받기위한 경우가 있다.
+
+def new자체를 GET, POST 요청에만 응답하겠다. 다른요청방식은 BAD REQUEST야라는 느낌으로 만들어 낼 수 있는데 이것이 decorator
+
+![image-20210318103619250](16_django.assets/image-20210318103619250.png)
+
+외우기 팁 : dvd h GET, POST, http
+
+![image-20210318103807144](16_django.assets/image-20210318103807144.png)
+
+![image-20210318104411360](16_django.assets/image-20210318104411360.png)
+
+![image-20210318104359598](16_django.assets/image-20210318104359598.png)
+
+---
+
+- 데코레이터는 실제로 어떻게 구현이 되어있나요?
+
+  이터레이터, 제너레이터, 데코레이터(3대장)
+
+  데코레이터는 기본적으로 함수입니다. 데코레이터라는 함수를 쓰는 방법이
+
+  ![image-20210318104537784](16_django.assets/image-20210318104537784.png)
+
+  이런 방식인 것
+
+  ![image-20210318104605474](16_django.assets/image-20210318104605474.png)
+
+  ![image-20210318104635595](16_django.assets/image-20210318104635595.png)
+
+  require_GET은 결국 require_http_methods(['GET'])과 동일하다
+
+  @require_GET으로 사용해도 괜찮고 @require_GET()으로 사용해도 괜찮다.
+
+---
+
+- 리팩토링
+  1. 빈폼준다
+  2. 아예 save해준다
+  3. 잘못된거 넣었을때 폼안에 자기가 작성했던 흔적까지 남겨준다    => 이렇게 3가지 처리해준다고 생각하면 될까요 ?  new에서도 edit에서 value 줘서 돌려줬듯이..
+
+-  new.html, edit.html 두개가 동일한 코드인데 굳이 두개를 사용해야하나??
+
+  ![image-20210318112134679](16_django.assets/image-20210318112134679.png)
+
+  ![image-20210318112143122](16_django.assets/image-20210318112143122.png)
+
+  그냥 form.html로 하나 만들고 거기에 코드를 작성
+
+---
+
+- ![image-20210318113213107](16_django.assets/image-20210318113213107.png)
+
+---
+
+- ![image-20210318125011770](16_django.assets/image-20210318125011770.png)
+
+meta와 form사이에 조건을 걸면 효과를 걸어준다.
+
+![image-20210318125218355](16_django.assets/image-20210318125218355.png)
+
+그렇다면 oh, my를 추가해준다면
+
+![image-20210318125327531](16_django.assets/image-20210318125327531.png)
+
+화면에 보이기는 하지만 생성을 눌러본면 DB에는 저장되지않는다. 즉, models.py에서 설정해둔 필드에만 DB가 저장된다.
+
+그렇다면 Meta 클래스 존재이유가 얼추 만들어진다. Meta클래스 없이 
+
+![image-20210318125545876](16_django.assets/image-20210318125545876.png)
+
+이렇게 된다면 model이라는 필드에 적용하는 것처럼 ReservationForm 클래스에서 작동을하게된다
+
+---
+
+- ![image-20210318130003881](16_django.assets/image-20210318130003881.png)
+
+  뒤에는 사람에게 보여지는 부분이라서 수정이 가능
+
+  ![image-20210318130138195](16_django.assets/image-20210318130138195.png)
+
+- ![image-20210318125902782](16_django.assets/image-20210318125902782.png)
+
+---
+
+- html radio button
+
+  ![image-20210318130500030](16_django.assets/image-20210318130500030.png)
+
+  
+
+![image-20210318130510591](16_django.assets/image-20210318130510591.png)
+
+![image-20210318130521807](16_django.assets/image-20210318130521807.png)
+
+**위젯 동일한 폼의 필드들에 각각 타입과 특성을 주기위해서 존재.**
+
+---
+
+![image-20210318131006179](16_django.assets/image-20210318131006179.png)
+
+추가적으로 여기서 number의클래스를 바꾸고싶다면?? attrs로 써준다.
+
+![image-20210318131047474](16_django.assets/image-20210318131047474.png)
+
+![image-20210318131316382](16_django.assets/image-20210318131316382.png)
+
+![image-20210318131616091](16_django.assets/image-20210318131616091.png)
+
+여기서 form-control은 완전히 CSS부분
+
+---
+
+DB라는 곳에 연결되어있는 Form
+
+회원가입은 C User detail은 R 그렇다면 로그인은 무엇인가? 기록이 저장될 순 있어도 ID pw는 저장할 데이터는 아니다. (로그인할때마다 쌓이면 엄청많은게 쌓일건데) 그때 사용하는 것이 ModelForm이 아니라 Form을 사용하게 되는 것.
+
+근데 이 Form을 우리가 만드는 것이아니라 django -> user authentication 부분이 자동적으로 해준다.
+
+---
+
+- static이라는 말 왜 등장?? settings에 있다
+
+  ![image-20210318132953611](16_django.assets/image-20210318132953611.png)
+
+---
+
+이미지파일(정적파일) 어디다 두는 것이 맞는가, 그리고 어떻게 불러올 수 있는가?
+
+![image-20210318140128789](16_django.assets/image-20210318140128789.png)
+
+요청 => SERVER => 응답HTML
+
+![image-20210318140237814](16_django.assets/image-20210318140237814.png)
+
+이미지 요청을 서버에 보내야합니다. 근데 ../../../dooly.png또한 url이긴 한데, url은 urls.py에서 판별을 합니다. 위의 url은 현재 듣도보도 못한 url이기 때문에 처리할 수가 없다.
+
+이미지를 요청하는 url path를 따로 만들어야한다
+
+![image-20210318140517745](16_django.assets/image-20210318140517745.png)
+
+근데 이미지는 단적인 애다. 좀 더 포괄적인 애는 뭐가있을까.....??? 하다가 나온것이 **static**
+
+![image-20210318140608919](16_django.assets/image-20210318140608919.png)
+
+근데 이렇게 세팅을 안해도 된다. 세팅안해도 실행되게 해주는 것이 바로 settings 맨밑의
+
+![image-20210318140628679](16_django.assets/image-20210318140628679.png)
+
+![image-20210318141501304](16_django.assets/image-20210318141501304.png)
+
+
+
+결국, 서버는 기본적으로 요청을 할 수 있고, 요청받는 곳은 urls밖에없다. 금고에서 가져오는 것이 아니라 창구를 통해서만 요청을 할 수 있고, 그 창구의 역할을 하는 것이 STATIC_URL = '/static/'부분인 것.
+
+---
+
+![image-20210318141940622](16_django.assets/image-20210318141940622.png)
+
+static안에 css, images 다 섞이면 너무 혼잡하니 다시 mkdir을 해서 분류를 해준다.
+
+![image-20210318142004452](16_django.assets/image-20210318142004452.png)
+
+---
+
+bootstrap위에 속성을 입히는 것(css)이 일반적
+
+---
+
+![image-20210318144258116](16_django.assets/image-20210318144258116.png)
+
+blank=True는 이미지 업로드 안해도 가능하다라는 의미
+
+![image-20210318144524651](16_django.assets/image-20210318144524651.png)
+
+makemigrations, migrate하고나서 db.sqlite3살펴보면
+
+![image-20210318144756646](16_django.assets/image-20210318144756646.png)
+
+이미지가 char형식으로 되어있다. 
+
+어짜피 데이터는 01로 이루어져있는데 내가 읽고싶은 형식으로 읽을 수있는것. 이미지로 읽든,  글로읽든 어떠한 형식으로도 읽을 수 있다. img -> str 하는데 부하가 크다. 따라서 그냥 따로 저장을 한다.
+
+---
+
+![image-20210318151415424](16_django.assets/image-20210318151415424.png)
+
+media는 랜덤
+
+static은 내가 사용할 것들
+
+---
+
+![image-20210318151851410](16_django.assets/image-20210318151851410.png)
+
+MEDIA_ROOT는 폴더명
+
+![image-20210318151921704](16_django.assets/image-20210318151921704.png)
+
+![image-20210318152108158](16_django.assets/image-20210318152108158.png)
+
+**정리하자면 미디어 업로드를 한다?라고한다면 아래와같이 만들어준다.**
+
+![image-20210318152336473](16_django.assets/image-20210318152336473.png)
+
+---
+
+![image-20210318153000356](16_django.assets/image-20210318153000356.png)
+
+article.image는 파일의 이름을 말하는 것
+
+article.image.url은 image콜럼이 이미지로 만들어져있는데 .url까지 해주면 
+
+![image-20210318153035551](16_django.assets/image-20210318153035551.png)
+
+이거 뒤에다가 이미지파일의 이름을 붙여주는것이 article.image.url이다.
+
+![image-20210318153046783](16_django.assets/image-20210318153046783.png)
+
+---
+
+![image-20210318153601589](16_django.assets/image-20210318153601589.png)
+
+설치하고 models.py로 갑니다.
+
+![image-20210318153656412](16_django.assets/image-20210318153656412.png)
+
+추가해주고
+
+![image-20210318154341402](16_django.assets/image-20210318154341402.png)
+
+이미지 원본그대로가 아니라 프로세싱을 하려고(수정을 하려고, 예를들어 파일용량이 너무크거나 화질이 크거나하기때문에 바꿔서 받아보려고 하는것)
+
+article에 저장할건데 비어있어도 괜찮고 사이즈는 200*300으로 JPEG형식으로 화질은 90%정도 화질로 만들어서 저장해준다.
+
+---
+
+AWS에서 Elastic Cloud Coumputing이 제일 기본적으로 빌리는 것인데
+
+외장하드처럼 'S3'라는 것을 씁니다.
