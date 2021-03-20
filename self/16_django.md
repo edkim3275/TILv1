@@ -2226,7 +2226,7 @@ meta와 form사이에 조건을 걸면 효과를 걸어준다.
 
 화면에 보이기는 하지만 생성을 눌러본면 DB에는 저장되지않는다. 즉, models.py에서 설정해둔 필드에만 DB가 저장된다.
 
-그렇다면 Meta 클래스 존재이유가 얼추 만들어진다. Meta클래스 없이 
+그렇다면 Meta 클래스 존재이유가 얼추 만들어진다. Meta클래스 없이
 
 ![image-20210318125545876](16_django.assets/image-20210318125545876.png)
 
@@ -2399,3 +2399,620 @@ article에 저장할건데 비어있어도 괜찮고 사이즈는 200*300으로 
 AWS에서 Elastic Cloud Coumputing이 제일 기본적으로 빌리는 것인데
 
 외장하드처럼 'S3'라는 것을 씁니다.
+
+## Model 관통 PJT(django project) 210319
+
+### Resize
+
+- pinterest :사진들이 테트리스같이 정렬에 알맞게 화면에 채워지고 있다
+
+![image-20210319091031044](16_django.assets/image-20210319091031044.png)
+
+​	현재우리는 높은 카드를 위주로 만들어지고있다.
+
+![image-20210319091128226](16_django.assets/image-20210319091128226.png)
+
+​	인스타그램의 경우 정사각형으로 사진의 크기를 규격화 시켰다.
+
+![image-20210319091245223](16_django.assets/image-20210319091245223.png)
+
+---
+
+- 어떻게..? 이미지 파일을 넣어둔 곳에서
+
+![image-20210319091413464](16_django.assets/image-20210319091413464.png)
+
+​	width="100%" (여기서 100%는 div의 영역중 100%를 차지하는 것)
+
+![image-20210319091434390](16_django.assets/image-20210319091434390.png)
+
+- 여긴 약간의 단점이 존재한다. 
+
+  1. 크기가 작은 사진은 늘리다가 사진이 깨지는 것처럼 보이고, 큰 사진은 작게하다가 잘 안보이게되는
+
+  2. 고해상도 사진의 경우 용량이 너무 크다
+
+     ![image-20210319091809681](16_django.assets/image-20210319091809681.png)
+
+  what? 개발자 도구를 열어서 확인해보면..
+
+![image-20210319091622459](16_django.assets/image-20210319091622459.png)
+
+---
+
+- 인스타그램은 이러한 문제를 어떻게 해결할까?
+
+- 2가지 작업이 가능
+  1. 정사각형이 구성되면서 원하는 부분만 사각형 형태로 만들기(크롭)
+
+![image-20210319091928191](16_django.assets/image-20210319091928191.png)
+
+![image-20210319092042004](16_django.assets/image-20210319092042004.png)
+
+필요없는 공간은 자르고 이미지 자체를 1080x1080에 우겨넣어서 자신들의 틀에 맞춰서 사진을 넣게된다(잘라지는 부분이 생겨남)
+
+​		2. 잘라내지 않고 미리 지정된 구성내에 비율에 맞춰서 사진을 넣게 하는 방법
+
+---
+
+![image-20210319092340753](16_django.assets/image-20210319092340753.png)
+
+현재 모델에서 image 사용하고있다면 pillow사용하는 것이니 위에부분의 1번은 생략
+
+![image-20210319092413255](16_django.assets/image-20210319092413255.png)
+
+배쉬에 `pip install django-imagekit`을 받아주고 settings에 추가해준다 !
+
+![image-20210319092543409](16_django.assets/image-20210319092543409.png)
+
+이 문서를 따라하면 썸네일을 만들 수 있는가보다 models.py에 적용해보자 무턱대고 복붙은 x
+
+![image-20210319092658500](16_django.assets/image-20210319092658500.png)
+
+![image-20210319092638145](16_django.assets/image-20210319092638145.png)
+
+이 부분을 복붙해온다.
+
+`source` 무엇을 기준으로 사진을 만들지에대한 원본 데이터.
+
+`processors` 이미지를 처리하는 프로세서,  숫자는 내가 원하는 사진의 영역
+
+`format` 확장자
+
+`options` 사진의 퀄리티, 품질(100이된다면 원본과 같은 품질의 사진이 업로드된다.)
+
+
+
+이제 다시 migrations를 해주고(`python manage.py makemigrations`) migrate하려고하는데 지금은 아무것도 migrate되지않는다.
+
+![image-20210319093835689](16_django.assets/image-20210319093835689.png)
+
+원본데이터를 가지고 와서 조정하는 과정(DB에 저장되지 않는다.)
+
+---
+
+다시 돌아가서 card.html로 가본다(이미지가 위치한 곳)
+
+공식문서를 읽어보니 섬네일에 url 붙여야 한다는ㄱ ㅓㅅ을 알 수 있다.
+
+![image-20210319093103496](16_django.assets/image-20210319093103496.png)
+
+![image-20210319093127146](16_django.assets/image-20210319093127146.png)
+
+![image-20210319093156161](16_django.assets/image-20210319093156161.png)
+
+이렇게 하니 썸네일이 적용 된것을 확인할 수 있다.
+
+![image-20210319093214611](16_django.assets/image-20210319093214611.png)
+
+posts에서는 thumbnail을, detail에서는 원본사진을 보여주도록 해주었다.
+
+---
+
+이번에는 원본데이터 자체를 수정하는 방식을 해봅시다.
+
+애초에 이미지 처리를 하고난 뒤에 이미지를 업로드를 해주는 방식
+
+![image-20210319093528484](16_django.assets/image-20210319093528484.png)
+
+이미지라는 변수를 지정해주고 복붙해온다
+
+![image-20210319093629165](16_django.assets/image-20210319093629165.png)
+
+다시한 번 `python manage.py makemigrations`, `python manage.py migrate`를 해준다. 이 과정은 아예 처음부터 원본파일을 만지면서 업로드 하는 것이기 때문에 DB에 영향을 준기때문에 바로 makemigrations가 가능해진다.
+
+![image-20210319094104754](16_django.assets/image-20210319094104754.png)
+
+비율을 변경해준다면(500*500으로)
+
+![image-20210319094124291](16_django.assets/image-20210319094124291.png)
+
+upload_to 어디 폴더에다가 사진을 저장할지 경로를 지정해주는것
+
+![image-20210319094145151](16_django.assets/image-20210319094145151.png)
+
+---
+
+![image-20210319094731899](16_django.assets/image-20210319094731899.png)
+
+upload_to='images/%Y/%m/%d'이렇게 한 후에 이미지를 업로드해보면
+
+![image-20210319094807045](16_django.assets/image-20210319094807045.png)
+
+폴더가 하나 만들어지고, 그 안에 파일이 새롭게 저장이 되는것이 확인된다.
+
+---
+
+사용자 개념을 배운다면 사용자별 폴더또한 만들 수 있을 것입니다.
+
+---
+
+![image-20210319100113278](16_django.assets/image-20210319100113278.png)
+
+도대체 저 processors에 뭐가 들어있을까
+
+https://django-imagekit.readthedocs.io/en/latest/#processors
+
+### Create,Update => forms
+
+![image-20210319100524654](16_django.assets/image-20210319100524654.png)
+
+좌 create, 우 update화면
+
+![image-20210319100547365](16_django.assets/image-20210319100547365.png)
+
+![image-20210319100605374](16_django.assets/image-20210319100605374.png)
+
+create의 html과 update의 html의 형식이 동일하다
+
+![image-20210319100634382](16_django.assets/image-20210319100634382.png)
+
+"" : 내가 현재 위치해있는 주소를 의미한다. 값이 없다면 현재 위치에 있는 주소로 다시 요청을 보내게 된다.
+
+![image-20210319100740561](16_django.assets/image-20210319100740561.png)
+
+다만 이번에는 POST방식으로 요청을 보내는 것
+
+![image-20210319100759266](16_django.assets/image-20210319100759266.png)
+
+
+
+돌아와서 내용이 조금만 다르고 형식이 동일한 이 두 가지 html을 하나로 통합해보려고 한다.
+
+![image-20210319100850619](16_django.assets/image-20210319100850619.png)
+
+forms.html을 만들고,
+
+![image-20210319100901485](16_django.assets/image-20210319100901485.png)
+
+views.py에서 경로를 약간 수정해준다. create.html, update.html이 아니라 forms.html로 갈 수 있도록
+
+![image-20210319100949463](16_django.assets/image-20210319100949463.png)
+
+![image-20210319101014306](16_django.assets/image-20210319101014306.png)
+
+둘다 같은 화면으로 form.html을 참조하지만 화면이 다르게 나온다
+
+![image-20210319101054392](16_django.assets/image-20210319101054392.png)
+
+어떻게?? form.html에서 내가 어디로 요청을 보냈는지 정보를 담을 수 있다.
+
+![image-20210319101109464](16_django.assets/image-20210319101109464.png)
+
+이 객체들이 무엇을 의미하는지 봅시다.
+
+- request
+
+![image-20210319101304857](16_django.assets/image-20210319101304857.png)
+
+![image-20210319101321865](16_django.assets/image-20210319101321865.png)
+
+<>사이에있다. 하나의 객체. 우리는 이것을 request객체라고 부르는데, 
+
+**django request object**를 검색해보면 
+
+![image-20210319101355869](16_django.assets/image-20210319101355869.png)
+
+우리가 하려고하는 것은 요청을 보내면 응답을 해주는것, 요청을 보내고 응답을 받는 것인데, 응답을 해줄때 respose objects라는 것으로 return을 해주는 것.
+
+![image-20210319101425470](16_django.assets/image-20210319101425470.png)
+
+보면 많은 속성값들이 있다.
+
+![image-20210319101514730](16_django.assets/image-20210319101514730.png)
+
+많이 쓰던게 보이네 request.method 방식
+
+![image-20210319101528581](16_django.assets/image-20210319101528581.png)
+
+어제 배웠던 FILES라는 정보도 들어있다.
+
+![image-20210319101638603](16_django.assets/image-20210319101638603.png)
+
+좀만 더 내리다 보면 request.resolver_match라는 것이 있다.
+
+![image-20210319101742816](16_django.assets/image-20210319101742816.png)
+
+form.html에서 이것을 출력해보면
+
+![image-20210319101809742](16_django.assets/image-20210319101809742.png)
+
+어떤 값이 엄청 많이 들어가 있는 것을 확인할 수있는데
+
+![image-20210319101827801](16_django.assets/image-20210319101827801.png)
+
+이것은
+
+![image-20210319101841001](16_django.assets/image-20210319101841001.png)
+
+이러한 URL을 만들기 위해서 어떠한 경로를 통해서 들어왔는지에대한 정보를 담고있다.
+
+![image-20210319101937403](16_django.assets/image-20210319101937403.png)
+
+create라는 함수가 사용되었고, 
+
+![image-20210319101952583](16_django.assets/image-20210319101952583.png)
+
+url_name과 app_name은 어떤것이 사용되었고,
+
+![image-20210319102045385](16_django.assets/image-20210319102045385.png)
+
+결국, create.html과 update.html을 하나로 만들어 냈다.
+
+![image-20210319102232689](16_django.assets/image-20210319102232689.png)
+
+ResolverMath한번 살펴보면 아래와 같은 속성값들이 적용되어있다.
+
+![image-20210319101917343](16_django.assets/image-20210319101917343.png)
+
+---
+
+### 단단한 함수
+
+![image-20210319102613367](16_django.assets/image-20210319102613367.png)
+
+현재 여기에서는 오류가 하나 발생할 수 있습니다(detail, update, delete에서 현재 공통적부분이 뭘까요)
+
+일단 특정한 pk를 받아온다는 공통점인데 만약 pk가 DB에 없는 pk값을 요청하게 된다면??
+
+인덱스 에러가 발생하게 된다.
+
+![image-20210319103207535](16_django.assets/image-20210319103207535.png)
+
+![image-20210319102952954](16_django.assets/image-20210319102952954.png)
+
+이러한 것은 http status로서 500 에러가 된다.
+
+![image-20210319103135519](16_django.assets/image-20210319103135519.png)
+
+이제 이 부분에 대해서도 처리를 해줄 겁니다.
+
+DB에 없는 variable routing변수를 사용자가 입력을 해도 404 error로 유도해줄수 있도록 해줄 것
+
+![image-20210319103339324](16_django.assets/image-20210319103339324.png)
+
+![image-20210319103410916](16_django.assets/image-20210319103410916.png)
+
+![image-20210319103550111](16_django.assets/image-20210319103550111.png)
+
+이제 다시 서버를 실행시켜보면
+
+![image-20210319103648777](16_django.assets/image-20210319103648777.png)
+
+이제 이런식으로 유도할 수 있다.
+
+404 page를 렌더하는 방법은 뭐가 있을까
+
+![image-20210319103716927](16_django.assets/image-20210319103716927.png)
+
+![image-20210319103738453](16_django.assets/image-20210319103738453.png)
+
+html을 404.html을 만들고 DEBUG를 False로 해놔야합니다
+
+![image-20210319103820643](16_django.assets/image-20210319103820643.png)
+
+DEBUG상태가 True인 상태는 개발환경(dev단계) 에서는 Error를 보여줘야만 문제들을 고쳐가면서 서버를 만들 수있다.
+
+False인 상태에서는 사용자에게 오류페이지를 보여주지않는 사용단계에서 사용된다.
+
+### 중간 중요점
+
+1. create, update를 form를 합친 것
+
+2. get_object_or_404
+
+### GIT UNDO(과거로 돌아가기)
+
+![image-20210319104636633](16_django.assets/image-20210319104636633.png)
+
+GIT 활용법 살펴보면서 오류들을 살펴보겠습니다.
+
+![image-20210319104701416](16_django.assets/image-20210319104701416.png)
+
+![image-20210319104712331](16_django.assets/image-20210319104712331.png)
+
+Working Directory / Staging Area / Repository
+
+시작에 앞서, 중요한 부분은 처음 커밋할때 실수하지않고 잘 쌓아 나가는 것!
+
+![image-20210319110905220](16_django.assets/image-20210319110905220.png)
+
+txt파일 2개를 만들고 git init
+
+```bash
+$git init
+```
+
+a.txt수정후 git add해보자
+
+![image-20210319110948099](16_django.assets/image-20210319110948099.png)
+
+git status확인해보면
+
+![image-20210319111001623](16_django.assets/image-20210319111001623.png)
+
+a.txt라는 파일을 staging area에 올린 것.
+
+![image-20210319111039740](16_django.assets/image-20210319111039740.png)
+
+그렇다면 반대로 a.txt를 무대 아래로 내리고 싶다면 어떻게 해야할까??
+
+![image-20210319111058077](16_django.assets/image-20210319111058077.png)
+
+```bash
+$git rm --cached a.txt
+```
+
+이러면 스테이지 위에있던 a.txt가 다시 무대 아래로 내려오게 된다.
+
+![image-20210319111125644](16_django.assets/image-20210319111125644.png)
+
+
+
+이번에는 a.txt를 커밋까지 해보겠습니다.
+
+```bash
+$git add a.txt
+$git commit -m 'a.txt'
+```
+
+그리고 a.txt를 수정후 다시 add를 하고 git status해보면 이번에는 좀 보이는게 다르다.
+
+![image-20210319111336769](16_django.assets/image-20210319111336769.png)
+
+![image-20210319111356153](16_django.assets/image-20210319111356153.png)
+
+이번에는 무대로 내리기 위한 명령어가 조금 달라진다.(reset으로 나오는사람은 이전버전사용자들)
+
+```bash
+$git restore --staged a.txt
+```
+
+
+
+- 중간정리
+
+![image-20210319111540584](16_django.assets/image-20210319111540584.png)
+
+
+
+- 이번에는 commit을 살펴봅시다.
+
+git add . => git commit -m 'newfnewfoiewfoewf' 이상하게 오타를 쳐서 커밋을 해버린 경우
+
+git log살펴보면 
+
+![image-20210319111635010](16_django.assets/image-20210319111635010.png)
+
+이것을 수정해보는 것을 해봅시다.
+
+```bash
+git commit --amend
+```
+
+그러면 화면이 변해있는게 보이는데 이것을 VIM이라고 합니다. (마우스가 없는상태에서 파일을 수정을 할 수 있도록 만들어진 프로그램)
+
+![image-20210319111706305](16_django.assets/image-20210319111706305.png)
+
+VIM은 두 가지 모드가 있다.
+
+1. 입력모드 : 데이터를 추가할 수 있는 모드
+
+   i를 누르면 입력모드가 되고
+
+   ![image-20210319111852579](16_django.assets/image-20210319111852579.png)
+
+   esc를 누르면 취소가 된다.
+
+   끼워넣기 부분에서 수정이 가능
+
+   ![image-20210319111938667](16_django.assets/image-20210319111938667.png)
+
+   수정 후 esc를 눌러서 입력모드를 나오고, 저장을 해주어야하는데
+
+   `:`을 입력하고, `wq`를 눌러주면(`:wq`) 저장하고 나가겠습니다의 의미라서 commit 이름이 수정되고 수정된 commit이 적용됩니다.
+
+1. 이동모드
+
+** Open vim이라는 곳에서 VIM 활용법을 배울수 있습니다. / vim adventure라는 곳에서도 연습가능
+
+**적어도 Insert normal에대한 개념은 가지고 있어야만 합니다.**
+
+![image-20210319112238950](16_django.assets/image-20210319112238950.png)
+
+
+
+이번에는 c.txt d.txt를 만들어서 수정을 해서 c.txt만 add하고 커밋을하면
+
+![image-20210319112502438](16_django.assets/image-20210319112502438.png)
+
+![image-20210319112515282](16_django.assets/image-20210319112515282.png)
+
+여기 커밋에다가 d.txt를 같이 커밋해주고 싶다면???
+
+요약해보면
+
+![image-20210319112620395](16_django.assets/image-20210319112620395.png)
+
+이런상황인데 d.txt도 이미 커밋되어있는 상태에 넣어주고싶다면 d.txt를 add해저서 스테이지위에 올려주고, amend를 해준다.
+
+```bash
+git commit --amend
+```
+
+![image-20210319112731316](16_django.assets/image-20210319112731316.png)
+
+여기서 메시지를 수정해줄 필요는 없으니 `:wq`를 통해 나와준다.
+
+
+
+이번에는 commit들의 목록이 쌓일건데, Git을 사용하는 목적중 하나는 협업, 버전관리... 중 지금 볼 버전관리입니다. 
+
+시나리오를 하나 생각해보면
+
+```
+# 영화보기
+
+1. 영화를 보기 위해 영화관 도착!!
+$git init
+$git add .
+$git commit -m '영화관 도착'
+$git log
+
+2. 명량 영화표 구매
+$git add .
+$git commit -m '영화표 구매'
+
+3. 팝콘 구매
+$git add .
+$git commit -m '팝콘 구매'
+
+4. 상영시간이 될때까지 웹서핑
+$git add .
+$git commit -m '웹서핑'
+
+5. 댓글읽다가 주인공 사망 스포당함
+$git add .
+$git commit -m '스포당함'
+
+6. 나도 스포해야지 댓글 작성
+$git add .
+$git commit -m '댓글작성'
+
+7. 영화를 재미없게 보고 나옴
+git add .
+git commit -m '영화 보고 나옴'
+```
+
+이제 간단히 로그 기록을 살펴보면
+
+```bash
+$git log --oneline
+```
+
+![image-20210319113419573](16_django.assets/image-20210319113419573.png)
+
+세가지 예시를 들겁니다.
+
+![image-20210319113547242](16_django.assets/image-20210319113547242.png)
+
+git.test라는 문서를 세개의 문서로 복사하고 hard, soft, mixed
+
+과거로 돌아갈 겁니다.
+
+- 처음엔 hard를 열어 코드를 열어보고. 다시 git log --oneline해보면
+
+![image-20210319113616763](16_django.assets/image-20210319113616763.png)
+
+위의 노란색 부분의 글씨들을 사용할건데 이는 각각의 커밋들의 고유값을 의미합니다.
+
+git reset --hard 가고싶은 커밋의 이름
+
+```bash
+$git reset --hard 
+```
+
+그냥 이렇게 하면 한단계 앞으로 이동하게 됨. 팝콘구매 부분으로 돌아가고 싶다면?
+
+```bash
+$git reset --hard 86c4d61
+```
+
+이렇게 작성하면 되고 log를 살펴보면
+
+![image-20210319113821923](16_django.assets/image-20210319113821923.png)
+
+![image-20210319113844587](16_django.assets/image-20210319113844587.png)
+
+스포당하지 않은 상태(과거)로 완전히 돌아오면서 코드도 그 당시 상태로 돌아가게됩니다.
+
+
+
+- 이번엔 soft로해봅시다.
+
+```bash
+$git log --oneline
+```
+
+![image-20210319113930144](16_django.assets/image-20210319113930144.png)
+
+soft로 팝콘구매 시점으로 이동해보자
+
+![image-20210319113946157](16_django.assets/image-20210319113946157.png)
+
+![image-20210319113954689](16_django.assets/image-20210319113954689.png)
+
+commit의 시점은 변경되었으나, git status를 찍어보면
+
+![image-20210319114016533](16_django.assets/image-20210319114016533.png)
+
+실제 파일안에는 우리가 적었던 파일의내용들이 남아있다
+
+![image-20210319114058585](16_django.assets/image-20210319114058585.png)
+
+![image-20210319114111491](16_django.assets/image-20210319114111491.png)
+
+과거로 돌아가지만, 그 중간까지의 기록은 남겨둔 상황으로 돌아가는 것
+
+
+
+- 이번엔 mixed
+
+![image-20210319114426895](16_django.assets/image-20210319114426895.png)
+
+![image-20210319114436839](16_django.assets/image-20210319114436839.png)
+
+팝콘구매한 시점으로는 왔는데 status를 살펴보면
+
+![image-20210319114449489](16_django.assets/image-20210319114449489.png)
+
+![image-20210319114534282](16_django.assets/image-20210319114534282.png)
+
+상황이 working directory로 돌아오게 된다.
+
+- 정리
+- git commit --amend
+
+### 프로젝트 공지
+
+CRUD로직은 **Model Form으로 만들기!**
+
+Model Form이 익숙하다면 media file로 만드는 것
+
+### 과목평가 공지
+
+- Framework 4지선다 단답형 1시간정도 진행
+
+- 프로젝트 만들고 앱만들고 등록하고 views.py urls.py 흐름을 잘 이해하면 됩니다.
+  - 프로젝트 생성
+  - 프로젝트 앱생성
+  - -.gitignore README.md생성-
+  - urls.py
+  - models.py => field를 만들고, CharField...와같은 속성을 적용시켜줌
+  - forms.py => 모델등록, fields등록
+  - views.py => templates 랜더링 => 실제목적은 결국 CRUD
+  - settings.py => INSTALLED_APP, BASE_DIR, TEMPLATES, STATIC_ROOT
+  - 단단한 페이지 만들기 => decorator를 추가(@require_GET, require_POST, require_http_methods...), get_object_or_404
+
+- 홈워크, 워크샵도 다시한번 보시길.. ㅎㅎ
+  - import 문장
