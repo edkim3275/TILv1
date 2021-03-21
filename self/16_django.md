@@ -1955,7 +1955,7 @@ base.html에 2줄 추가
 
 
 
-django template tag검색 load찾아보면
+django template tag검색 load찾아보면  
 
 ![image-20210317103141520](16_django.assets/image-20210317103141520.png)
 
