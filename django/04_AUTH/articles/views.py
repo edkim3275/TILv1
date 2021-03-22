@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Article
 from .forms import ArticleForm
 
@@ -28,8 +29,10 @@ def detail(request, pk):
     }
     return render(request, 'articles/detail.html', context)
 
-
-
+# ~/accounts/login/?next=/articles/create/
+# => login_required가 만들어준 url
+# 우리의 회원들만 작성 => 인증
+@login_required
 def create(request):
     """
     GET : 새 글을 작성하는 탬플릿을 랜더
