@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ user_profile }}</h1>
+{% comment %} 
+  /accounts/profile/neo/
+  => user_profile = <User: neo> 객체가 들어가있다.
+{% endcomment %}
+{% comment %} requeset.user == user {% endcomment %}
+{% if request.user == user_profile %}
+<div>
+  <form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary">정보 수정</button>
+  </form>
+  <hr>
+  {% comment %} <div class="d-inlline-block">
+  <a href="#" class="btn btn-primary">개인정보 수정</a>
+  </div> {% endcomment %}
+  <form action="#" method="POST" class="d-inline-block">
+    {% csrf_token %}
+    <input type="submit" class="btn btn-danger" value="회원 탈퇴">
+  {% comment %} <button class="btn btn-danger">회원 탈퇴</button> {% endcomment %}
+  </form>
+</div>
+{% endif %}
+
+
+
+{% endblock content %}
