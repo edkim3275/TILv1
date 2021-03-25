@@ -81,4 +81,4 @@ def change_pw(request):
     else:
         form = PasswordChangeForm(request.user)
     context = {'form': form}
-    return render(request, 'accounts/change_pw.html', context)
+    return render(request, 'accounts/update.html', context)
