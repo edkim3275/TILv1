@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <h1>
+    {{ person.username }} 의 프로필 페이지 입니다.
+  </h1>
+
+  {{ person.fans.all|length }} 명이 팔로우 중입니다.
+  <hr>
+  {{ person.stars.all|length }} 명을 팔로잉 중입니다.
+
+
+{% if request.user.username != person.username %}
+  <form action={% url 'accounts:follow' person.pk %} method="POST">
+    {% csrf_token %}
+    {% if request.user in person.fans.all %}
+      <button class='btn btn-danger'>팔로우 취소</button>
+    {% else %}
+      <button class='btn btn-info'>팔로우</button>
+    {% endif %}
+  </form>
+{% endif %}
+  
+{% endblock content %}
+
+
+
+

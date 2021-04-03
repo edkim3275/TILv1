@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+
+  <form method="POST">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <button class="btn btn-secondary">가입</button>
+  </form>
+
+
+{% endblock content %}
