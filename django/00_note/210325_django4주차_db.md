@@ -466,7 +466,7 @@ https://docs.djangoproject.com/en/3.1/ref/models/querysets/
 
 ![image-20210325162718965](210325_django4주차_db.assets/image-20210325162718965.png)
 
-알아서 특정패턴 매칭하는 애들 데리고 오는 것이 regex
+알아서 특정패턴 매칭하는 애들 데리고 오는 것이 regex레겍쓰
 
 ![image-20210325163222684](210325_django4주차_db.assets/image-20210325163222684.png)
 
@@ -489,8 +489,6 @@ https://docs.djangoproject.com/en/3.1/ref/models/querysets/
 <br>
 
 expressions, groupby
-
-
 
 - annotate() : 주석을 다는 것 => 없는 테이블을 더 만든다
 
