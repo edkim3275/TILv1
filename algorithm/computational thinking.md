@@ -532,3 +532,69 @@ print(quicksort([10, 5, 2, 3]))
 
 
 과제 : 기초수식8 / 동적프로그래밍 2 / 심심하면 재귀 6
+
+## 210409
+
+<img src="computational thinking.assets/image-20210409090449117.png" alt="image-20210409090449117" style="zoom:100%;" />
+
+![image-20210409090758780](computational thinking.assets/image-20210409090758780.png)
+
+- 문제3
+
+  드모르강 법칙이라는게 있다.
+
+  ![image-20210409090933399](computational thinking.assets/image-20210409090933399.png)
+
+  ![image-20210409091114313](computational thinking.assets/image-20210409091114313.png)
+
+- 문제4
+
+  분배법칙이 성립한다.
+
+  ![image-20210409091352371](computational thinking.assets/image-20210409091352371.png)
+
+- 문제5
+
+![image-20210409091719445](computational thinking.assets/image-20210409091719445.png)
+
+- 문제7
+
+  ![image-20210409092348345](computational thinking.assets/image-20210409092348345.png)
+
+- 문제9
+
+  ![image-20210409092912409](computational thinking.assets/image-20210409092912409.png)
+
+- 문제11
+
+  ![image-20210409093304849](computational thinking.assets/image-20210409093304849.png)
+
+### 수와표현
+
+![image-20210409093730699](computational thinking.assets/image-20210409093730699.png)
+
+![image-20210409094127293](computational thinking.assets/image-20210409094127293.png)
+
+![image-20210409095020806](computational thinking.assets/image-20210409095020806.png)
+
+## 과목평가(월)
+
+2시간 => 4문제
+
+1, 2, 3 코드직접 짜는문제 : 2문제 이상 풀어야만 패스
+
+4 : 서술형(Comtational Thinking)
+
+공부 : 배열, 탐색(그래프, bfs, bfs, 2차원배열), 이진순회
+
+주석은 엄청 세세하게 달 필요는 없습니다.
+
+연습문제 : 2차원배열, 델타를 이용해서 순회하는 방법, 2진순회하는 법
+
+문제를 자세히 읽어보고 풀어보자
+
+## 다음주
+
+본격적인 응용과정의 시작
+
+월을 시작으로 완전탐색, 그리디(자세히 할지 안할지 아직모르겠음), 분할정복, 백트래킹, 그래프에 대한 이론(인접행렬, 인접리스트, dfs, bfs), 최소가중치(MST, 크루스칼, 프림, 다익스트라)
