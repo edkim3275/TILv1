@@ -288,3 +288,674 @@ RESTful 키포인트 : URL은 리소스만 정의(명사), HTTP verb는 행동�
 ---
 
 ![image-20210426132418460](18_django_REST API.assets/image-20210426132418460.png)
+
+---
+
+우리가 지금 뭘 하려고 django_seed, djangorestframework이런것들을 사용하는지
+
+RESTful하다 라는 것은? 결국 GET, POST, PATCH, PUT, DELETE를 잘 사용하는 것
+
+![image-20210426234746932](18_django_REST API.assets/image-20210426234746932.png)
+
+routing설정이 너무 자유로워서 URL routing할 때 하나의 규칙을 만든 것. 그것이 바로 RESTful API.
+
+RESTful의 키포인트 2개는
+
+- **URL은 리소스만 정의(명사)**
+- **HTTP Verb가 행동을 정의(동사)**
+
+기존에 배웠던 URL은 아래와같은 내용이었지만 RESTful은 그렇지 않습니다.
+
+![image-20210427000241918](18_django_REST API.assets/image-20210427000241918.png)
+
+이러한 것들이 movies/와 movies/1/과 같이 남게됩니다.
+
+## 210427 Tue
+
+![image-20210427091813490](18_django_REST API.assets/image-20210427091813490.png)
+
+- serializer : 데이터검증과, JSON 생성
+
+- JSON데이터 딕셔너리를 JSON으로 바꾸어주는 명령어
+
+  ![image-20210427092044188](18_django_REST API.assets/image-20210427092044188.png)
+
+  ![image-20210427092055928](18_django_REST API.assets/image-20210427092055928.png)
+
+  ![image-20210427092133474](18_django_REST API.assets/image-20210427092133474.png)
+
+  **큰따옴표(" ")로 이루어져있는 것이 JSON의 특징**
+
+- 그렇다면 아래와 같이 일일히 직접 수작업으로 딕셔너리를 만들고 덤핑을 해서 JSON으로 내보내야 하는 건가?? 놉. 전처리 작업을 생략할 수 있다.
+- ![image-20210427092255039](18_django_REST API.assets/image-20210427092255039.png)
+
+- 헷갈리지 말게 DRF serializer와 django serializer가 따로 있습니다.
+
+  `from django.core import serializers` 이건 쓰는거 아닙니다잉? 이건 dumpdata사용시에 사용되는 것.(목적이  다르다)
+
+  ![image-20210427092519855](18_django_REST API.assets/image-20210427092519855.png)
+
+- 그래서 DRF serializer가 등장하게 된 것.
+
+- serializer 어떻게 쓰는지 봅시다.
+
+- 이제 더이상 template를 사용하지 않고 약간의 코드 변화가 있을 것이라는 걸 인지하면 됩니다.
+
+- XML : 웹에서의 data표시를 위한 HTML이라는 언어가 data를 표시할 수 있지만 HTML은 표준이 존재한다.(태그...)
+
+  ![image-20210427093120877](18_django_REST API.assets/image-20210427093120877.png)
+
+  위와같이 HTML은 key값이 정해져있습니다. 따라서 사람들이 확장된(e**X**tended) MarkupLanguage를 만들고자 한 것이 바로 XML이고 이는 'de facto' 사실상 표준으로 받아들여진다.
+
+  ![image-20210427093531365](18_django_REST API.assets/image-20210427093531365.png)
+
+- 핵심만 보면 JSON이 더 편하다.
+- 왼쪽이 오른쪽보다 좋은게 뭘까요? 데이터양은 곧 돈입니다. 경영자적인 마인드가 조금 필요한데 데이터양이 비트단위로 생각하면 JSON이 훨씬 줄어듭니다.(조금이라도 덜 드는 것이 이득) / 두번째로 JavaScript Object Notation 자바스크립트가 떡상했기 때문.
+- 두가지를 기억합시다.
+  - 데이터는 Key - Value로 이루어져있다.
+  - JSON은 string이다 그 와중에 딕셔너리나 리스트로 변환가능한 스티링이다.(파싱, 해석가능한 스트링)
+
+---
+
+### 코드
+
+#### Read
+
+- views.py
+
+  ```python
+  #from django.http.response import JsonResponse # 내가 직접 빚는 것(사용x)
+  #from rest_framework import serializers # x
+  
+  from rest_framework.response import Response # 이전의 render역할
+  from rest_framework.decorators import api_view # 이전의 require_methods
+  from .models import Article
+  from .serializers import ArticleSerializer # 이전의 ArticleForm
+  
+  # 이전에 이랬다면
+  @require_methods(['GET'])
+  def article_list(request):
+      articles = Article.objects.all()
+      context = {'articles': articles}
+      return render(req.., 'a.html', context)
+  
+  # 데이터검증 / JSON만들기
+  @api_view(['GET'])
+  def article_list(request):
+      articles = Article.objects.all()
+      serializer = ArticleSerializer(articles, many=True) # 쿼리셋엔 True필요
+      return Response(serializer.data)
+  ```
+
+- api urls.py
+
+  ![image-20210427095053188](18_django_REST API.assets/image-20210427095053188.png)
+
+  여기서 app_name은 굳이 사용하지 않아도 괜찮습니다
+
+  ![image-20210427095147878](18_django_REST API.assets/image-20210427095147878.png)
+
+  이와같은 활용을 위해 써졌는데 지금은 필요가 없는 부분.
+
+- JSON 직접 확인해보기
+
+  ![image-20210427095401793](18_django_REST API.assets/image-20210427095401793.png)
+
+- serializers.py
+
+  ![image-20210427100718206](18_django_REST API.assets/image-20210427100718206.png)
+
+  이렇게 한다면 title만 보여지게 할 수 있다.
+
+- views.py
+
+  ```python
+  from django.shortcuts import get_object_or_404
+  
+  @api_view(['GET'])
+  def article_detail(request, article_pk):
+      article = get_object_or_404(Article, pk=article_pk)
+      serializer = ArticleSerializer(article)
+      return Response(serializer.data)
+  ```
+
+- urls.py
+
+  ```python
+  from dajngo.urls import path
+  from . import views
+  
+  urlpatterns = [
+      path('', views.article_list),
+      path('<int:article_pk>/', views.article_detail),
+  ]
+  ```
+
+  ![image-20210427101527109](18_django_REST API.assets/image-20210427101527109.png)
+
+- serializers.py
+
+  detail을 할때에는 다른 부분이 보이게 하고싶다면(단일, 여러개 따로 보여주는 방식을 다르게 하고 싶은경우 별개로 만들어 주어야만 합니다.)
+
+  ```python
+  # 단일조회
+  class ArticleSerializer(serializers.ModelSerializer):
+      title = forms.CharField(min_length=2, max_length=100)
+      class Meta:
+          model = Article
+          fields = '__all__'
+  # 전체조회
+  class ArticleListSerializer(serializers.ModelSerializer):
+      class Meta:
+          model = Article
+          fields = ('pk', 'title',)
+  ```
+
+  ![image-20210427110655499](18_django_REST API.assets/image-20210427110655499.png)
+
+- views.py
+
+  ```python
+  from .serializers import ArticleSerializer, ArticleListSerializer
+  ```
+
+  ![image-20210427101935963](18_django_REST API.assets/image-20210427101935963.png)
+
+#### Create
+
+- views.py
+
+  ```python
+  def create_article(request):
+      if request.method == 'POST':
+      	form = ArticleForm(request.POST)
+          if form.is_valid():
+              article = form.save()
+              return redirect('api:article_detail', article.pk)
+  	else:
+          form = ArticleForm()
+      context = {'form': form}
+      return render(request, 'create.html', context)
+  ```
+
+  이전에 했던 코드가 위와같은데, 왜 if와 else를 했을까요?
+
+  ![image-20210427102542338](18_django_REST API.assets/image-20210427102542338.png)
+
+  DRF는 API를 만드는 부분이다보니까 위에서 쓰던 도우미 양식은 사용하지 않게 됩니다. 
+
+  ![image-20210427102704204](18_django_REST API.assets/image-20210427102704204.png)
+
+  따라서 아래와 같이 수정이 될 것이고
+
+  ```python
+  @require_methods(['POST'])
+  def create_article(request):
+      form = ArticleForm(request.POST)
+      if form.is_valid():
+          article = form.save()
+          return redirect('api:article_detail', article.pk)
+      return render(request, 'create.html', context)
+  ```
+
+  serializer에 대응해보면
+
+  ```python
+  @api_view(['POST'])
+  
+  def create_article(requeset):
+      serializer = ArticleSerializer(request.POST)
+      if serializer.is_valid():
+          article = serializer.save()
+          return Response(serializer.data) # 성공했을경우
+      return Response(serializer.errors) # 실패했을경우 error메시지를 json으로 보냄
+  ```
+
+- 그렇다면 의문이 생긴다. data어떻게 보내지?
+
+- urls.py
+
+  ```python
+  urlpatterns = [
+      path('create/', views.create_article),
+  ]
+  ```
+
+- 서버를 켜보자
+
+  ![image-20210427103245847](18_django_REST API.assets/image-20210427103245847.png)
+
+  multipart/form-data는 이미지, 파일 보낼때
+
+  application/json이 일단 제일 만만하니까 한번 해보면 아래와 같은 문구 확인이가능한데
+
+  ![image-20210427103346065](18_django_REST API.assets/image-20210427103346065.png)
+
+  이것과 상관없이 보면 잠시 views.py 수정하고
+
+  ![image-20210427103429110](18_django_REST API.assets/image-20210427103429110.png)
+
+  ![image-20210427103459478](18_django_REST API.assets/image-20210427103459478.png)
+
+  애초에 진입조차 못했다는 것을 확인할 수 있다. 이유인 즉슨 JSON이 아니라는 것.
+
+- 그렇다면 번거롭겠지만 JSON으로 만들어 보내보자
+
+  ![image-20210427103601064](18_django_REST API.assets/image-20210427103601064.png)
+
+  이번에는 보내진것같지만 아무것도 들어가있질 않다.
+
+  ![image-20210427103626494](18_django_REST API.assets/image-20210427103626494.png)
+
+  x디버깅으로 확인해봤더니 아무런 데이터도 들어가 있질 않다.
+
+  ![image-20210427103739544](18_django_REST API.assets/image-20210427103739544.png)
+
+  ![image-20210427103724835](18_django_REST API.assets/image-20210427103724835.png)
+
+  request.POST => **POST요청 & HTML FormData로 넘어온 데이터만** 취급합니다.
+
+  비슷한게 뭐 있었냐면 request.GET => URL params (/?key1=value1&key2=value2)
+
+  ![image-20210427104038082](18_django_REST API.assets/image-20210427104038082.png)
+
+- 그럼 사용자가 보낸 data는 form data가 아니라 여기서는 application json이었던 것.
+
+  ![image-20210427104104234](18_django_REST API.assets/image-20210427104104234.png)
+
+  이제부터는 사용자가 보낸 데이터는 request.data에 담긴다.
+
+  ![image-20210427104349942](18_django_REST API.assets/image-20210427104349942.png)
+
+  기존에 했던 것과의 차이를보면 data = request.data정도?
+
+  ![image-20210427104522631](18_django_REST API.assets/image-20210427104522631.png)
+
+- Response객체가 기본적으로 아무말도 안하면 200을 보냅니다. 따라서 status를 설정해주어야만 합니다.
+
+  ![image-20210427104726601](18_django_REST API.assets/image-20210427104726601.png)
+
+  잘 나오는 것 확인 가능
+
+  ![image-20210427104801396](18_django_REST API.assets/image-20210427104801396.png)
+
+  201이 created 성공했다는 것 따라서 마무리로 status로 201해주면 됩니다.
+
+  ![image-20210427105110163](18_django_REST API.assets/image-20210427105110163.png)
+
+  ![image-20210427105145475](18_django_REST API.assets/image-20210427105145475.png)
+
+#### RESTful 확인
+
+- 그래서 현재 URI가 RESTful 한가??
+
+  ![image-20210427110937698](18_django_REST API.assets/image-20210427110937698.png)
+
+  create와 같은 내용이 없어야한다고 했다. 
+
+  Get /articles=> Read, POST /articles=> Create하는 거라고 했었다.
+
+  ![image-20210427111115084](18_django_REST API.assets/image-20210427111115084.png)
+
+  django는 위와같은 개념이 존재하지 않는다.  따라서 views.py에서 if로 구분하는 함수를 만들어 주어야만 합니다.
+
+#### Delete
+
+- views.py
+
+  ```python
+  @api_view(['GET', 'POST'])
+  def article_list_or_create(request):
+      if request.method == 'GET':
+          articles = Article.objects.all()
+          serializer = ArticleListSerializer(articles, many=True)
+          ...
+  ```
+
+  ![image-20210427111325388](18_django_REST API.assets/image-20210427111325388.png)
+
+- urls.py
+
+  url은 딱 2개만 만들어지게 된다.
+
+  ![image-20210427111444034](18_django_REST API.assets/image-20210427111444034.png)
+
+- views.py 단일객체 수정, 삭제,..
+
+  ```python
+  @api_view(['GET', 'PATCH', 'DELETE', 'PUT'])
+  def article_detail_or_update_or_delete(request, article_pk):
+      article = get_object_or_404(Article, pk=article_pk)
+      
+      if request.method == 'GET':
+          serializer = ArticleSerializer(article)
+          return Response(serializer.data)
+      
+      elif request.method == 'PATCH' or request.method == 'PUT':
+          pass
+      
+      elif request.method == 'DELETE':
+          article.delete()
+          data = {  # customize message
+              'success': True,
+            'message': f'{article_pk} 번 게시글이 삭제되었습니다.'
+          }
+		return Response(status=204)
+  ```
+
+  ![image-20210427111843726](18_django_REST API.assets/image-20210427111843726.png)
+  
+  204 : 없는데, 삭제가 되어서 없다는 것
+
+#### postman
+
+get요청뿐만이 아니라 POST와 같은 요청도 보내고 싶은 경우
+
+- body -  row - json -> send
+
+![image-20210427132258976](18_django_REST API.assets/image-20210427132258976.png)
+
+![image-20210427132704487](18_django_REST API.assets/image-20210427132704487.png)
+
+request.POST는 form data를 갖고있습니다
+
+---
+
+#### Update
+
+PUT : override 전체수정
+
+PATCH : 자원의 부분수정
+
+![image-20210427133144693](18_django_REST API.assets/image-20210427133144693.png)
+
+- views.py
+
+  ```python
+  @api_view(['GET', 'PATCH', 'DELETE', 'PUT'])
+  def article_detail_or_update_or_delete(request, article_pk):
+      article = get_object_or_404(Article, pk=article_pk)
+      
+      if request.method == 'GET':
+          serializer = ArticleSerializer(article)
+          return Response(serializer.data)
+      
+      
+      elif request.method == 'PATCH' or request.method == 'PUT':
+          # serializer = ArticleSerializer(article, request.data)
+      	serializer = ArticleSerializer(data=requeset.data, instance=article)
+          if serializer.is_valid():
+              seializer.save()
+              return Response(serializer.data)
+          else:
+          	return Response(serializer.errors, status=400)
+          
+          
+      elif request.method == 'DELETE':
+          article.delete()
+          data = {  # customize message
+              'success': True,
+              'message': f'{article_pk} 번 게시글이 삭제되었습니다.'
+          }
+  		return Response(status=204)
+  ```
+
+  수정의 경우 인자값으로 instance가 앞으로 나오게 된다. 앞에 쓰기 싫다면 data=request.data처럼 1:1로 지정해주면 된다.
+
+- ![image-20210427134015381](18_django_REST API.assets/image-20210427134015381.png)
+
+  ![image-20210427134027445](18_django_REST API.assets/image-20210427134027445.png)
+
+- ![image-20210427134251196](18_django_REST API.assets/image-20210427134251196.png)
+
+  raise_exception=True를 하게된다면 error부분을 지워줘도 된다.
+
+api로 만들어져있는 CRUD
+
+- ![image-20210427134533526](18_django_REST API.assets/image-20210427134533526.png)
+
+  ![image-20210427134541558](18_django_REST API.assets/image-20210427134541558.png)
+
+  ```python
+  elif request.method == 'PATCH' or request.method == 'PUT':
+      data = {'title': request.data.get('title') or article.title}
+      if serializer.is_valid(raise_exception=True):
+          serializer.save()
+      
+  ```
+
+### relation
+
+- models.py
+
+![image-20210427140159899](18_django_REST API.assets/image-20210427140159899.png)
+
+- serializers.py
+
+  ```python
+  class CommentSerializer(serializers.ModelSerializer):
+      content = serializers.CharField(min_length=1, max_length=200)
+      class Meta:
+          model = Comment
+          fields = '__all__'
+  ```
+
+- urls.py
+
+  ![image-20210427140822445](18_django_REST API.assets/image-20210427140822445.png)
+
+  ```python
+  urlpatterns = [
+      # GET/POSt => /api/articles/<pk>/comments/ => <pk>에 속한 전체 댓글 + 댓글 생성
+      path('articles/<int:article_pk>/comments/', views.comments),
+      # GET/PUT/DELETE => /api/articles/<pk>/comments/1/ => 단일 댓글/수정/삭제
+      path('articles/<int:article_pk>/comments/<int:comment_pk', views.comments),
+  ]
+  ```
+
+  ![image-20210427141042660](18_django_REST API.assets/image-20210427141042660.png)
+
+- 우리가 받아봐야할 결과물이 아래와 같을 것이다.
+
+  ![image-20210427141203079](18_django_REST API.assets/image-20210427141203079.png)
+
+  ![image-20210427141311796](18_django_REST API.assets/image-20210427141311796.png)
+
+- serializers.py로가서 ArticleSerializer에 추가
+
+  ![image-20210427141454819](18_django_REST API.assets/image-20210427141454819.png)
+
+  CommentSerializer 사용지 밑에잇는 것을 가져와야만한다.
+
+  ![image-20210427141532568](18_django_REST API.assets/image-20210427141532568.png)
+
+  - Article관련해서는 comment는 수정하지않고 여러개가 올것
+
+    ![image-20210427141704769](18_django_REST API.assets/image-20210427141704769.png)
+
+- views.py
+
+  ![image-20210427142216102](18_django_REST API.assets/image-20210427142216102.png)
+
+- 예전에 배웠을 때는 commit을 사용했었는데
+
+  ![image-20210427142332070](18_django_REST API.assets/image-20210427142332070.png)
+
+  API에서는 이러한 과정을 모두 생략하고,  아래와같이 사용된다.
+
+  ![image-20210427142352841](18_django_REST API.assets/image-20210427142352841.png)
+
+---
+
+- error메시지는 is_valid함수가 실행될때 생깁니다.
+
+  serilaizer로 돌아와서 validation 설정을 해줄 수 있습니다.
+
+  ![image-20210427142832976](18_django_REST API.assets/image-20210427142832976.png)
+
+- ![image-20210427142909880](18_django_REST API.assets/image-20210427142909880.png)
+
+- ![image-20210427143242065](18_django_REST API.assets/image-20210427143242065.png)
+
+  ![image-20210427143436569](18_django_REST API.assets/image-20210427143436569.png)
+
+- ![image-20210427143744298](18_django_REST API.assets/image-20210427143744298.png)
+
+  ![image-20210427143808197](18_django_REST API.assets/image-20210427143808197.png)
+
+- ![image-20210427144500580](18_django_REST API.assets/image-20210427144500580.png)
+- ![image-20210427144439558](18_django_REST API.assets/image-20210427144439558.png)
+
+---
+
+annotate라는 것을 하면서 댓글 개수 확인하고 그랬었는데 serializer에서 해봅시다.
+
+- serializers.py
+
+  ```python
+  class ArticleListSerializer(serializers.ModelSerializer):
+      # 댓글 개수를 확인하려고 한다 => 댓글 JSON 담당자 소환
+      comments = CommentSerializer(many=True, read_only=True)
+      # 없는 필드(댓글 개수)를 만들어서 JSON을 구성하자.
+      comment_count = serializers.IntegerField(source='comments.count')
+      class Meta:
+          model = Article
+          fields = ('pk', 'title', 'comments', 'comment_count',)
+          read_only_fields = fields
+  ```
+
+### Authentication
+
+![image-20210427153429488](18_django_REST API.assets/image-20210427153429488.png)
+
+## hw
+
+쿼리셋
+
+![image-20210427154426111](18_django_REST API.assets/image-20210427154426111.png)
+
+![image-20210427154443529](18_django_REST API.assets/image-20210427154443529.png)
+
+는 맞는말이 된다.
+
+- DRF가 상당히 중요한 부분입니다.
+
+- 결국 제일 중요한 것은 모델링과 쿼리
+- html없애고 serializer좀 잘 사용해야하는 것
+
+![image-20210427155137925](18_django_REST API.assets/image-20210427155137925.png)
+
+- 문서읽어보시고, 복습해보시고, workshop좀 해보시면서
+- 오늘 미루면 나중에 처음부터 다시 하게되는 느낌이 될 것이니 workshop좀 제대로 공부해 놓으면 이번주 프로젝트는 조금 수월할 것입니다.
+
+---
+
+## 워크샵
+
+![image-20210427162902317](18_django_REST API.assets/image-20210427162902317.png)
+
+- 
+
+![image-20210427165226565](18_django_REST API.assets/image-20210427165226565.png)
+
+- serializers.py 가 forms.py와 비슷한 느낌
+
+- serializers.py
+
+  ```python
+  class 
+  
+  # 상세 가수의 정보를 생성 및 반환
+  class ArtistSerializer(serializers.ModelSerializer):
+      name = serializers.CharField(min_length=2, max_length=100)
+      # ralated_name
+      # ArtistSerializer에 딸린 음악을 가져와야하는데
+      # MusicSerializer가 위에있어야 순서대로 가져올 수가 있다.
+      # 다수의 정보니까 many=True, 수정을 안하니까 read_only=True
+      musics = MusicSerializer(many=True, read_only=True)
+      music_count = serializers.IntegerField(source='musics.count')
+      class Meta:
+          model = Artiest
+          fields = ('id', 'name', 'music_count',)
+          # read_only=True로 설정하는 것과 같다.
+          read_only_fields = ('musics', 'music_count')
+          
+          
+  # 상세 음악정보 생성, 반환
+  def MusicSerializer(serializers.ModelSerializer):
+      title = serializers.CharField(min_length=2, max_length=100)
+      class Meta:
+          model = Music
+          fields = ('id', 'title',)
+  ```
+
+- views.py
+
+  ```python
+  from django.shortcuts import render, get_object_or_404
+  from .serializers import ArtistSerializer, ArtistListSerializer, 
+  from .models import Artist, Music
+  from rest_framework.response import Response
+  from rest_framework.decoratorts import api_view
+  from rest_framework import status
+  
+  @api_view(['GET', 'POST'])
+  def artists(request):
+      # JSON으로 가수의 id, nmae 응답
+      if request.method == 'GET':
+          # omt -> sql데이터가져오기
+          artists = Artist.objects.all()
+          serializer = ArtistListSerializer(instance=artists, read_only=True, many=True) 
+          return Response(serializer.data) # .data로 안하면 그냥 request
+      # 생성
+      if request.method == 'POST':
+          serializer = ArtistSerializer(data=request.data)
+          if serializer.is_valid(raise_exception=False):
+              artist = serializer.save()
+              return Response(serializer.data, status=status.HTTP_201_CREATED)
+          return Response(status=status.HTTP_400_BAD_REQUEST)
+  
+      
+  @api_view(['GET'])
+  def artist_detail(request, artist_pk):
+      artist = get_object_or_404(artist, id=artist_pk)
+      serializer = ArtistSerializer(instance=artist, read_only=True)
+      return Response(serializer.data)
+  
+  
+  @api_view(['POST'])
+  def artist_musics(request, artist_pk):
+      # 가수의 음악의 정보 생성
+      artist = get_object_or_404(Artist, id=artist_pk)
+      serializer = MusicSerializer(data=request.data)
+      if serializer.is_valid(raise_exception=True):
+          music = serializer.save(artist=artist)
+          return Response(status=status.HTTP_201_CREATED)
+      return Response(status=status.HTTP_400_BAD_REQUEST)
+  
+  
+  @api_view(['GET'])
+  def music_list(request):
+      musics = Music.objects.all()
+      # 변형되지 않으니까 read_only=True
+      serializer = MusicListSerializer(instance=musics, read_only=True)
+      return Response(serializer.data)
+      
+  @api_view(['GET', 'PUT', 'DELETE'])
+  def find_or_update_or_delete_music(request, music_pk):
+      # 특정 음악의 모든 커ㅓㄹ럼 응답
+      if request.method == 'GET':
+          music = get_object_or_404(Music, id=music_pk)
+          serializer = MusicSerializer(instance=music, read_only=True)
+          return Response(serializer.data)
+      # 정보수정
+      elif request.method == 'PUT':
+          music = get_object_or_404(Music, id=music_pk)
+          serializer = MusicSerializer(request.data)
+      # 삭제
+      elif request.method == 'DELETE':
+          pass
+  ```
+
+- 
+

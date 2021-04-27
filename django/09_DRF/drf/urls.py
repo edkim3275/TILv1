@@ -20,3 +20,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
 ]
+
+
+"""
+GET movies/ => 전체
+    movies/1/ => 단일
+
+POST movies/create/ => 생성
+POST movies/1/edit/ => 수정
+POST movies/1/delete/ => 삭제
+"""
