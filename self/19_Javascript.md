@@ -1,20 +1,31 @@
 # Javascript
 
+- API Server
+
+  - django 와 더이상 문서를 넘겨주지않고 JSON data를 넘겨주는 서버로서의 역할.
+
+  - JSON응답할수있는 다양한 방법, 직접 구조만들기, serializer, DRF힘빌리기
+
+- RESTful
+
+  - API server그냥 만들지 않고 특정 방법론에 따라서 만들었다.(REST API)
+  - 자원(URI) - URL(자원의 위치를 나타내는 키워드), URN(자원의 고유한 이름)
+  - 행위(HTTP Method)
+  - 표현(Representations) - 응답 데이터(JSON...)
+
+- JSON(JavaScript Object Notation)
+
+  - JavaScript의 자료구조 중 하나인 object의 표기법을 따른 데이터 교환 포멧
+  - key와 value의 조합
+  - 데이터를 교환할 때 사용하는 양식중 하나
+  - 개발 환경에 맞는 자료형으로 변환 후 활용(파씽)
+    - 파이썬은 .json() 라는 것이 존재
+
+---
+
 python 이후의 두 번째 언어(총 4일간 화욜까지 진행)
 
-![image-20210428090153593](19_Javascript.assets/image-20210428090153593.png)
-
-![image-20210428090201239](19_Javascript.assets/image-20210428090201239.png)
-
-- ![image-20210428090257802](19_Javascript.assets/image-20210428090257802.png)
-
-- API Server를 특정 방법론을 통해서 만든다고 했는데 그것이 RESTful
-
-  ![image-20210428090324727](19_Javascript.assets/image-20210428090324727.png)
-
-- ![image-20210428090451091](19_Javascript.assets/image-20210428090451091.png)
-
-## Javascript 기초
+## 1. Javascript 기초
 
 ![image-20210428090522353](19_Javascript.assets/image-20210428090522353.png)
 
@@ -28,159 +39,265 @@ python 이후의 두 번째 언어(총 4일간 화욜까지 진행)
 
 - ![image-20210428090654976](19_Javascript.assets/image-20210428090654976.png)
 
-  가장 많이 사용하는 / 유명한 프로그래밍 언어 Stackoverflow(좌) 1위 Javascript, Jetbrain survey(우) 1위 Javascript
+  가장 많이 사용하는 / 유명한 프로그래밍 언어 
+
+  Stackoverflow(좌) 1위 Javascript, Jetbrain survey(우) 1위 Javascript
 
   그만큼 개발자가 다룰 수 있고 다루어야만하는 언어라고 볼 수 있다.
 
-- 브라우저를 조작하는 언어라고 했습니다. 그렇다면 Javascript가 지금까지 해온 이야기를 좀 해보고자 합니다.
+- **브라우저를 조작하는 언어**라고 했습니다. 그렇다면 Javascript가 지금까지 해온 이야기를 좀 해보고자 합니다.
 
   ![image-20210428090847415](19_Javascript.assets/image-20210428090847415.png)
 
-### 핵심인물
+### 1.1. 핵심인물
 
 ![image-20210428090905809](19_Javascript.assets/image-20210428090905809.png)
 
-​	팀 버너스리(Sir Tim Berners-Lee), 브래던 아이크(Brendan Eich)
+팀 버너스리(Sir Tim Berners-Lee) : 웹의 아버지
 
-### JS의 탄생
+브랜던 아이크(Brendan Eich) : JS만드시분
+
+### 1.2. JS의 탄생
 
 ![image-20210428091035628](19_Javascript.assets/image-20210428091035628.png)
 
-Mocha -> LiveScript -> JavaScript
+`94 넷스케이프사가1위 브라우저였었음.
 
-95년 마이크로소프트에서 자체적 커스텀을 해서 Jscript를 IE 1.0에 탑재
+Mocha -> LiveScript -> JavaScript(당시 인기였던 Java의 인기에 편승하기위해 이름을 바꿈)
 
-### 브라우저 전쟁
+'95 마이크로소프트에서 자체적 커스텀을 해서 JScript를 IE 1.0에 탑재(거의 카피캣)
+
+### 1.3. 브라우저 전쟁
 
 ![image-20210428091312041](19_Javascript.assets/image-20210428091312041.png)
 
+- Window OS를 가지고있던 마이크로소프트가 무료로 브라우저 사용하도록 하면서 공격적인 마케팅을 펼쳐서 넷스케이프는 발리고 MS의 브라우저 점유율 90% 상회
 - Mozilla Development Network(모질라 재단)
 
 ![image-20210428091523240](19_Javascript.assets/image-20210428091523240.png)
 
 ![image-20210428091533551](19_Javascript.assets/image-20210428091533551.png)
 
+- 구글의 등장
+
 ![image-20210428091606329](19_Javascript.assets/image-20210428091606329.png)
 
-### 파편화와 표준화
+### 1.4. 파편화와 표준화
 
 ![image-20210428091738743](19_Javascript.assets/image-20210428091738743.png)
 
 ![image-20210428091743985](19_Javascript.assets/image-20210428091743985.png)
 
+- 크로스 브라우징(브라우저 마다 렌더링에 사용하는 엔진이 다른) 이슈로 인해 파편화가 발생 => 표준화의 필요성
+
 ![image-20210428091926152](19_Javascript.assets/image-20210428091926152.png)
 
-### 현재의 JS
+### 1.5. 현재의 JS
 
 현재는 EcmaScript 버전이 몇인가?
 
 ![image-20210428092145428](19_Javascript.assets/image-20210428092145428.png)
 
-2015년에 나온것이 ES6(공식적인 명칭은 그 해 나온 년도를 사용하기 시작해서 ES2015) 09'~15' 사이에 만들어진ES6가 가장 큰 대격변이 일어났다.
+- 2015년에 나온것이 **ES6**(공식적인 명칭은 그 해 나온 년도를 사용하기 시작해서 **ES2015**) '09~'15 사이에 만들어진ES6가 가장 큰 대격변이 일어났다.
+- 파편화 등으로인한 JS의 고질적인 문제들을 해결한 것이 바로 ECMAScript 6번째 버전인 ES6
 
 ![image-20210428092531901](19_Javascript.assets/image-20210428092531901.png)
 
-표준 Vanilla JavaScript
+- 표준 Vanilla JavaScript(순수 JavaScript)
 
 ![image-20210428092725403](19_Javascript.assets/image-20210428092725403.png)
 
-## DOM
+## 2. DOM
 
 ![image-20210428092830176](19_Javascript.assets/image-20210428092830176.png)
 
-Javascript는 브라우저를 조작한다고했는데 뭘 할 수있는가 ?
+**Javascript는 브라우저를 조작한다**고했는데 뭘 할 수있는가 ?
 
-- 문서조작
-- 브라우저조작
-- Data Structure
+- 문서조작(DOM)
+- 브라우저조작(BOM) : navigator, screen, location, frames, history...
+- JavaScript Core(언어로서의 역할) : Data Structure(객체, 배열), 표현식, 반복...
 
-### DOM(Document Object Model)
+### 2.1. DOM(Document Object Model)
+
+- 말그대로 **문서를 조작하는 행위**
+- 문서 : 우리가 웹페이지에서 보게되는 화면을 문서라고한다
+- 개발자 도구 console탭을 켜보면 됩니다.
 
 ![image-20210428092937432](19_Javascript.assets/image-20210428092937432.png)
 
-전역개체인 window 안에 document의 title에 접근
+- JavaScript전역개체인 window 안에 document의 title에 접근
 
 ![image-20210428093143195](19_Javascript.assets/image-20210428093143195.png)
 
-수정 또한 가능하다
+- 수정 또한 가능하다
 
-### BOM(Browser Object Model)
+### 2.2. BOM(Browser Object Model)
 
-브라우저 객체를 조작
+![image-20210428224638072](19_Javascript.assets/image-20210428224638072.png)
 
-pathname 현재있는 페이지의 pathname
+- 문서가 아니라 **브라우저 객체를 조작**
 
-### JavaScript Core
+- pathname 현재있는 페이지의 pathname
 
-프로그래밍 언어로서의 Javascript
+### 2.3. JavaScript Core
+
+- 프로그래밍 언어로서의 Javascript
 
 ![image-20210428093349827](19_Javascript.assets/image-20210428093349827.png)
 
-### DOM이란
+- 배열을 하나 만들고 for문을 돌면서 배열 안의 원소 하나하나를 꺼내는 코드
+
+### 2.4. DOM이란
 
 ![image-20210428093518899](19_Javascript.assets/image-20210428093518899.png)
 
-우리는 문서 하나를 보고있지만 DOM입장에서는 하나하나의 객체로 구조화 하는 것을 DOM이라 합니다.
+- **우리는 문서 하나를 보고있지만 DOM입장에서는 하나하나의 객체로 구조화 하는 것**을 DOM이라 합니다.
+- 객체로 접근을 해서 JS의 프로그래밍 언어적 특성을 활용한 조작이 가능하다
+- window : 모든 객체의 부모(최상위 객체)
+- document : 페이지 콘텐츠의 시작점 역할, < body >등과 같은 수많은 다른 요소들을 포함(이 안에 모든 객체들이 들어있을 것)
 
 ![image-20210428093610727](19_Javascript.assets/image-20210428093610727.png)
 
-window, document 통해서 객체에 단계적으로 접근할 수 있는 이유는 DOM이 논리적 트리 모델을 가지고 있기 때문
+- window, document 통해서 객체에 단계적으로 접근할 수 있는 이유는 **DOM이 논리적 트리 모델을 가지고 있기 때문**
+- 요소하나하나, 메서드하나하나를 객체로 보게 된다.
 
 ![image-20210428093831937](19_Javascript.assets/image-20210428093831937.png)
 
+- Parsing : DOM트리형태로 보기위해서는 특정 과정을 거쳐야만 한다.
+- 브라우저가 문자열을 해석하여 DOM Tree로 만드는 과정
+
 ![image-20210428093951626](19_Javascript.assets/image-20210428093951626.png)
+
+- 일렬로 되어있는 문자열을 DOM Tree로 만들어(파씽) 하나의 LAYOUT을 사용자에게 보여주게 되는 것
 
 - BOM이란
 
   ![image-20210428094024476](19_Javascript.assets/image-20210428094024476.png)
 
-  문서를 조작하는 것이 아니라 브라우저를 조작
+  - 문서를 조작하는 것이 아니라 브라우저자체(url입력창, 버튼, 프레임, 타이틀바, 즐겨찾기)를 조작
 
-  브라우저나 웹페이지 일부를 제어
+  - 브라우저나 웹페이지 일부를 제어
 
   ![image-20210428094152819](19_Javascript.assets/image-20210428094152819.png)
 
-### DOM조작
+### 2.5. DOM조작 : 선택 후 변경
 
 ![image-20210428094214791](19_Javascript.assets/image-20210428094214791.png)
 
-- 선택 : 객체(요소나 태그)로 이루어져있으니까 선택해야한다
-- 변경 : 선택했으니까 변경해야한다
+- **선택(select)** : 객체(요소나 태그)로 이루어져있으니까 선택해야한다
+- **변경(manipulation)** : 선택했으니까 선택한 요소를 변경해야한다
+
+![image-20210428230623840](19_Javascript.assets/image-20210428230623840.png)
 
 ![image-20210428094318278](19_Javascript.assets/image-20210428094318278.png)
 
+- 이러한 상속구조로 되어있구나 느낌만 알고있자(각각의 객체가 쓸 수 있는 메서드가 조금 다르기 때문)
+- EventTarget - Node - Element/Document - HTMLElement
+
+- EventTarget : Event Listener를 가질 수 있는 객체가 구현하는 DOM 인터페이스
+
+- Node : 여러 가지 DOM 타입들이 상속하는 인터페이스
+
+- Element : Document 안의 모든 객체가 상속하는 가장 범용적인 기반 클래스
+
+  부모인 Node와 그 부모인 EventTarget의 속성을 상속
+
+- Document : 브라우저가 불러온 웹 페이지, DOM트리의진입점 역할을 수행
+- HTMLElement : 모든 종류의 HTML 요소
+
+#### 2.5.1. DOM 선택
+
 ![image-20210428094529115](19_Javascript.assets/image-20210428094529115.png)
 
-- DOM조작에서는 선택과 변경을한다고했는데 선택 관련 메서드가 무엇이 있을까?
+- DOM조작에서는 **선택과 변경**을한다고했는데 선택 관련 메서드가 무엇이 있을까?
+
 - `Document.querySelector()` : 
-  - 인자에 일치하는 element하나를 선택
-  - 제공한 CSS selector를 만족하는 첫번째 element 객체를 반환
+  
+  - 메서드 안에 들어가는 인자에 일치하는 element하나를 선택
+  
+  - CSS의 선택자 문법이들어갑니다.
+  
+    ![image-20210428231412451](19_Javascript.assets/image-20210428231412451.png)
+  
+  - 제공한 CSS selector를 만족하는 **첫번째 element 객체를 반환**
+  
+- `Document.querySelectorAll()` :
+
+  - 제공한 선택자와 일치하는 여러 element 선택
+
+  - 매칭할 하나 이상의 셀렉터를 포함하는 유요한 CSS selector를 인자(문자열)로 받음
+
+  - 지정된 셀렉터에 일치하는 **NodeList를 반환**
+
+    django에서 `Article.object.all()`은 쿼리셋을 반환했는데 이와 비슷함.
 
 ![image-20210428100019420](19_Javascript.assets/image-20210428100019420.png)
 
-- 반환하는 타입(하나를 return 여러개를 return)
+- 선택자로서 id, tag, class이름이 들어갈 수있다고 했으니 저 위에있는거는 해당하는 선택자만 사용할 수 있다는 것. 따라서 모두 사용할 수 있는 `querySelector()`, `querySelectorAll()`을 사용합니다.
+
+  더 구체적이고 유연하게 선택가능
+
+- 반환하는 타입(`querySelector()`는 하나를 return `querySelectorAll()`은여러개를 return)
 
 ![image-20210428100058274](19_Javascript.assets/image-20210428100058274.png)
 
-	- 단일 element
-	- HTMLCollection
- - NodeLIst
+- 단일 element
+  - `getElementById()`
+  - `querySelector()`
+- 여러개를 return하는 경우
+  1. HTMLCollection
+     - `getElementByTagName()`
+     - `getElementByClassName()`
+  2. NodeList
+     - `querySelectorAll()`
 
 ![image-20210428100222354](19_Javascript.assets/image-20210428100222354.png)
 
-HTMLCollection NodeList는 Live Collection 범주에 들어가지만
+- 둘 다 인덱스를 제공합니다(유사 배열 like 쿼리딕트)
 
-**querySelectorAll()에 의해 반환되는 NodeList는 Static Collection**
+- **HTMLCollection : name, id, index 속성으로 각 항목들에 접근 가능**
+- **NodeList : index번호로만 각 항목들에 접근 가능** 단, HTMLCollection과 달리 배열에서 사용하는 for each 함수 및 다양한 메서드 사용가능
+- HTMLCollection, NodeList 둘 다 DOM의 변경사항을 실시간으로 반영하는 **Live Collection**입니다. 
+- 단, **querySelectorAll()에 의해 반환되는 NodeList는 Static Collection**
 
 ![image-20210428100530974](19_Javascript.assets/image-20210428100530974.png)
 
+- Live Collection
+
+  - DOM의 변경사항을 실시간으로 반영
+
+- Static Collection(non-live)
+
+  - DOM이 변경되어도 collection 내용에는 영향을 주지 않음
+- **querySelectorAll()의 반환 NodeList만 static**
+  
 - DOM 선택 예시
 
   ![image-20210428100706073](19_Javascript.assets/image-20210428100706073.png)
 
   ![image-20210428100737477](19_Javascript.assets/image-20210428100737477.png)
+  
+  - `const h1 = document.querySelector('h1')` : h1태그를 선택
+  
+  - `const h2 = document.querySelector('h2')` : h2태그를 선택
+  
+  - `const secondH2 = document.querySelector('#location-header')` : id 선택자로 가져오기
+  
+  - `const liTags = document.querySelectorall('li')` : static collection인 NodeList를 반환
+  
+  ![image-20210428232655121](19_Javascript.assets/image-20210428232655121.png)
+  
+  - `const secondLiTags = document.querySelectorAll('.ssafy-location')` : class선택자로 가져오기. 마찬가지로 NodeList 반환
+  
+  ![image-20210428232825021](19_Javascript.assets/image-20210428232825021.png)
+  
+  - 태그들에 대해서 클래스나 ID경로를 좀 더 명확하게 해주는 것이 좋다.
 
-태그들에 대해서 클래스나 ID경로를 좀 더 명확하게 해주는 것이 좋다.
+#### 2.5.2. DOM 변경
+
+- `Document.createElement()` : 태그 만들기
+- `ParentNode.append()` : 특정 부모 노드의 자식 노드 리스트 중 마지막 자식 다음에 추가(반환 값 없음), 여러 개의 Node 객체, DOMString를 추가 할 수 있다.
+- `Node.appendChild()` : 한 노드를 특정 부모 노드의 자식 노드 리스트 중 마지막 자식으로 추가
 
 ![image-20210428101153010](19_Javascript.assets/image-20210428101153010.png)
 
@@ -188,43 +305,57 @@ HTMLCollection NodeList는 Live Collection 범주에 들어가지만
 
 ![image-20210428101417741](19_Javascript.assets/image-20210428101417741.png)
 
-- `remove()` : ChildNode자체를 제거
+- `자식노드.remove()` : ChildNode자체를 제거
 
-- `removeChild()` : DOM에서 자식 노드를 제거하고 제거 된 노드를 반환. Node는 인자로 들어가는 자식 노드의 부모 노드
+- `부모노드.removeChild(자식노드)` : DOM에서 자식 노드를 제거하고 제거 된 노드를 **반환**. Node는 인자로 들어가는 자식 노드의 부모 노드
 
   ![image-20210428101544168](19_Javascript.assets/image-20210428101544168.png)
 
-  remove : 우선 선택을 하고 나서 해당변수를 지우는 것
+  - remove : 우선 선택을 하고 나서 해당변수를 지우는 것
 
-  removeChild : 부모태그, 자식태그를 먼저 선택. 그리고 부모.removeChild(자식)을 하고 이를 변수로 할당할 수 있다.
+  - removeChild : 부모태그, 자식태그를 먼저 선택. 그리고 부모.removeChild(자식)을 하고 이를 변수로 할당할 수 있다.
 
 ---
 
-메서드까지 봤는데 이제 속성값을 봐봅시다.
+- 메서드까지 봤는데 이제 속성값을 봐봅시다.
 
 ![image-20210428101725480](19_Javascript.assets/image-20210428101725480.png)
 
-- 속성값이라서 ()가 없다.
+- **속성값이라서 ()가 없다.**
 
-- `innerText` : 노드와 그 자손의 텍스트 컨텐트(문자열, DOMString)를 표현. 특정 태그안에 있는 문자열들을 innerText라고 합니다.(사람이 읽을 수 있는 요소만 남김 예를 들어 줄 바꿈, br태그와 같은 것을 사람이 이해할 수 있도록 스타일링 되어서 표현됨)
+- `innerText` : 노드와 그 자손의 텍스트 컨텐트(문자열, DOMString)를 표현. 
+
+  특정 태그안에 있는 문자열들을 innerText라고 합니다.(사람이 읽을 수 있는 요소만 남김 예를 들어 줄 바꿈, br태그와 같은 것을 사람이 이해할 수 있도록 스타일링 되어서 표현됨)
 
   ![image-20210428101849192](19_Javascript.assets/image-20210428101849192.png)
 
-- `innerHTML` : 단순히 text가 아니라 HTML마크업.
+- `innerHTML` : 단순히 text가 아니라 요소(element)에 포함된 HTML마크업.
 
   ![image-20210428102005640](19_Javascript.assets/image-20210428102005640.png)
 
-  ul태크를 선택하고, 같은 값을 추가했을때 작동한 것을 비교해 보자면 innderHTML은 마크업이 적용됨.
+  - ul태크를 선택하고, 같은 값을 추가했을때 작동한 것을 비교해 보자면 innderHTML은 마크업이 적용됨.
 
-  ![image-20210428102040583](19_Javascript.assets/image-20210428102040583.png)
+  ![image-20210428233820088](19_Javascript.assets/image-20210428233820088.png)
+
+  - `innerHTML`은 XSS공격에 취약점이 있으므로 사용시 주의
 
 - ![image-20210428102127497](19_Javascript.assets/image-20210428102127497.png)
 
-  innerHTML이 XSS에 조금 취약하다
+  - innerHTML이 XSS에 조금 취약하다
 
 - DOM 변경 예시
 
   ![image-20210428102245459](19_Javascript.assets/image-20210428102245459.png)
+
+  - `const newLiTag = document.createElement('li')` : li태그 하나를 newLiTag로 만들기. 안이 비어있기 때문에 채워줘야 한다.
+
+  - `newLiTag.innerText = '춘천'` 
+
+    ![image-20210428234257720](19_Javascript.assets/image-20210428234257720.png)
+
+  - `const ulTag = document.querySelector('ul')` : ul태그를 선택하고
+  - `ulTag.appendChild(newLiTag)` : 새로만든 li태그를 추가해준다
+  - `ulTag.removeChild(newLiTag)`: 만들어준 li태그를 삭제
 
 - DOM변경 관련 속성
 
