@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTMLCollection & NodeList</title>
+  <style>
+		.red {
+			color: red;
+		}
+
+		.blue {
+			color: blue;
+		}
+	</style>
+</head>
+<body>
+  <div>
+    <p class="live">Live</p>
+    <p class="live">Live</p>
+    <p class="live">Live</p>
+  </div>
+	
+	<hr>
+  
+	<div>
+    <p class="non-live">Non-Live</p>
+    <p class="non-live">Non-Live</p>
+    <p class="non-live">Non-Live</p>
+  </div>
+	<script>
+    const liveNodes = document.getElementsByClassName('live') // HTML Collection은 실시간으로 반영
+    console.log(liveNodes)
+
+    for (let i = 0; i < liveNodes.length; i++) {
+      liveNodes[i].className = 'red'
+    }
+
+    // 2 static collection
+    const nonLiveNodes = document.querySelectorAll('.non-live') // querySelectorAll에서 나오는 반환하는 NodeList는 static Collection
+    for (let i = 0; i < nonLiveNodes.length; i++) {
+      nonLiveNodes[i].className = 'blue'
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // // 1
+    // const liveNodes = document.getElementsByClassName('live')
+    // // console.log(liveNodes)
+
+    // for (let i = 0; i < liveNodes.length; i++) {
+    //   liveNodes[i].className = 'red'
+    //   console.log(liveNodes)
+    // }
+
+    // // 2
+    // const nonLiveNodes = document.querySelectorAll('.non-live')
+
+    // for (let i = 0; i < nonLiveNodes.length; i++) {
+    //   nonLiveNodes[i].className = 'blue'
+    //   console.log(nonLiveNodes)
+    // }
+  </script>
+</body>
+</html>

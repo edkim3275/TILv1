@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic DOM Manipulation</title>
+  <style>
+    #king {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="header">DOM Manipulation</h1>
+  <h2 id="lang-header">Programming Languages</h2>
+  <ul>
+    <li class="lang">Python</li>
+    <li class="lang">Java</li>
+    <li class="lang" id="special-lang">JavaScript</li>
+  </ul>
+
+  <h2 id="frame-header">Frameworks</h2>
+  <ul>
+    <li class="framework" id="special-frame">Django</li>
+    <li class="framework">Spring</li>
+    <li class="framework">Vue.js</li>
+  </ul>
+
+  <script>
+    //1. Selection - querySelector / querySelectorAll
+    //1-1. window & document
+    // console.log(window)
+    // console.log(document)
+    // console.log(window.document)
+
+    //1-2. querySelector
+    const mainHeader = document.querySelector('h1')
+    const langHeader = document.querySelector('#lang-header')
+    const frameHeader = document.querySelector('#frame-header')
+    // console.log(mainHeader, langHeader, frameHeader)
+
+    //1-3. querySelectorAll
+    const langLi = document.querySelectorAll('.lang') // 클래스가 lang인 태그 모두 선택
+    const frameworkLi = document.querySelectorAll('.framework')
+    // console.log(langLi, frameworkLi)
+
+    //1-4. 여러 개의 요소 -> 첫 번째로 일치하는 요소
+    const selectOne = document.querySelector('.lang')
+    // console.log(selectOne)
+    
+    //1-5. 복합 선택자
+    const selectDescendant = document.querySelector('body li') // 자손 중 첫번 째
+    // const selectDescendant = document.querySelectorAll('body li')
+    const selectChild = document.querySelector('body > li') // 직계자식(없다면 null)
+    // console.log(selectDescendant) 
+    // console.log(selectChild) 
+
+    //1-6. getElementById, getElementByClassName 
+    const selectSepcialLang = document.getElementById('special-lang') // 단일객체
+    const selectAllLangs = document.getElementsByClassName('framework') // HTMLCollection
+    const selectAllLiTags = document.getElementsByTagName('li') // HTMLCollection
+    // console.log(selectSepcialLang, selectAllLangs, selectAllLiTags)
+
+    
+    //2. Manipulation(조작)
+    //2-1. Creation
+    const browserHeader = document.createElement('h2') // h2태그 생성 => 태그만 만드거로는 화면에 보일 수 없다. text값도 없고 append도 안됨
+    const ul = document.createElement('ul')
+    const li1 = document.createElement('li')
+    const li2 = document.createElement('li')
+    const li3 = document.createElement('li')
+    // console.log(browserHeader, li1, li2, li3) 
+
+
+    //2-2. innerText & innerHTML / append & appendChild
+    browserHeader.innerText = 'Browsers'
+    li1.innerText = 'IE'
+    li2.innerText = '<strong>FireFox</strong>' // innerText : 마크업 불가
+    li3.innerHTML = '<strong>Chrome</strong>' // innerHTML : 마크업 가능
+    // console.log(browserHeader, li1, li2, li3)
+
+    //2-3. append DOM 
+    const body = document.querySelector('body') // body선택 후
+    body.appendChild(browserHeader) // 추가
+    body.appendChild(ul)
+
+    ul.append(li1, li2, li3) 
+    // ul.appendChild(li1, li2, li3) // appendChild는 여러개 넣을 수 없다.
+
+    //2-4. Delete
+    // removeChild
+    // ul.removeChild(li1)
+    // ul.removeChild(li2)
+
+    // remove
+    // ul.remove()
+    // body.remove()
+
+    //2-5. Element Styling
+    li1.style.cursor = 'pointer'
+    li2.style.color = 'blue'
+    li3.style.background = 'red'
+
+    // setAttribute(name, value)
+    // id가 king인 속성값 추가
+    li3.setAttribute('id', 'king')
+
+    // getAttribute
+    const getAttr = li1.getAttribute('style')
+    const getAttr2 = li3.getAttribute('style')
+    console.log(getAttr)
+    console.log(getAttr2)
+  </script>
+</body>
+</html>
