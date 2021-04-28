@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text">
+  <button>Add</button>
+  <ul id='todolist'>
+    <li>첫번째 할 일</li>
+    <li>두번째 할 일</li>
+  </ul>
+  <script>
+    // ul 태그에 자식으로 li태그를 만들어서 추가한다
+    const newTodoLi = document.createElement('li') // li태그를 만들긴 했지만 자바메모리상에서 가상으로 만든상태
+    const ul = document.querySelector('#todolist') // ul태그 가져오기
+    ul.appendChild(newTodoLi) // 자식으로 추가하기
+    newTodoLi.innerText = 'js로 추가된 list' // 텍스트로 추가
+
+
+    // add버튼이 눌리면 alert로 버튼이 눌렸다고 알린다!
+    // 2-2
+    function onClick() {
+      // input창에 입력된 텍스트를 가지고 오기
+      const inputTag = document.querySelector('input') // input태그 가져오기
+      // 빈 값이면 추가하지 못하도록
+      if (inputTag.value == '') {
+        alert('빈 값입니다!')
+        return
+      }
+      const newTodoLi = document.createElement('li') // li태그 가져오기
+      newTodoLi.innerText = inputTag.value // li태그에 input내용을 담아주기
+      const ul = document.querySelector('#todolist') // 추가해야만 하는 ul태그 가져오기
+      ul.appendChild(newTodoLi) // ul태그에 추가
+      // alert로 표시
+      // alert(inputTag.value) // input.value는 'input태그에 적힌 내용'을 의미
+
+      // 버튼이 눌리면 내용이 사라지도록(초기화)
+      inputTag.value = ''
+    }
+    
+    const addButton = document.querySelector('button') // 1 버튼을 js로 활용하기위해서 가져오기
+    addButton.addEventListener('click', onClick) // 2-1 add버튼이 클릭이 되었을 때, 할일을 정의 django의 urls.py path구조와 동일
+    /*
+      django에서 urls.py
+      path('', views.index)
+    */
+
+    // input창에서 엔터가 눌렸을 때 onClick을 실행하려면
+    const input = document.querySelector('input') // 위에 함수안에서 사용한 inputTag는 함수에서만 사용가능
+    input.addEventListener('change', onClick) // 엔터가 눌리면 onClick함수를 실행, change(엔터, 인풋 외부 클릭)
+  </script>
+</body>
+</html>
