@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .container {
+      margin: 0, auto;
+    }
+
+    #red {
+      color: red;
+    }
+
+    .done {
+      text-decoration: line-through
+    }
+
+  </style>
+  <title>TODO APP</title>
+</head>
+<body>
+  <h1 class="mr-3">My JS Todo app</h1>
+  
+  <form id="todoForm">
+    <input id="todoInput" type="text">
+    <button>Add Todo</button>
+  </form>
+
+
+  <ul id="todoList">
+    <!-- <li>밥먹기</li>
+    <li>복습하기</li>     -->
+  </ul>
+
+  <script>
+    // // 새로고침할때마다 localStorage에 저장되어있는 내용을 불러오기
+    // const prevTodos = localStorage.getItem('data')
+    // // console.log(prevTodos)
+    // const ulTag = document.querySelector('#todoList')
+    // ulTag.innerHTML = prevTodos
+
+    function addTodo(event) {
+      // console.log(event)
+      event.preventDefault()
+      const inputTag = document.querySelector('#todoInput')
+      const inputData = inputTag.value
+      
+      // inputData 좌우 공백 다 지웠는데도 데이터가 있다면
+      if (inputData.trim()) {
+        const liTag = document.createElement('li')
+        liTag.innerText = inputData
+        
+        const deleteBtn = document.createElement('button')
+        deleteBtn.innerText = 'X'
+
+        // 삭제 버튼을 눌렀을 때,
+        deleteBtn.addEventListener('click', function (event) {
+          // liTag.remove()
+          event.target.parentNode.remove()
+          localStorage.setItem('data', ulTag.innerHTML)
+        })
+        liTag.appendChild(deleteBtn)
+        
+        // liTag에 click event listener 추가
+        liTag.addEventListener('click', function(event) {
+
+          /* if (event.target.classList.contains('done')) {
+            event.target.classList.remove('done')
+          } else {
+            event.target.classList.add('done')
+          } */
+          event.target.classList.toggle('done')
+          // event.target == liTag
+          // event.target.classList.add('done')
+        })
+
+        const ulTag = document.querySelector('#todoList')
+        ulTag.appendChild(liTag)
+
+        // 지금까지의 ulTag 내부의 내용(todo리스트들)을 모두 localStorage에 저장
+        localStorage.setItem('data', ulTag.innerHTML)
+      } else {
+        alert('내용이 없습니다.')
+      }
+
+      inputTag.value = ""
+      // event.target.reset()
+    }
+
+    const todoForm = document.querySelector('#todoForm')
+    todoForm.addEventListener('submit', addTodo)
+  </script>
+
+
+</body>
+</html>
