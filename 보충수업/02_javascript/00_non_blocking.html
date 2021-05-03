@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 1. setTimeout
+    const sleep3Seconds = function () {
+      console.log('잘잤다')
+    }
+
+    console.log('일어나자')
+    setTimeout(sleep3Seconds, 3000)
+    // 3초있다가 sleep3Seconds를 실행한다 x
+    // WEB API -> 3초 세고
+    // 3초있다가 sleep3Seconds를 실행하라고 알려줘라! o
+    console.log('학교간다')
+    // 2. XMLHttpRequest
+    const URL = 'https://jsonplaceholder.typicode.com/todos/1/'
+
+    // const button = document.querySelector('button')
+    // button.addEventListener('click', ()=>{
+
+    // })
+    // console.log('그 다음 할일')
+
+    axios.get()
+      .then()
+      .catch()
+  </script>
+</body>
+</html>

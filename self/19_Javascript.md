@@ -506,16 +506,16 @@ Mocha -> LiveScript -> JavaScript(당시 인기였던 Java의 인기에 편승�
 
 #### 4.4.1. 식별자
 
-- 문자, 달러($), 밑줄(_)로 시작
+- **문자, 달러($), 밑줄(_)**로 시작
 - 대소문자를 구분, 클래스명 외에 모두 소문자 시작
 
 ![image-20210428152452521](19_Javascript.assets/image-20210428152452521.png)
 
 ![image-20210428152546726](19_Javascript.assets/image-20210428152546726.png)
 
-- `camelCase` : 변수, 객체, 함수에 사용
-- `PascalCase` : 클래스, 생성자에 사용
-- `SNAKE_CASE` : 상수(개발자의 의도와 상관없이 변경될 가능성이 없는 값 ex) token에 사용
+- `camelCase` : **변수, 객체, 함수**에 사용
+- `PascalCase` : **클래스, 생성자**에 사용
+- `SNAKE_CASE` : **상수**(개발자의 의도와 상관없이 변경될 가능성이 없는 값 ex) token에 사용
 
 ![image-20210428152721056](19_Javascript.assets/image-20210428152721056.png)
 

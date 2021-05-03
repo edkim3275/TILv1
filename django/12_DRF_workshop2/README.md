@@ -65,6 +65,7 @@ class Article(models.Model):
 
 3. music create : `POST + api/v1/artists/<artist_pk>/music/`
 4. music index : `GET + api/v1/music/`
+5. music detail / update/ delete : `GET / PUT /DELETE + api/v1/music/<music_pk>/`
 
 ```python
 from django.urls import path
