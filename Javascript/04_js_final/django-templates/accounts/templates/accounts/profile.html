@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ person.username }}님의 프로필</h1>
+
+{% with followings=person.followings.all followers=person.followers.all %}
+  <div>
+    <div>
+      팔로잉 : <span id="followings">{{ followings|length }}</span> / 팔로워 : <span id="followers">{{ followers|length }}</span>
+    </div>
+    {% if request.user != person %}
+      <div>
+        <form id="followForm" data-person-pk="{{ person.pk }}">
+          {% csrf_token %}
+          {% if request.user in followers %}
+            <button id="followBtn" class="btn-danger">언팔로우</button>
+          {% else %}
+            <button id="followBtn" class="btn-primary">팔로우</button>
+          {% endif %}
+        </form>
+      </div>
+    {% endif %}
+  </div>
+{% endwith %}
+
+
+<hr>
+
+<h2>{{ person.username }}'s 게시글</h2>
+{% for article in person.article_set.all %}
+  <div>{{ article.title }}</div>
+{% endfor %}
+
+<hr>
+
+<h2>{{ person.username }}'s 댓글</h2>
+{% for comment in person.comment_set.all %}
+  <div>{{ comment.content }}</div>
+{% endfor %}
+
+<hr>
+
+<h2>{{ person.username }}'s likes</h2>
+{% for article in person.like_articles.all %}
+  <div>{{ article.title }}</div>
+{% endfor %}
+
+<hr>
+
+<a href="{% url 'articles:index' %}">[back]</a>
+{% endblock %}
+
+{% block script %}
+<script>
+/*
+  1. 팔로우 버튼을 클릭
+  2. submit이벤트 발생하면
+  3. 요청을 보낸다(/accounts/<pk>/follow/)
+    4. 요청이 성공하면 버튼색깔, 내용, 숫자를 바꾼다.
+    5. 요청이 실패하면 에러메시지를 콘솔에 띄운다.
+*/
+const followForm = document.querySelector('#followForm')
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
+
+followForm.addEventListener('submit', function (event) {
+  event.preventDefault()
+  const pk = event.target.dataset.personPk
+
+  axios({
+  method: 'post',
+  url: `http://localhost:8000/accounts/${pk}/follow/`,
+  headers: {'X-CSRFToken': csrftoken}
+  })
+    .then(function (res) {
+      const followBtn = document.querySelector('#followBtn')
+      const followCnt = document.querySelector('#followers')
+
+      followBtn.innerText = res.data.follow ? '언팔로우' : '팔로우'
+      followBtn.classList.toggle('btn-danger')
+      followBtn.classList.toggle('btn-primary')
+
+      followCnt.innerText = res.data.count
+      return res.data.count
+    })
+    .catch(err => console.error(err))
+})
+
+</script>
+{% endblock script %}

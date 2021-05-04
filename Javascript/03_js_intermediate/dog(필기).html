@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- dog.html -->
+  <script>
+    // axios === client 프로그램
+    let dogUrl = ''
+    // 사용자가 버튼을 누르면, '랜덤한' 댕댕이 이미지를 보여줍니다
+    axios.get('https://dog.ceo/api/breeds/image/random') // axios.get() 리턴값은 promise
+      .then(function (res) {
+        const dogUrl = res.data.message // axios 사용시, res.data까지는 고정
+        const dogImage = document.querySelector('#dogImage')
+        dogImage.src = dogUrl
+      })
+      .catch(function (err) {
+        console.log('ERROR :(')
+        console.log(err)
+      })
+  </script>
+</body>
+</html>
