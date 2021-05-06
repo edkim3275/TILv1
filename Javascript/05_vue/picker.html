@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Picker</title>
+</head>
+<body>
+  <div id="app">
+    <h1>Picker App</h1>
+    <!-- 랜덤한 점심식사 pick -->
+    <h2>점심메뉴</h2>
+    <button @click="pickMenu">골라줘!</button>
+    <h3 v-show="menu">{{ menu }}</h3>
+    <hr>
+
+    <!-- 로또 번호 pick -->
+    <h2>로또번호</h2>
+    <button @click="pickLuckyNumbers">1등 기릿</button>
+    <!-- <div>{{ luckyNumbers }}</div> -->
+    <ul v-show="luckyNumbers.length">
+      <li v-for="number in luckyNumbers">{{ number }}</li>
+    </ul>
+  </div>
+  <!-- vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- lodash -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  <script>
+    const app = new Vue ({
+      el: '#app',
+      data: {
+        lunchMenus: ['국밥', '라멘', '낙곱새', '짬뽕', '짜장면', '치킨', '설렁탕', '산오징어', '족발'],
+        menu: '',
+        luckyNumbers: [],
+      },
+      methods: {
+        pickMenu () {
+          this.menu = _.sample(this.lunchMenus)
+        },
+        pickLuckyNumbers() {
+          const allNumbers = _.range(1, 46)
+          this.luckyNumbers = _.sortBy(_.sampleSize(allNumbers, 6))
+        }
+      },
+    })
+  </script>
+</body>
+</html>

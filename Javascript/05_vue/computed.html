@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1>{{ message }}</h1>
+    <!-- eventaddListener -->
+    <button v-on:click="changeMessage">GO!</button>
+
+    <!-- input 내용과 data를 연결하기 -->
+    <!-- 1. => method를 통해 data를 변경한다. -->
+    <h2>이름 : {{ firstName }}</h2>
+    <!-- input: 모든입력에 반응 / change: Enter || 포커스 아웃에 반응 -->
+    <input @input="changeFirstName" type="text">
+
+    <!-- 2. => v-model을 통해 data와 직접 동기화 한다. -->
+    <h2>성 : {{ lastName }}</h2>
+    <input v-model="lastName" type="text">
+
+    <h2>{{ lastName + firstName }}</h2>
+    <h2>{{ fullName }}</h2>
+  </div>
+  <!-- Vue.js 설치 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- 우리가 사용할 script -->
+  <script>
+    const obj = {  // vue instance(vm)의 속성들을 정의 & this는 vm을 의미합니다.
+      el: '#app',
+      data: {  // *data내부에서는 this 사용 금지*
+        message: '오오 Vuetiful!',
+        firstName: '',
+        lastName: '',
+        // fullName: '',
+      },
+      methods: {  // 모든 동작(+data setting)
+        changeMessage: function () {
+          console.log('METHOD CALL!')
+          // console.log(this)
+          // 여기서 this는 vm을 가리킨다. Vue에 들어갈때 분해해서 들어가기 때문
+          this.message = '짜잔!'
+        },
+        changeFirstName: function (event) {
+          this.firstName = event.target.value
+        },
+        // changeFullName: function () {
+        //   this.fullName = this.firstName + this.lastName
+        // }
+      },
+      
+      computed: { // (computed) data getting
+        fullName: function () {
+          return this.lastName + this.firstName
+        }
+      },
+    }
+    const vm = new Vue(obj)
+  </script>
+</body>
+</html>

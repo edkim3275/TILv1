@@ -291,8 +291,9 @@ const edgar = {
 - ![image-20210504164838374](20_Javascript_마무리.assets/image-20210504164838374.png)
 
 - ![image-20210504170247792](20_Javascript_마무리.assets/image-20210504170247792.png)
-  - 이 경우, this와 neo가 bind된 것
-
+  
+- 이 경우, this와 neo가 bind된 것
+  
 - ![image-20210504170425607](20_Javascript_마무리.assets/image-20210504170425607.png)
 
   harry.greeting()  // method true => .greeting() o
@@ -398,8 +399,6 @@ function map(cb ,arr) {
 
 
 
-
-
 function plusOne(num) {
     return num + 1
 }
@@ -445,3 +444,92 @@ filter(function(num) {
 [1, 2, 3, 4, 5].filter(num => n % 2)
 ```
 
+---
+
+## Review
+
+```js
+function myFunc1() {}
+
+var myFunc2 = function () {}
+
+const myFunc3 = function () {}
+
+const myFunc4 = () => {}
+```
+
+ ```js
+// 실습 리뷰
+// 기존의 filter 메서드
+[1, 2, 3, 4, 5].filter(function (num) {
+    return num % 2
+})
+
+// 구현해주신 filter함수
+function filter(callback, arr) {
+    const newArr = []
+    for (const elem of arr) {
+        if (callback(elem)) {  // callback true/false를 리턴하는 함수여야 한다.
+            newArr.push(elem)
+        }
+    }
+    return newArr
+}
+
+// 아래는 바꿀 수 없습니다.
+filter(num => num % 2, [1, 2, 3, 4, 5]) // 리턴값이 0 or 1
+
+[1, 2, 3, 4, 5].filter(num => num % 2)
+ ```
+
+위의 filter와 map을 비교해보면, map의 경우 callback함수의 리턴값을 푸쉬하고 filter의 경우에는 조건식으로 활용하게됩니다.
+
+![image-20210506093144148](03_Javascript_마무리.assets/image-20210506093144148.png)
+
+---
+
+## hw_4 review
+
+- Event Loop는 Call Stack이 비워지면 Task Queue의 함수들을 Call Stack으로 할당하 는 역할을 한다. True
+
+- XMLHttpRequest(XHR)은 AJAX 요청을 생성하는 JavaScript API이다. XHR의 메서드로 브라우저와 서버간의 네트워크 요청을 전송할 수 있다. True
+
+  모든 브라우저의 비동기요청(AJAX)는 XHR 기반으로 하고있고, XHR은 메서드로 브라우저와 서버간의 네트워크 요청을 전송할 수 있다. XHR을 패키징한 것이 바로 Axios
+
+- axios는 XHR(XMLHttpRequest)을 보내고 응답 결과를 Promise 객체로 반환해주는 라이브러리이다. True
+
+- JS는 Event loop를 기반으로 하는 Concurrency model을 가지고 있다고 한다.  Concurrency 키워드의 특징을 작성하고, 이와 비슷한 키워드로 비교되는 Parallelism의 개념과 두 개념의 차이점을 서술 하시오
+
+  우리 컴퓨터가 한번에 많은 일(프로그램 업데이트, 압축, 방화벽, ...)을 처리합니다. 
+
+  ![image-20210506093944317](03_Javascript_마무리.assets/image-20210506093944317.png)
+
+  6코어 12스레드, 6개 방에 일꾼이 2명씩 들어가있다 => 그러면 12개 이상의 일은 못하는 건가? => 12개 이상의 일을 하면 뻗겠네..? 켤 수 있는 할 수 있는 작업이 정해져 있겠다고 생각할 수 있겠지만 그렇지 않습니다.
+
+  컴퓨터 사용시 물리적인 사용량을 생각하면서 사용하지는 않습니다. 그 이유가 바로 'Concurrency'입니다. CPU는 기본적으로 연산속도가 무척 빠릅니다.
+
+  ![image-20210506094210197](03_Javascript_마무리.assets/image-20210506094210197.png)
+
+  트랜지스터(스위치 == 0과 1)가 초당 10억 사이클정도로 열고 닫을정도로 매우 빠릅니다. 
+
+  각 일마다 감사하는 사람이 하나씩 배정되어있다고 생각해봅시다. 적당한 시간내에 적당히 다 같이 작업을 끝마칠 수 있도록 하는것이 가장 이상적일 겁니다. => 5개 일이 있다면 하나씩 하나씩 일을 조금씩 번갈아 가면서 하는 것. => 그렇게 하면 거의 비슷한 시간대에 모든 작업을 하는 것 처럼 보입니다.
+
+  Concurrency Parallellism
+
+  ![image-20210506093756598](03_Javascript_마무리.assets/image-20210506093756598.png)
+
+  이 처럼 전반적으로 모든 일을 작업대(?)에서 하는 것처럼 보이는데 이 상태에서는 메모리(RAM)공간이 많이 필요하게 됩니다.
+
+  연산은 PU(Process Unit)이 해야되는데 이건 CPU애들이 해야합니다.
+
+  ![image-20210506093746220](03_Javascript_마무리.assets/image-20210506093746220.png)
+
+  Parallel은 동시에 2개를 하는 것.
+
+  Con 하난데 여러개를 처리하는 것처럼 보이는 거고 Para 는 각각이 일을 처리하는 것
+
+  ![image-20210506095046618](03_Javascript_마무리.assets/image-20210506095046618.png)
+
+하나가 동시에 일
+
+Parallism하나의 일을 여러명이 나눠서 하는 것

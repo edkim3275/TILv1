@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    img {
+      width: 50vw;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h1>Cat Image</h1>
+    <div>
+      <button @click="fetchCatImage">야옹</button>
+    </div>
+    <div v-show="imgUrl">
+      <!-- v-bind: === : -->
+      <img :src="imgUrl" alt="cat-image">
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const obj = {
+      el: '#app',
+      data: {
+        imgUrl: '',
+      },
+      methods: {
+        fetchCatImage () {
+          axios.get('https://api.thecatapi.com/v1/images/search')
+            .then(res => this.imgUrl = res.data[0].url)
+            .catch(err => console.error(err))
+        }
+      }, 
+    }
+    const vm = new Vue(obj)
+  </script>
+</body>
+</html>
