@@ -533,3 +533,335 @@ filter(num => num % 2, [1, 2, 3, 4, 5]) // 리턴값이 0 or 1
 하나가 동시에 일
 
 Parallism하나의 일을 여러명이 나눠서 하는 것
+
+## 210507_관통pjt
+
+### 쿼리개선
+
+Algo : 속도개선, 유의미한 데이터를 만들어내는 과정
+
+- 더미데이터 깔기 위해서
+
+  `pip install faker`
+
+- 10개의 article과 review dumdata만들기
+
+- django model database optimaizetion
+
+- QuerySet : evaluated된 상황에서 갱신.
+
+  `pip install django-debug-toolbar`
+
+  등록시 `debug_toolbar`
+
+  url에도 추가
+
+  ![image-20210507091522246](03_Javascript_마무리.assets/image-20210507091522246.png)
+
+  middleware에도 추가해줘야만 한다. 
+
+- 실제로 브라우저에 보이는 것이 어떤 요청을 보내는지 확인이 가능해진다.
+
+  ![image-20210507091723240](03_Javascript_마무리.assets/image-20210507091723240.png)
+
+  ![image-20210507091816155](03_Javascript_마무리.assets/image-20210507091816155.png)
+
+- views.py
+
+  ```python
+  from django.db.models import Count
+  
+  @require_safe
+  def query_index(request):
+      # reviews = Review.objects.order_by('-pk')
+      # reviews = Review.objects.annotate(Count('comment')).order_by('-pk')
+      
+      # select_related() => 'FK 정참조'
+      reviews = Review.objects.select_related('user').order_by('-pk')
+      
+      # prefetch_related => MTM정참조, FK역참조
+      reviews = Review.objects.prefetch_related('comment_set').order_by('-pk')
+      context = {
+          'reviews': reviews,
+      }
+      return render(request, 'reviews/index.html', context)
+  ```
+
+- urls.py
+
+  ```python
+  path('query_index/', views.query_index, name='query_index')
+  ```
+
+- query_index.html
+
+  ```html
+  {% extends base.html%}
+  
+  {% block content %}
+  	<h1>query index</h1>
+  	{% for review in reviews %}
+  		<p>{{ reveiw.title }}</p>
+  			<p>댓글수 : {{ review.comment__count}}</p>
+  			<p>작성자 : {{ review.user.username }}</p>
+  			{% for comment in review.comment_set.all %}
+  				<li>{{ comment.user.username }} - {{ comment.content }}</li>
+  			{% endfor%}
+  			<p></p>
+  	{% endfor %}
+  {% end block %}
+  ```
+
+- annotate
+
+  ![image-20210507092523011](03_Javascript_마무리.assets/image-20210507092523011.png)
+
+  comment_count를 위해서 다시 comment에 요청을 보낼 필요가 없다는 것.
+
+- SQL join
+
+  ![image-20210507093351370](03_Javascript_마무리.assets/image-20210507093351370.png)
+
+  select_related : Review, User가 연결되어있는데  User 하나에 여러개의 Revie가 연결되어있는 구조에서 ForeignKey 정참조시에 사용
+
+  ![image-20210507093702220](03_Javascript_마무리.assets/image-20210507093702220.png)
+
+  Review를 작성한 user에 대한 정보를 가져오므로 정참조로 볼 수 있다.
+
+- Review가 Comment참조하는 역참조 시에는 select_related 사용불가
+
+  prefetch_related라는 것을 사용한다. => MTM 정참조, FK 역참조
+
+- comment.content따로 user.username의 경우 따로 참조를 하다보니까 시간이 오래걸린다.
+
+  ![image-20210507094731140](03_Javascript_마무리.assets/image-20210507094731140.png)
+
+  ```python
+  from django.db.models import Count
+  
+  @require_safe
+  def query_index(request):
+      # reviews = Review.objects.order_by('-pk')
+      # reviews = Review.objects.annotate(Count('comment')).order_by('-pk')
+      
+      # select_related() => 'FK 정참조'
+      reviews = Review.objects.select_related('user').order_by('-pk')
+      
+      # prefetch_related => MTM정참조, FK역참조
+      reviews = Review.objects.prefetch_related('comment_set').order_by('-pk')
+      
+      
+      context = {
+          'reviews': reviews,
+      }
+      return render(request, 'reviews/index.html', context)
+  ```
+
+### infinite scroll
+
+데이터 추가: `python manage.py loaddata movies.json`
+
+![image-20210507100430097](03_Javascript_마무리.assets/image-20210507100430097.png)
+
+```python
+from django.core import serializers
+from django.http.response import HttpResponse
+
+@require_GET
+def index(request):
+    # movies = Movie.objects.all()
+    paginator = Paginator(movies, 10)
+    page_number = request.GET.get('page')
+    # 해당정보의 쿼리셋만 가져오기
+    movies = paginator.get_page(page_number)
+    if request.is_ajax():
+        # movies라는 데이터를 JSON으로 변형해준다.
+        data = serializers.serialize('json', movies)
+        return HttpResponse(data, content_type='application/json')
+	else:
+        context = {
+            'movies': movies,
+        }
+        return render(request, 'movies/index.html', context)
+```
+
+```html
+<-- axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    const URL = 'http://127.0.0.1:8000/movies/'
+    let pageNum = 2
+	document.addEventListener('scroll', (event)=>{
+        // console.log(event)
+        const {scrollTop, clientHeight, scrollHeight} = document.documentElement
+        // console.log(scrollTop, clientHeight, scrollHeight)
+        if (scrollHeight - scrollTop === clientHeight) {
+            // console.log('아래 도착!')
+            requestData = {
+                method: 'get',
+                url: `${URL}?page=${pageNum}`,
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            }
+            
+            axios(requestData)
+            	// response: 하나하나의 영화정보
+            	.then(response => {
+                response.data.forEach((movie)=>{
+                	console.log(movie)
+                    const movieList = document.querySelector('#movie-list')
+                    const movieDiv = document.createElement('div')
+                    
+                    const movieHTML = `
+						<h1>${movie.fields.title}<h1>
+						<p>${movie.fields.overview}</p>
+						<a href="/movies/${movie.pk}/">[detail]</a>
+					`
+                    movieDiv.innerHTML = movieHTML
+                    movieList.appendChild(movieDiv)
+                    pageNum += 1
+                })
+            })
+        }
+    })
+</script>
+```
+
+- 스크롤이 맨 아래 붙었을 때를 확인하여 실행해주는 것
+
+- documentElement : 여러가지 정보들을 가지고 있는데 그중 하나가 scrollHeight
+
+  ![image-20210507101203025](03_Javascript_마무리.assets/image-20210507101203025.png)
+
+- scrollHeight : 문서의 처음부터 끝까지의 ''높이''
+
+  ![image-20210507101316919](03_Javascript_마무리.assets/image-20210507101316919.png)
+
+  `const {scrolltop, clientHeight, scrollHeight} = document.documentElement`
+
+  scrolltop : 내 스크롤기준으로 위에 얼마나 페이지가 있는지
+
+  ![image-20210507101441965](03_Javascript_마무리.assets/image-20210507101441965.png)
+
+  
+
+  clientHeight : 사용자가 보고있는 화면
+
+  ![image-20210507101507308](03_Javascript_마무리.assets/image-20210507101507308.png)
+
+  scrollHeight : 내가 스크롤 끝까지 내렸을때의 높이
+
+- 끝까지 내렸는지 확인하기
+
+  `element.scrollHeight - element.scrollTop === element.clientHeight`
+
+- ![image-20210507103024053](03_Javascript_마무리.assets/image-20210507103024053.png)
+
+  1~10까지는 화면에 보여주고, 나머지는 json으로
+
+  ![image-20210507103113899](03_Javascript_마무리.assets/image-20210507103113899.png)
+
+  ![image-20210507103500320](03_Javascript_마무리.assets/image-20210507103500320.png)
+
+- ![image-20210507103602258](03_Javascript_마무리.assets/image-20210507103602258.png)
+
+- ![image-20210507104135097](03_Javascript_마무리.assets/image-20210507104135097.png)
+
+#### Vue
+
+![image-20210507111239887](03_Javascript_마무리.assets/image-20210507111239887.png)
+
+![image-20210507111432220](03_Javascript_마무리.assets/image-20210507111432220.png)
+
+![image-20210507111559047](03_Javascript_마무리.assets/image-20210507111559047.png)
+
+```html
+<-- axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<-- vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+	const app = new Vue({
+        el: '#movie-list',
+        data: {
+            movies: [],
+        },
+        methods: {
+          getMovies: function () {
+          	requestData = {
+                method: 'get',
+                url: '${URL}?page=${pageNum}',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}},
+          }
+          axios(requestData)
+              .then((response) => {
+              console.log(response.data)
+              this.movies.push(...response.data)
+              this.pageNum += 1
+          })
+          checkBottom: function () {
+              const {scrollTop, clientHeight, scrollHeight} = document.documentElement
+              if (scrollHegiht - scrollTop === clientHeight) {
+                  this.getMovies()
+              }
+          }
+          created: function () {
+              this.getMoviews()
+              documemt.addEventListener('scroll', this,checkBottom)
+          }
+        },
+    })
+</script>
+```
+
+![image-20210507112634259](03_Javascript_마무리.assets/image-20210507112634259.png)
+
+### pjt 내용
+
+- 좋아요 기능 AJAX요청으로
+
+- 팔로우 기능 AJAX요청으로
+
+- 추천 알고리즘 작성
+
+  - 사용자에게 10개의 영화를 추천하여 제공
+
+    ex) 랜덤으로 10개 뽑기 / 날씨정보 크롤링해서 날씨관련 드라마, 액션... / 유저가 고른 장르를 필터링해서 사용자에게 추천 / TMDB API참고
+
+    ![image-20210507113430306](03_Javascript_마무리.assets/image-20210507113430306.png)
+
+- 추가적인 Styling
+
+## 과목평가
+
+- ES6 pdf파일 중심으로 !(javascript 문법)
+
+- 변수와 식별자 : 어떤상황에 사용하고, 에러가 나는지
+
+  ![image-20210507113902112](03_Javascript_마무리.assets/image-20210507113902112.png)
+
+- 변수선언(let, const, var)
+
+  ![image-20210507113925772](03_Javascript_마무리.assets/image-20210507113925772.png)
+
+  ![image-20210507114104608](03_Javascript_마무리.assets/image-20210507114104608.png)
+
+- 데이터 타입 : Primitive, Reference type
+
+  ![image-20210507114230109](03_Javascript_마무리.assets/image-20210507114230109.png)
+
+  Object는 비어있든 비어있지 않든 항상 참. => **비어있는 리스트, 딕셔너리 ... 또한 참이된다.**
+
+- 동등 연산자, 일치 비교 연산자
+- 반복문
+  - for ... of
+- Function
+  - 선언식
+  - 표현식
+  - arrow function
+  - 일급객체의 조건
+
+- Array
+
+- ArrayHelperMethod
+
+  ![image-20210507114532908](03_Javascript_마무리.assets/image-20210507114532908.png)
