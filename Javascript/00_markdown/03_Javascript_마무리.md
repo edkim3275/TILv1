@@ -853,6 +853,7 @@ def index(request):
 
 - 동등 연산자, 일치 비교 연산자
 - 반복문
+  
   - for ... of
 - Function
   - 선언식
