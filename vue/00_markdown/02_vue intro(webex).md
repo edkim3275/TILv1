@@ -126,7 +126,7 @@ console.log(b)를 해보면 빈객체 {}가 나옵니다.
 
   mixed : add에서 내려서  working directory로 돌아감(add하고 커밋가능)
 
-  hard : 실제 파일이 바뀜. 
+  hard : 실제 파일이 바뀜.
 
   `git reset HEAD~` : 지금 현재위치에서 한단계 뒤로 가겠다.
 
@@ -470,3 +470,4 @@ data에서는 this를 사용하지 못하기 때문에 아래와 같은 방법�
 - `npm run build` 모두 마무리 한 후에 이렇게 한다면 생짜 js css가 됩니다.
 
   ![image-20210511180045436](02_vue intro(webex).assets/image-20210511180045436.png)
+
