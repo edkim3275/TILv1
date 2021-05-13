@@ -10,7 +10,7 @@
   - 인스턴스 === 컴포넌트 === .vue파일
 - Vue CLI & Vue Router
   - Vue Router : SPA의 단점. 페이지의 이동이 없다(사용자가 멈춰있는 느낌을 경험하게 됨) => URL은 변하지만 페이지는 변하지않는 기능을 제공(브라우저의 history API 기반)
-  - Babel(버전간 번역) & Webpack(의존성 문제해결하는 모듈 번들러)
+  - Babel(JS의 번역기. 버전간 번역. 원시코드=>목적코드) & Webpack(모듈, 라이브러리간의 의존성 문제해결하는 모듈 번들러) 
 - Pass Props & Emit Event
   - Pass Props : 상위 컴포넌트가 하위 컴포넌트에게 전달
   - Emit Event : 하위 컴포넌트가 상위 컴포넌트에게 알림
@@ -18,20 +18,20 @@
 
 ---
 
-## Vuex
+## 1. Vuex
 
 ![image-20210512090752640](03_vuex.assets/image-20210512090752640.png)
 
 - vue를 위한 상태관리 패턴 라이브러리
   - **상태** 관리 패턴(statement management pattern)
   - 기존의 패턴은 MVC(django는 MTV)를 벗어 나지 않았는데 Vue에서 조금 바뀝니다.
-- 상태를 **전역 저장소**로 관리할 수 있도록 지원하는 라이브러리
+- 상태를 **전역 저장소**로 관리할 수 있도록 지원하는 라이브러리(어떤 컴포넌트에도 접근이 가능)
   - 상태가 예측 가능한 방식으로만 변경될 수 있도록 보장하는 규칙 설정
   - 애플리케이션 모든 컴포넌트에 대한 **중앙 집중식 저장소** 역할
 
 - Vue의 공식 devtools와 통합되어 기타 고급 기능을 제공
 
-### State
+### 1.1. State
 
 ![image-20210512091108371](03_vuex.assets/image-20210512091108371.png)
 
@@ -41,21 +41,21 @@
 
 ![image-20210512091249660](03_vuex.assets/image-20210512091249660.png)
 
-### Pass props & Emit event
+### 1.2. Pass props & Emit event
 
 ![image-20210512091313734](03_vuex.assets/image-20210512091313734.png)
 
 - 각 컴포넌트는 독립적으로 데이터를 관리
 
-- 데이터는 단방향 흐름
+- 데이터는 단방향 흐름 
 
-  - 장점 : 데이터의 흐름을 직관적으로 파악 가능
+  - 장점 : **데이터의 흐름을 직관적으로 파악** 가능
 
   - 단점 : 컴포넌트 중첩이 깊어지는 경우 동위 관계의 컴포넌트로의 데이터 전달이 불편해짐
 
     ![image-20210512091556032](03_vuex.assets/image-20210512091556032.png)
 
-### in Vuex
+### 1.3. in Vuex
 
 ![image-20210512091615572](03_vuex.assets/image-20210512091615572.png)
 
@@ -69,7 +69,7 @@
 
 - 더이상 컴포넌트 깊이를 고려하지 않아도 괜찮아짐
 
-### Vuex Core Concept
+### 1.4. Vuex Core Concept
 
 ![image-20210512091856200](03_vuex.assets/image-20210512091856200.png)
 
@@ -77,34 +77,37 @@
 
 ![image-20210512091931718](03_vuex.assets/image-20210512091931718.png)
 
+- 공통의 데이터를 공유할 때 늘어나는 복잡성
+
 ![image-20210512092037322](03_vuex.assets/image-20210512092037322.png)
 
+- 각각의 컴포넌트의 공유된 데이터를 store로 추출하여 전역에서 관리
 - 단방향 데이터 흐름에서 생겨나는 복잡성을 해결하기 위해서 Vuex가 생겨난 것.
 
-#### 구성요소
+## 2. 구성요소
 
 ![image-20210512092244270](03_vuex.assets/image-20210512092244270.png)
 
 1. State
-2. Actions
+2. Actions 
 3. Mutations
 4. Getters
 
 ![image-20210512092347446](03_vuex.assets/image-20210512092347446.png)
 
-##### State
+### 2.1. State
 
 ![image-20210512092450774](03_vuex.assets/image-20210512092450774.png)
 
-- 중앙에서 관리하는 모든 상태 정보(data)
-- Mutations에 정의된 메서드에 의해 변경
-- Vuex Store(중앙저장소)에서 state가 변화하면 해당 하는 state를 공유하는 컴포넌트의 DOM은 알아서 렌더링
+- 중앙에서 관리하는 모든 상태 정보(=== data)
+- Mutations(data를 조작하는 친구)에 정의된 메서드에 의해 변경 
+- Vuex Store(중앙저장소)에서 **state가 변화하면 해당 하는 state를 공유하는 컴포넌트의 DOM은 알아서 렌더링**
 
 ![image-20210512092729612](03_vuex.assets/image-20210512092729612.png)
 
-- `.dispatch()`를 사용하여 Actions 내부의 메서드를 호출
+- 컴포넌트가 `.dispatch()`를 사용하여 Actions 내부의 메서드를 호출
 
-##### Actions
+### 2.2. Actions
 
 ![image-20210512092909245](03_vuex.assets/image-20210512092909245.png)
 
@@ -114,15 +117,15 @@
 
 - mutations에 정의된 메서드를 **commit** 메서드로 호출해서 state를 변경
 
-##### Mutations
+### 2.3. Mutations
 
 ![image-20210512093436754](03_vuex.assets/image-20210512093436754.png)
 
-- 즉각 처리가 되어야 하기 떄문에 동기적인 코드만 작성
+- 즉각 처리가 되어야 하기 떄문에 **동기적인 코드만 작성*
 - 첫 번째 인자로 state가 넘어온다.
 - Actions, Mutations 둘 다 공통점은 특정 기능을 하는 메서드를 가지고있다.
 
-##### Getters
+### 2.4. Getters
 
 ![image-20210512093623123](03_vuex.assets/image-20210512093623123.png)
 
@@ -134,11 +137,25 @@
 
 ![image-20210512093933091](03_vuex.assets/image-20210512093933091.png)
 
+- state : 중앙에서 관리하는 모든 data
+
+- mutations : state를 조작하는 로직. 동기적인 작업만 수행(비동기적인 코드작성시 state에대한 변경시점이 달라질 수 있기 때문)
+
+  Action가 commit을 통해 호출
+
 ![image-20210512093942672](03_vuex.assets/image-20210512093942672.png)
 
 ![image-20210512093953109](03_vuex.assets/image-20210512093953109.png)
 
 ![image-20210512094011290](03_vuex.assets/image-20210512094011290.png)
+
+- Actions : 모든 속성, data에 대해서 접근할 수 있는 권한은 있지만, state를 직접 변경하지는 않는다. 
+
+  컴포넌트가 dispatch를 통해서 호출
+
+- Getters : 저장소의 state를 기준으로 계산해야 하는 값
+
+
 
 ---
 
@@ -180,6 +197,8 @@
 
   ![image-20210512100524272](03_vuex.assets/image-20210512100524272.png)
 
+  
+
 - store에서 data를 가져오는 행위
 
   ![image-20210512101850881](03_vuex.assets/image-20210512101850881.png)
@@ -188,11 +207,17 @@
 
   ![image-20210512102136044](03_vuex.assets/image-20210512102136044.png)
 
+  store에 저장된 todo 목록을 가져오는건데 매번 새로 호출하는 것이 아니라 todo리스트 자체가 변화가 있을때만 가져오도록 하기위해서 computed로 추가해주는 것이 좋습니다.
+
+  
+
 - 상태(state)변경을 하는 것은 mutations
 
   ![image-20210512103304063](03_vuex.assets/image-20210512103304063.png)
 
   mutations는 commit()을 통해 호출이 됩니다.
+
+  
 
 - mutatinos는 기본적으로 state를 인자로 받습니다.
 
@@ -200,13 +225,41 @@
 
   왜 대문자 이름? **data를 조작하는 함수**라는 것을 명시해주기 위해서.
 
+  
+
 - ![image-20210512104122503](03_vuex.assets/image-20210512104122503.png)
+
+
 
 - Actions context에는 많은 정보가 기본인자로 담겨져 있습니다.
 
   ![image-20210512104919997](03_vuex.assets/image-20210512104919997.png)
 
-  모든속성, 데이터에 접근이 가능한 특징을 가지고 있기 때문. 보다 많은 동기적, 비동기적 처리를 하기 때문.
+  Action은 모든속성, 데이터에 접근이 가능한 특징을 가지고 있기 때문. => 보다 많은 동기적, 비동기적 처리를 하기 때문.
+
+
+
+- Destructuring : context내부에서 사용할 것들만 뽑아서 사용하는 것.
+
+  ![image-20210513011857533](03_vuex.assets/image-20210513011857533.png)
+
+  아래와 같이 수정가능(mutations를 부르기 위한 기능을 하는 commit만을 뽑아온 경우)
+
+  ![image-20210513011920855](03_vuex.assets/image-20210513011920855.png)
+
+
+
+
+
+### 정리
+
+1. 컴포넌트에서 `dispatch`를 활용해 actions를 호출
+2. action에 정의된 메서드는 `commit`을 활용해 mutations를 호출
+3. mutations에 정의된 메서드는 state를 조작한다.
+
+
+
+가다랑어포 + 간장베이스 + 데리야끼 + 생강
 
 ---
 
@@ -254,9 +307,9 @@ module : 파일을 나누는 것(쪼개기)
 
 - actions : state를 비동기적으로 변경하는 역할
 
-  - (참고) mutations를 통해 "간접적으로 state를 변경합니다."
+  - (참고) mutations를 통해 "간접적으로 state를 변경합니다.
 
-    
+
 
 ### 2. 컴포넌트에서의 활용법
 
