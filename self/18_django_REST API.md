@@ -1925,3 +1925,6 @@ account article comment like follow구현 되어있고, 모델 1:N, M:N 구현�
 
 유저 추천 댓글
 
+`git switch -c branch이름`
+
+`git push origin branch이름`

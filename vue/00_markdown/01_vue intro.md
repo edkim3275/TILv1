@@ -647,6 +647,3 @@ Child : 위로 2개를 올리기
 1. UI(User-Interface) : 화면이 어떻게 구성되어있는지 파악
 2. UI에 맞게 component를 구성
 3. 각 component에 어떠한 data들이 필요할 것인지.
-
-
-
