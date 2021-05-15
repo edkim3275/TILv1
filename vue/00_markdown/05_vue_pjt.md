@@ -4,15 +4,15 @@
 >
 > 지금까지 여러가지 것들을 배워왔습니다. HTML, CSS, Django, Vue.. 현재까지는 웹 페이지를 만든다고 해도 본인의 서버에서만 가능헀었습니다. 이제는 Deploy과정을 통해 외부에 공개할 수 있는 것을 배워보겠습니다.
 
-## 준비사항
+## 1. 준비사항
 
-### Django project
+### 1.1. Django project
 
 - 오류가 없는 완성도 있는 프로젝트
 - 의존성 저장 : `pip freeze > requirments.txt`
 - 원격저장소(gitlab) 업로드
 
-### AWS
+### 1.2. AWS
 
 - (https://aws.amazon.com/ko/)
 
@@ -238,6 +238,4 @@ Vue : HTML / CSS / JS
 django : 프로그램
 
 ![image-20210514150939798](05_vue_pjt.assets/image-20210514150939798.png)
-
-git switch master
 
