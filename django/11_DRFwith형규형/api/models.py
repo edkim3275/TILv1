@@ -6,5 +6,5 @@ class Artist(models.Model):
 
 class Music(models.Model):
     # artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='musics')
-    artist = models.ForeignKey(artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     title = models.CharField(max_length=30)

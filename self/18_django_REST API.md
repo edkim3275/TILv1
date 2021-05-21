@@ -1042,7 +1042,7 @@ api로 만들어져있는 CRUD
 
   ```python
   urlpatterns = [
-      # GET/POSt => /api/articles/<pk>/comments/ => <pk>에 속한 전체 댓글 + 댓글 생성
+      # GET/POST => /api/articles/<pk>/comments/ => <pk>에 속한 전체 댓글 + 댓글 생성
       path('articles/<int:article_pk>/comments/', views.comments),
       # GET/PUT/DELETE => /api/articles/<pk>/comments/1/ => 단일 댓글/수정/삭제
       path('articles/<int:article_pk>/comments/<int:comment_pk', views.comments),
@@ -1928,3 +1928,14 @@ account article comment like follow구현 되어있고, 모델 1:N, M:N 구현�
 `git switch -c branch이름`
 
 `git push origin branch이름`
+
+
+
+
+
+tmdb array for문돌면서 1에해당하는 장르를 찾고 그 장르를 movie에 add
+
+movie object가 하나 있고 movie.actor.add 
+
+actor는json에서 이름은 actor.objects.get('')
+

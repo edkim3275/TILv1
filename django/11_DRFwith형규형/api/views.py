@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view
 from .models import Artist, Music
-from serializers import ArtistListSerializer, ArtistSerializer, MusicSerializer, MusicListSerializer
+from .serializers import ArtistListSerializer, ArtistSerializer, MusicSerializer, MusicListSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
