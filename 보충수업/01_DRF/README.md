@@ -53,27 +53,26 @@ url - view - template / model, form
   ```
 
   - models.py - Article - 게시물 Queryset data 가져와서 Json으로 응답하기 위해서 python data 객체로  변형 시켜주는 것이 serializer
-
-  - get_object_or_404 : 찾고자 하는 객체가 하나도 없을때 404를 보여줌
-  - get_list_or_404 : 찾고자 하는 리스트(?)가 하나도 없을때 404를 보여줌
+- `get_object_or_404` : 찾고자 하는 객체가 하나도 없을때 404를 보여줌
+  - `get_list_or_404`: 찾고자 하는 리스트(?)가 하나도 없을때 404를 보여줌
+    - Article.objects.filter(title='hello')라고 했을때 해당하는 경우가 하나도 없다면 404 에러가 발생
     - 쿼리셋과 모델인스턴스의 차이?? 여러개와 한개의 차이
     - get_object_or_404에는 모델 인스턴스가 들어가야만 합니다.
-    - get_list_or_404에는 쿼리셋(여러개)가 들어가있어야만 합니다.
-
-  - raise_exception=True : 유효성검사 실패시 404를 자동으로 보내주는 역할
-
-  ```python
+  - get_list_or_404에는 쿼리셋(여러개)가 들어가있어야만 합니다.
+- raise_exception=True : 유효성검사 실패시 404를 자동으로 보내주는 역할
+  
+```python
   elif request.method == 'PUT':
       serializer = ArticleSerializer(article, data=request.data)
       if serializer.is_valid(raise_exception=True):
           serializer.save()
           return Response(serializer.data)
-  ```
+```
 
-  - 수정  method에 PUT과 PATCH가 존재합니다.
-
-    두 개의 차이는  PUT이라고 명시가 되어있다면 수정을 하더라도 모든 데이터를 다 넘겨줘라, PATCH라고 명시되어있다면 수정할 때 수정할 것만 넘겨줘라
-
+- 수정  method에 PUT과 PATCH가 존재합니다.
+  
+  두 개의 차이는  PUT이라고 명시가 되어있다면 수정을 하더라도 모든 데이터를 다 넘겨줘라, PATCH라고 명시되어있다면 ㅊ수정할 때 수정할 것만 넘겨줘라
+  
 - serializers.py
 
   - ArticleSerializer랑 ArticleListSerializer 이렇게 두개 다르게 만드는 이유
@@ -126,8 +125,10 @@ url - view - template / model, form
 
     이 경우에도 Article 과 Comment가 1:N관계라서 여러개의 댓글이 들어갈 수 있기 때문에 many=True설정을 해준다.
 
-  - ![image-20210430193218502](README.assets/image-20210430193218502.png)
+    ![image-20210522115342653](README.assets/image-20210522115342653.png)
 
+  - ![image-20210430193218502](README.assets/image-20210430193218502.png)
+  
     여기서 comment_count는 ArticleSerializer에 추가해주는 필드
 
 ## 관통pjt review
@@ -153,3 +154,20 @@ url - view - template / model, form
      `requests.get(무비리스트 가져오는 url) -> 내 입맛에 맞게 가공 -> 해당 데이터를 return
 
      최신정보를 보장한다는 장점. But 비용이 든다는 단점
+     
+     ![image-20210522120109945](README.assets/image-20210522120109945.png)
+     
+     ![image-20210522120142452](README.assets/image-20210522120142452.png)
+
+---
+
+기능에 맞는 url 구성 - view  //  model, serializer
+
+- 게시글을 모두 조회하는 기능
+  - articles GET => 자원과 표현
+  - model => Article => 전부 조회해서 쿼리셋 가져오는거
+  -  serializer
+  - json 응답
+
+![image-20210524213753195](README.assets/image-20210524213753195.png)
+
