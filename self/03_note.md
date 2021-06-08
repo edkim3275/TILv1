@@ -541,3 +541,9 @@ for weather_info in weather_infos:
 - 마크다운 문법을 통해 풍부한 문서화 가능
 
 *추후 알고리즘 수업 및 Django 수업에서 pycharm, vs code의 환경에서 스크립트 파일 단위로 실행 예정
+
+
+
+## 알고
+
+![image-20210608204854576](03_note.assets/image-20210608204854576.png)
