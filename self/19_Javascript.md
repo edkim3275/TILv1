@@ -1,10 +1,14 @@
+[TOC]
+
+
+
 # Javascript
 
 - API Server
 
   - django 와 더이상 문서를 넘겨주지않고 JSON data를 넘겨주는 서버로서의 역할.
 
-  - JSON응답할수있는 다양한 방법, 직접 구조만들기, serializer, DRF힘빌리기
+  - JSON응답할수있는 다양한 방법, 직접 구조만들기, serializer, DRF(Django REST Framework)힘빌리기
 
 - RESTful
 
@@ -31,9 +35,9 @@ python 이후의 두 번째 언어(총 4일간 화욜까지 진행)
 
 - 왜 사용할까?
 
-  브라우저 화면을 '동적'으로 만들기 위함
+  브라우저 화면을 **'동적'으로 만들기 위함**
 
-  브라우저를 조작할 수 있는 유일한 언어
+  **브라우저를 조작할 수 있는 유일한 언어**
 
 - ![image-20210428090616801](19_Javascript.assets/image-20210428090616801.png)
 
@@ -43,7 +47,7 @@ python 이후의 두 번째 언어(총 4일간 화욜까지 진행)
 
   Stackoverflow(좌) 1위 Javascript, Jetbrain survey(우) 1위 Javascript
 
-  그만큼 개발자가 다룰 수 있고 다루어야만하는 언어라고 볼 수 있다.
+  **그만큼 개발자가 다룰 수 있고 다루어야만하는 언어**라고 볼 수 있다.
 
 - **브라우저를 조작하는 언어**라고 했습니다. 그렇다면 Javascript가 지금까지 해온 이야기를 좀 해보고자 합니다.
 
@@ -65,14 +69,14 @@ python 이후의 두 번째 언어(총 4일간 화욜까지 진행)
 
 Mocha -> LiveScript -> JavaScript(당시 인기였던 Java의 인기에 편승하기위해 이름을 바꿈)
 
-'95 마이크로소프트에서 자체적 커스텀을 해서 JScript를 IE 1.0에 탑재(거의 카피캣)
+`95 마이크로소프트에서 자체적 커스텀을 해서 JScript를 IE 1.0에 탑재(거의 카피캣)
 
 ### 1.3. 브라우저 전쟁
 
 ![image-20210428091312041](19_Javascript.assets/image-20210428091312041.png)
 
 - Window OS를 가지고있던 마이크로소프트가 무료로 브라우저 사용하도록 하면서 공격적인 마케팅을 펼쳐서 넷스케이프는 발리고 MS의 브라우저 점유율 90% 상회
-- Mozilla Development Network(모질라 재단)
+- `98 넷스케이프에서 나온 브랜던 아이크 외 후계자들이 Mozilla Development Network(모질라 재단) 설립
 
 ![image-20210428091523240](19_Javascript.assets/image-20210428091523240.png)
 
@@ -81,6 +85,8 @@ Mocha -> LiveScript -> JavaScript(당시 인기였던 Java의 인기에 편승�
 - 구글의 등장
 
 ![image-20210428091606329](19_Javascript.assets/image-20210428091606329.png)
+
+- 마소는 시장독점하면서 브라우저 업데이트도 제대로 하지않고, 웹 표준 또한 잘 지키지않았었음
 
 ### 1.4. 파편화와 표준화
 
@@ -91,6 +97,8 @@ Mocha -> LiveScript -> JavaScript(당시 인기였던 Java의 인기에 편승�
 - 크로스 브라우징(브라우저 마다 렌더링에 사용하는 엔진이 다른) 이슈로 인해 파편화가 발생 => 표준화의 필요성
 
 ![image-20210428091926152](19_Javascript.assets/image-20210428091926152.png)
+
+- `97 JavaScript의 공식 명칭인 ECMAScript1(ES1)이 탄생
 
 ### 1.5. 현재의 JS
 
@@ -111,7 +119,7 @@ Mocha -> LiveScript -> JavaScript(당시 인기였던 Java의 인기에 편승�
 
 ![image-20210428092830176](19_Javascript.assets/image-20210428092830176.png)
 
-**Javascript는 브라우저를 조작한다**고했는데 뭘 할 수있는가 ?
+**Javascript는 브라우저를 조작한다**고했는데 브라우저에서는 뭘 할 수있는가 ?
 
 - 문서조작(DOM)
 - 브라우저조작(BOM) : navigator, screen, location, frames, history...
