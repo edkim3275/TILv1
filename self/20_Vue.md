@@ -70,8 +70,9 @@ for (let i=0; i < numbers.length; i++) {
      innerText, innerHTML, setAttribute(), getAttribute(), element.style,color, createElement(), appendChild()
 
 - DOM관련 객체의 상속 구조
-  - EventTarget - Node - Element/Document - HTMLElement
-
+  
+- EventTarget - Node - Element/Document - HTMLElement
+  
 - DOM 선택 - 선택 관련 메서드
 
   - `Document.querySelector()`
@@ -162,4 +163,51 @@ const ulTag = document.querySelector('ul')
 ulTag.appendChild(newLiTag)
 ulTag.removeChild(newLiTag)
 ```
+
+## Event
+
+- 네트워크 활동 혹은 사용자와의 상호작용 같은 **사건의 발생을 알리기 위한 객체**
+
+- 이벤트 처리기(Event-handlers)
+
+  - `EventTarget.addEventListener()`
+
+  - 지정한 이벤트가 대상에 전달될 때마다 호출할 함수를 설정
+
+  - `target.addEventListener(type, listener[, options])`
+
+    - type : 반응 할 이벤트 유형(대소문자 구분)
+
+    - listener : 지정된 타입의 이벤트가 발생 했을 때 알림을 받는 객체
+
+      ![image-20210710211919344](20_Vue.assets/image-20210710211919344.png)
+
+    - 발생한 이벤트가 listener함수의 인자로 들어가게 된다.
+
+- Event 기반 인터페이스
+  - AnimationEvent, ClipboardEvent, DragEvent
+  - 그 중에서도 UIEvent
+    - 간단한 사용자 인터페이스 이벤트
+    - Evnet 상속을 받음
+    - MouseEvent, KeyboardEvent, InputEvent, FocusEvent 등의 부모 객체 역할을 함
+
+- **특정 이벤트가 발생**하면 **할 일을 등록**한다. => 이러한 일을 Evnet handler가 수행한다 
+
+```javascript
+const btn = documnet.querySelector('button')
+
+btn.addEventListener('click', function (event) {
+    alert('버튼이 클릭되었습니다.')
+    console.log(event)
+})
+```
+
+- 다양한 이벤트 레퍼런스
+
+  https://developer.mozilla.org/en-US/docs/Web/Events
+
+- `preventDefault()`
+  - 현재 이벤트의 기본 동작을 중단
+  - 태그의 기본 동작(a 태그는 클릭 시 페이지 이동, form 태그는 폼 데이터를 전송)
+  - 이벤트의 전파를 막지 않고 이벤트의 기본동작만 중단
 
