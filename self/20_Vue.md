@@ -1145,3 +1145,6 @@ Vue 확장 프로그렘 Vetur도 설치합니다.
 
 ## Youtube API
 
+toggle => 2pages
+
+`vue add vuetify` : CLI상으로 vuetify 설치 명령어
