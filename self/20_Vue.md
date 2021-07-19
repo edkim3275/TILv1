@@ -1143,8 +1143,10 @@ Vue 확장 프로그렘 Vetur도 설치합니다.
 
 도커를 내컴에 깔고 maria DB를 도커에 넣고 aws에 올린다.
 
-## Youtube API
+## Vuetify
 
 toggle => 2pages
 
 `vue add vuetify` : CLI상으로 vuetify 설치 명령어
+
+- wireframe : 토글버튼, 반응형크기 설정
