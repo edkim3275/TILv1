@@ -1141,6 +1141,12 @@ Vue 확장 프로그렘 Vetur도 설치합니다.
 
 ---
 
+![image-20210722222443903](20_Vue.assets/image-20210722222443903.png)
+
+![image-20210722223802708](20_Vue.assets/image-20210722223802708.png)
+
+---
+
 도커를 내컴에 깔고 maria DB를 도커에 넣고 aws에 올린다.
 
 ## Vuetify
