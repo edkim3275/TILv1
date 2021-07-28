@@ -76,10 +76,6 @@ UDP(User Datagram Protocol)
 
 
 
-
-
-
-
 - HTTP와 HTTPS의 차이점에 대해서 설명해보세요.
 
 ```
