@@ -1,6 +1,6 @@
 # Git
 
-## 작업과정
+## 작업 후  merge
 
 - frontend에서 local 브랜치를 하나 만들어주기
 
@@ -30,3 +30,20 @@
 
   `git push origin frontend`
 
+---
+
+- 커밋 기록 확인하기
+
+  `git log --pretty=format:"%h %s" --graph`
+
+  <img src="git.assets/image-20210729225100256.png" alt="image-20210729225100256" style="zoom:50%;" />
+
+  `--pretty` : 지정한 형식으로 보여준다. 많은 커밋을 한번에 조회할 때 유용한 방식
+
+  `format` : `--pretty` 옵션 중 하나로써 원하는 형식으로 출력하고자 할 때 사용한다.
+
+  `%h` : 짧은 길이 커밋 해시
+
+  `%s` : 요약
+
+  `--graph` : 브랜치와 머지 히스토리 정보까지 아스키 그래프로 보여준다.
