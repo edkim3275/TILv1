@@ -28,15 +28,15 @@ export default {
     //   const catImgUrl = response.data[0].url
     //   this.UPDATE_ANIMAL_IMAGES(catImgUrl)
       
-        // .then((response) => {
-        //   const catImgUrl = response.data[0].url
-        //   // this.$store.commit('UPDATE_ANIMAL_IMAGES', catImgUrl)
-        //   // 3. helpers사용(위 처럼 작성할 필요없다)
-        //   this.UPDATE_ANIMAL_IMAGES(catImgUrl)
-        // })
-        // .catch((error) => {
-        //   console.error(error)
-        // })
+    //     .then((response) => {
+    //       const catImgUrl = response.data[0].url
+    //       // this.$store.commit('UPDATE_ANIMAL_IMAGES', catImgUrl)
+    //       // 3. helpers사용(위 처럼 작성할 필요없다)
+    //       this.UPDATE_ANIMAL_IMAGES(catImgUrl)
+    //     })
+    //     .catch((error) => {
+    //       console.error(error)
+    //     })
     },
 }
 </script>
