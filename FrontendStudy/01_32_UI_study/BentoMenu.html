@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* body {
+      background: #222;
+      font-family: "Comfortaa", sans-serif;
+      color: #fff;
+    } */
+
+    .box {
+      width: 10px;
+      height: 10px;
+      background: rgb(88, 85, 85);
+      margin: 3px 3px;
+      display: inline-block;
+    }
+
+    .menu__wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+    .menu__wrapper > div {
+      width: 60px;
+      height: 60px;
+      padding: 20px 20px 5px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+    .menu__wrapper > div:hover, .menu__wrapper > div:focus {
+      outline: none;
+    }
+    .menu__wrapper > span {
+      display: inline-block;
+      text-align: center;
+      line-height: 1.2;
+      padding: 10px;
+      margin-top: auto;
+    }
+
+    /* .menu__item--bento:hover .box:nth-child(2),
+    .menu__item--bento:hover .box:nth-child(4),
+    .menu__item--bento:hover .box:nth-child(6),
+    .menu__item--bento:hover .box:nth-child(8), .menu__item--bento:focus .box:nth-child(2),
+    .menu__item--bento:focus .box:nth-child(4),
+    .menu__item--bento:focus .box:nth-child(6),
+    .menu__item--bento:focus .box:nth-child(8) {
+      opacity: 0;
+    } */
+  </style>
+</head>
+<body>
+  <div class="menu__wrapper" v-on:click="hello" @click="hello">
+    <div class="menu__item--bento" tabindex="3">
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+    </div><span>Bento Menu</span>
+  </div>
+</body>
+<script>
+  function hello() {
+    console.log("hello")
+  }
+</script>
+</html>
