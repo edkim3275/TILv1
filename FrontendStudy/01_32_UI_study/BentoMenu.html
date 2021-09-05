@@ -75,8 +75,26 @@
   </div>
 </body>
 <script>
-  function hello() {
-    console.log("hello")
+  // function hello() {
+  //   console.log("hello")
+  // }
+  // fetch('https://api.thecatapi.com/v1/images/search')
+  //   .then(function(response) {
+  //     return response.json()
+  //   })
+  //   .then(function(myJson) {
+  //     console.log(JSON.stringify(myJson))
+  //   })
+
+  // Example POST method implementation:
+  const requestURL = 'https://api.thecatapi.com/v1/images/search'
+  const request = new XMLHttpRequest();
+  request.open('GET', requestURL);
+  request.responseType = 'json';
+  request.send();
+  request.onload = function() {
+    const res = request.response;
+    console.log(res)
   }
 </script>
 </html>

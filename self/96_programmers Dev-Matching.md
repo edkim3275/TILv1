@@ -1,5 +1,5 @@
 - programmers 2021 Dev-Matching: 웹 프론트엔드 개발자(하반기) 회고
-
+- ![image-20210904165857144](96_programmers Dev-Matching.assets/image-20210904165857144.png)
   - vanilla JS 상황에서의 API통신 방법
   - 화폐단위 표시방법
   - html파일의 컴포넌트 화
