@@ -188,3 +188,36 @@
 - +연산자는 피연산자 중 하나 이상이 문자열인 경우 문자열 연결 연산자로 동작한다.
 
 - 동등 비교(==) 연산자는 좌항과 우항의 피연산자를 비교할 때 먼저 암묵적 타입 변환을 통해 타입을 일치시킨 후 같은 값인지 비교한다.
+
+- typeof 연산자는 피연산자의 데이터 타입을 문자열로 반환
+
+  ```javascript
+  typeof NaN // "number"
+  typeof null // "undefined"
+  typeof /test/gi // "object"
+  typeof function() {} // "function"
+  ```
+
+  앞에서 배웠던 7가지 데이터 타입과는 차이가 있다.
+
+- 선언하지 않은 식별자를 typeof 연산자로 연산해 보면 ReferenceError가 아닌 undefined를 반환한다.
+
+  ```javascript
+  typeof undeclared; // undefined
+  ```
+
+## 08. 제어문
+
+- 자바스크립트는 블록문을 하나의 실행 단위로 취급한다.
+
+- `if ... else`문에서 코드 블록 내의 문이 하나뿐이라면 중괄호를 생략할 수 있다.
+
+  ```javascript
+  let num = 2;
+  
+  if (num > 0) console.log("짝수");
+  else if (num < 0) console.log("음수");
+  else console.log("영")
+  ```
+
+  
