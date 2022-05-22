@@ -357,5 +357,103 @@ Symbol을 완전히 숨길 수 있는 방법은 없다.
   parseFloat(padding); // 18.5 부동소수점을 반환
   ```
 
+## 6. string
+
+- `length` : 문자열 길이
+
+  ```js
+  let desc = '안녕하세요.';
+  desc.length; // 6
+  ```
+
+- 특정 위치에 접근
+
+  ```js
+  let desc = '안녕하세요.';
+  desc[2]; // '하'
+  // 바꿀수는 없다.
+  desc[4] = '용'
+  console.log(desc); // 안녕하세요.
+  ```
+
+- `toUpperCase()` / `toLowerCase()` : 대소문자 변경
+
+- `indexOf(text)` : 문자를 인수로 받아 몇번째 인덱스인지 확인
+
+  ```js
+  let desc = "Hi guys. Nice to meet you.";
+  desc.indexOf("to") // 14
+  desc.indexOf("man") // -1
+  ```
+
+  포함된 문자가 여러개라도 앞에 있는 문자의 인덱스가 나온다.
+
+  if문에서 사용될때 주의해야한다.
+
+  ```js
+  if (desc.indexOf("Hi") > -1) { // 0 => false
+      console.log("Hi가 포한된 문장입니다.")
+  }
+  ```
+
+- `slice(n, m)` : 특정 범위의 문자열 뽑기
+
+  n : 시작점, m : 없으면 문자열 끝까지, 양수면 그 숫자까지(포함x), 음수면 끝에서부터
+
+  ```js
+  let desc = "abcdefg";
+  desc.slice(2); // "cdefg"
+  desc.slice(0, 5) // "abcde"
+  desc.slice(2, -2) // "cde"
+  ```
+
+- `substring(n, m)` : n과 m 사이 문자열 반환
+
+  단, n과 m을 바꿔도 동작함. 음수는 0으로 인식
+
+  ```js
+  let desc = "abcdefg"
+  desc.substring(1, 5); // "bcde"
+  desc.substring(5, 1); // "bcde"
+  ```
+
+- `substr(n, m)` : n 부터 시작, m개를 가져옴
+
+  ```js
+  let desc = "abcdefg";
+  desc.substr(2, 4); // "cdef"
+  desc.substr(-4, 2); // "de"
+  ```
+
+- `trim()` : 앞 뒤 공백 제거
+
+  ```js
+  let desc = " coding      ";
+  desc.trim(); // "coding"
+  ```
+
+- `repeat(n)` : n번 반복
+
+  ```js
+  let desc = "hello!"
+  hello.repeat(3); // "hello!hello!hello!"
+  ```
+
+- 문자열 비교
+
+  | 십진법 | 십육진법 | 모양 | 85진법(아스키85) |
+  | ------ | -------- | ---- | ---------------- |
+  | 64     | 40       | @    | 31               |
+  | 65     | 41       | A    | 32               |
+  | ...    |          |      |                  |
+  | 97     | 61       | a    | 64               |
+  | 98     | 62       | b    | 65               |
+
+  ```js
+  "a" < "c" // true
+  ```
+
   
+
+
 
