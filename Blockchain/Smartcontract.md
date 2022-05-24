@@ -370,7 +370,7 @@ contract PancakeFactory is IPancakeFactory {}
 
 ## 3. 적용
 
-## 민팅
+### 민팅사례
 
 - pancakeSwap
 
@@ -462,6 +462,89 @@ contract MintProdToken is ERC721Enumerable {
     }
 ```
 
+### 스컨 필요 함수
+
+- Master(TMB)
+
+```solidity
+contract TmaxMetaBank is Ownable {
+	
+}
+```
+
+
+
+- Ownable
+
+```solidity
+import "./Context.sol";
+contract Ownable is Context {
+	address private _owner;
+	
+	constructor () internal {
+		address msgSender = _msgSender();
+		_owner = msgSender;
+	}
+	
+	// Returns the address of the owner.
+	function owner() public view returns (address) {
+		return _owner;
+	}
+	
+	modifier onlyOwner() {
+		require(_owner == _msgSender(), "Ownable: caller is not the owner.");
+		_;
+	}
+}
+```
+
+
+
+- Context : Provides information about the current execution context, including the sender of the tx and its data
+
+```solidity
+abstract contract Context {
+	function _msgSender() internal view virtual returns (address payable) {
+		return msg.sender;
+	}
+	
+	function _msgData() internal view virtual returns (bytes memory) {
+		this;
+		return msg.data;
+	}
+}
+```
+
+
+
+- ReentrancyGuard : Contract module that helps prevent reentrant calls to a function
+
+```solidity
+contract ReentrancyGuard {
+	uint256 private constant _NOT_ENTERED = 1;
+	uint256 private constant _ENTERED = 2;
+	
+	uint256 private _status;
+	
+	constructor () internal {
+		_status = _NOT_ENTERED;
+	}
+	
+	modifier nonReentrant() {
+		// 첫 호출에는 _notentered가 true(따라서 require문 통과한다.)
+		require(_status != _ENTERED, "ReentrancyGuard: reentrant call");
+		
+		// _entered가 true가 되면서 이후 호출은 모두 에러메시지가 발생한다.
+		_status = _ENTERED;
+		
+		_;
+		
+		// By storing the original value once again, a refund is triggered.
+		_status = _NOT_ENTERED;
+	}
+}
+```
+
 
 
 ## 참고링크
@@ -472,8 +555,20 @@ pancake-smart-contracts 깃헙 : https://github.com/pancakeswap/pancake-smart-co
 
 스마트 컨트랙트 소개 : https://solidity-kr.readthedocs.io/ko/latest/introduction-to-smart-contracts.html#blockchain-basics
 
+스마트 컨트랙트 개발 주의사항 : https://medium.com/rayonprotocol/%EC%9D%B4%EB%8D%94%EB%A6%AC%EC%9B%80-%EC%8A%A4%EB%A7%88%ED%8A%B8-%EC%BB%A8%ED%8A%B8%EB%9E%99%ED%8A%B8-%EA%B0%9C%EB%B0%9C-%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD-5a1abde1a4e0
+
 ## 용어정리
 
 - BEP20 : ERC-20의 확장. Binance 플랫폼 스마트 체인의 토큰 표준.
 
 - WBNB : Wrapped BNB. 바이낸스토큰(BNB)을 디파이에서 활용하기 위해 전환된 토큰.
+
+- 러그풀사건 : NFT를 팔아 투자금을 모은 뒤 도주하는 행위
+
+- 스마트컨트랙트 함수 실행
+
+  배포를 하면서 얻게된 abi를 contract object상에 넣고 instance를 생성 ➭ instance상에 스마트컨트랙스 상의 함수가 메서드로 존재하게된다. ➭ instance.method.methodName() 이런식으로 스마트컨트랙트 함수를 실행(아래의 과정을 대신해주는 것)
+
+  - method를 16진수로 인코드 ➭ tx의 data로 넣어서 tx전송 ➭ EVM이 tx을 받으면서 data field의 16진수를 읽음 ➭ 16진수를 다시 opcode로 변환
+
+- 에어드랍 : 특정 암호화폐를 보유한 사람에게 어떤 비율로 다른 암호화폐를 지급하는 것. 투자 비율에 따라 해당 코인/토큰을 무료로 커뮤니티에 지급하는 것.
