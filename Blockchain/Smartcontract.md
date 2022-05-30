@@ -547,6 +547,184 @@ contract ReentrancyGuard {
 
 
 
+- ERC20
+
+```solidity
+abstract contract Context {
+    function _msgSender() internal view virtual returns (address payable) {
+        return msg.sender;
+    }
+
+    function _msgData() internal view virtual returns (bytes memory) {
+        this;
+        return msg.data;
+    }
+}
+
+contract ERC20 is Context, IERC20, IERC20Metadata {
+    mapping(address => uint256) private _balances;
+
+    mapping(address => mapping(address => uint256)) private _allowances;
+
+    uint256 private _totalSupply;
+
+    string private _name;
+    string private _symbol;
+    
+    constructor(string memory name_, string memory symbol_) {
+        _name = name_;
+        _symbol = symbol_;
+    }
+	
+	function name() public view virtual override returns (string memory) {
+        return _name;
+    }
+    
+    function symbol() public view virtual override returns (string memory) {
+        return _symbol;
+    }
+    
+    function decimals() public view virtual override returns (uint8) {
+        return 18;
+    }
+    
+    function totalSupply() public view virtual override returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address account) public view virtual override returns (uint256) {
+        return _balances[account];
+    }
+    
+    function transfer(address to, uint256 amount) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _transfer(owner, to, amount);
+        return true;
+    }
+    
+    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+        return _allowances[owner][spender];
+    }
+
+    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, amount);
+        return true;
+    }
+    
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        address spender = _msgSender();
+        _spendAllowance(from, spender, amount);
+        _transfer(from, to, amount);
+        return true;
+    }
+    
+    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, allowance(owner, spender) + addedValue);
+        return true;
+    }
+    
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        uint256 currentAllowance = allowance(owner, spender);
+        require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
+        unchecked {
+            _approve(owner, spender, currentAllowance - subtractedValue);
+        }
+
+        return true;
+    }
+    
+    function _transfer(address spender, address recipient, uint amount) internal {
+        require(from != address(0), "ERC20: transfer from the zero address");
+        require(to != address(0), "ERC20: transfer to the zero address");
+
+        _beforeTokenTransfer(from, to, amount);
+
+        uint256 fromBalance = _balances[from];
+        require(fromBalance >= amount, "ERC20: transfer amount exceeds balance");
+        unchecked {
+            _balances[from] = fromBalance - amount;
+        }
+        _balances[to] += amount;
+
+        emit Transfer(from, to, amount);
+
+        _afterTokenTransfer(from, to, amount);
+    }
+
+	function _mint(address account, uint256 amount) internal virtual {
+        require(account != address(0), "ERC20: mint to the zero address");
+
+        _beforeTokenTransfer(address(0), account, amount);
+
+        _totalSupply += amount;
+        _balances[account] += amount;
+        emit Transfer(address(0), account, amount);
+
+        _afterTokenTransfer(address(0), account, amount);
+    }
+    
+    function _burn(address account, uint256 amount) internal virtual {
+        require(account != address(0), "ERC20: burn from the zero address");
+
+        _beforeTokenTransfer(account, address(0), amount);
+
+        uint256 accountBalance = _balances[account];
+        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+        unchecked {
+            _balances[account] = accountBalance - amount;
+        }
+        _totalSupply -= amount;
+
+        emit Transfer(account, address(0), amount);
+
+        _afterTokenTransfer(account, address(0), amount);
+    }
+	
+	function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal virtual {
+        require(owner != address(0), "ERC20: approve from the zero address");
+        require(spender != address(0), "ERC20: approve to the zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
+    }
+    
+    function _spendAllowance(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal virtual {
+        uint256 currentAllowance = allowance(owner, spender);
+        if (currentAllowance != type(uint256).max) {
+            require(currentAllowance >= amount, "ERC20: insufficient allowance");
+            unchecked {
+                _approve(owner, spender, currentAllowance - amount);
+            }
+        }
+    }
+    
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual {}
+
+	function _afterTokenTransfer(address from, address to, uint256 amount) internal virtual {}
+}
+
+
+
+
+```
+
+
+
 ## 참고링크
 
 pancake-smart-contracts 깃헙 : https://github.com/pancakeswap/pancake-smart-contracts
@@ -572,3 +750,19 @@ pancake-smart-contracts 깃헙 : https://github.com/pancakeswap/pancake-smart-co
   - method를 16진수로 인코드 ➭ tx의 data로 넣어서 tx전송 ➭ EVM이 tx을 받으면서 data field의 16진수를 읽음 ➭ 16진수를 다시 opcode로 변환
 
 - 에어드랍 : 특정 암호화폐를 보유한 사람에게 어떤 비율로 다른 암호화폐를 지급하는 것. 투자 비율에 따라 해당 코인/토큰을 무료로 커뮤니티에 지급하는 것.
+
+- address(0) : 새 계약이 배포되고 있음을 나타내는데 사용되는 특별한 경우. 트랜잭션의 새 계약. 주소가 0인 계정의 경우 트랜잭션은 새 계약을 작성한다. '0x0'은 원시 트랜잭션의 to 필드로 설정된다.
+
+  ```solidity
+  transaction = {
+    nonce: '0x0', 
+    gasLimit: '0x6acfc0', // 7000000
+    gasPrice: '0x4a817c800', // 20000000000
+    to: '0x0',
+    value: '0x0',
+    data: '0xfffff'
+  };
+  ```
+
+  
+
