@@ -31,6 +31,28 @@ Dapp 서비스
 
 # DeFI
 
+no banks instead there are pieces of code that run and act as a bank. they're open to anyone. they don't require you to trust them because they're literally a piece fo code running a program.
+
+decentralized finance is built on three main things. cryptography, blockchain technology, smart contracts.
+
+one of the reasons we can reliably lend and borrow with banks is because we usually put something down like 20percent collateral so that if we never pay back the full loan our government can come after us and throw us in jail or make us pay that money. in short there are legal consequences for not paying a loan back. well with crypto, this is a problem because one of the pros of crypto is anonymity you could put 20percent down and run away with the rest of the loan never be seen again. so we have to find a way to solve this. in fact with the use of smart contracts we can actually allow others to use our funds while still keeping custody of th m.
+
+```
+우리가 은행에서 안정적으로 돈을 빌리고 빌릴 수 있는 이유 중 하나는 우리가 일반적으로 20%의 담보를 담보로 하여 대출 전액을 갚지 않으면 정부가 우리를 뒤쫓아 감옥에 가거나 그 돈을 갚게 할 수 있기 때문입니다. 간단히 말해서 대출금을 상환하지 않으면 법적 결과가 발생합니다. 암호 화폐의 경우 암호 화폐의 장점 중 하나가 익명성이므로 20%를 낮추고 대출의 나머지 부분을 다시는 볼 수 없도록 할 수 있기 때문에 이것은 문제입니다. 그래서 우리는 이것을 해결할 방법을 찾아야 합니다. 실제로 스마트 계약을 사용하면 다른 사람들이 우리 자금을 계속 관리하면서 사용하도록 허용할 수 있습니다.
+```
+
+personA wants to earn interest on his coins while personB wants to borrow some coins. so personA goes to compound or ave which are two platforms that allow crypto borrowing and lending. and personA deposits his coins into a smart contract in turn what he gets are called C tokens or A tokens that are a representation of his original coin plus interest whenever he wants to he can just turn his A tokens or C tokens into that smart contract that was created by compounder ave and they spit out his original deposit plus interest. now the smart contract is created this way so that there's no human being that has to do the calculation or have to do the transaction. it's all automatic by code.
+
+```
+personA는 자신의 코인에 대한 이자를 얻고자 하고 personB는 코인을 빌리고 싶어합니다. 그래서 personA는 암호화폐 차용 및 대출을 허용하는 두 가지 플랫폼인 복합 또는 아베(AAVE)로 이동합니다. 그리고 personA는 자신의 코인을 스마트 계약에 차례로 예치합니다. 그가 얻는 것은 C 토큰 또는 A 토큰이라고 하며, 이는 그가 원할 때마다 자신의 A 토큰 또는 C 토큰을 스마트 계약으로 전환할 수 있습니다. 복합기 ave가 만들었으며 원래 예금에 이자를 더한 금액을 뱉어냈습니다. 이제 스마트 계약은 이러한 방식으로 생성되므로 계산을 하거나 거래를 해야 하는 사람이 없습니다. 코드에 의해 모두 자동입니다.
+```
+
+person B must do something called overcollateralize his loan. this means if he wants to borrow 100$ he must put up 120$ so that way if he runs away and never pays back his loan the smart contract is written in a way that it can pay person A their coins plus interest.
+
+```
+사람 B는 자신의 대출을 과잉 담보화(overcollateralize)라고 하는 일을 해야 합니다. 이것은 그가 100$를 빌리고 싶다면 120$를 넣어야 한다는 것을 의미합니다. 그래야 그가 도주하고 대출금을 갚지 않을 경우 스마트 계약이 A 사람에게 동전과 이자를 더한 금액을 지불할 수 있는 방식으로 작성됩니다.
+```
+
 ## 개요
 
 - 디파이(DeFi)란 탈중앙화 금융(Decentralized Finance)의 약자. 탈중화된 분산금융 혹은 분산재정을 의미
