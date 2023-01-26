@@ -292,7 +292,7 @@ concept that is available in most modern languages such as dart, rust, swift ...
   final lengthOfNames = names.length;
   ```
 
-  ![image-20230126105505107](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230126105505107.png)
+  ![image-20230126105505107](https://user-images.githubusercontent.com/77393619/214823429-5b6464c8-e2a4-497d-a213-f30f47c98608.png)
 
   ```dart
   List<String>? names = null;
