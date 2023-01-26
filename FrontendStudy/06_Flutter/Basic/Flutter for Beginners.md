@@ -222,5 +222,122 @@
   };
   person['lastName'] = 'Kim';
   ```
+## 5. Null-safety
 
+concept that is available in most modern languages such as dart, rust, swift ... it is better to try to utilize it so that we can write better code.
+
+- null value
+
+  https://dart.dev/null-safety
+
+  the concept of the absence of a value. variable can sometimes during its lifetime contain nothing. this nothingness is the concept that is know as null.
+
+- nullable
+
+  use the question mark after the data type such as `String?`
+
+  ```dart
+  const String? name = null;
+  String? name = null;
+  // only nullable list
+  List<String>? names = ['foo', 'bar'];
+  // nullable list & nullable values
+  List<String?>? names = ['foo', 'bar', null];
+  ```
+
+  it means that variable can sometimes contain null
+
+- cherry-picking non-null values
+
+  use the `??`(null aware operator) mark
+
+  ```dart
+  const String? firstName = null;
+  const String? middleName = 'bar';
+  const String? lastName = 'baz';
+  
+  // old way
+  if (firstName != null) {
+      print("first name is the first non-null value")
+  } else if (middleName != null) {
+      ...
+  } else if (lastName != null) {
+      ...
+  }
+  
+  const firstNonNullValue = firstName ?? middleName ?? lastName;
+  ```
+
+  `??` : if the value on my left side is null I'm gonna pick the value on my right. but the left one is not null I'll pick you. 
+
+- null-aware assignment operator
+
+  use `??=` mark
+
+  ```dart
+  double number = 2.0;
+  number = null;
+  number = 3.0;
+  print(number); // 3.0
+  ```
+
+  if the value on the left side is null then change the value by the right side
+
+- conditional invocation
+
+  use the `?.` syntax to conditionally invoke a method or property
+
+  ```dart
+  List<String>? names = null;
+  final lengthOfNames = names.length;
+  ```
+
+  ![image-20230126105505107](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230126105505107.png)
+
+  ```dart
+  List<String>? names = null;
+  // old way
+  final int lengthOfNames;
+  if (names != null) {
+      final lengthOfNames = names.length;
+  } else {
+      lengthOfNames = 0;
+  }
+  
+  // better way(?.)
+  // if the names List is present then grab its length. otherwise take the value of zero.
+  final lengthOfNames = names?.length ?? 0;
+  ```
+
+## 6. Dart enumeration and objects
+
+- Enumerations
+
+  Named list of related items
+
+- switch statement
+
+- classes
+
+  grouping of various functionalities into one packageable piece of data. grouping of related things is done with a class.
+
+  ```dart
+  class PascalCasePerson {
+      void run() {
+          print('running');
+      }
+      void breathe() {
+          print('breathing');
+      }
+  }
+  
+  final person = PascalCasePerson();
+  person.run();
+  ```
+
+  - instantiation
+
+    instances are objects and objects are created from classes. every class can be instantiated meaning that the dart compiler will create a copy of that exact class with its data its functions its properties and give that copy to you
+
+  
   
