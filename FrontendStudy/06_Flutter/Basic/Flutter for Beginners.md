@@ -338,6 +338,153 @@ concept that is available in most modern languages such as dart, rust, swift ...
   - instantiation
 
     instances are objects and objects are created from classes. every class can be instantiated meaning that the dart compiler will create a copy of that exact class with its data its functions its properties and give that copy to you
+    
+- Inheritance and subclassing
 
+- abstract classes
+
+  use the `abstract` modifier to define an abstract class - a class that can't be instantiated. Abstract classes are **useful for defining interfaces**, often with some implementation.
+
+  ```dart
+  abstract class ... {
+      
+  }
+  ```
+
+- factory constructors
+
+  can return instances that are not of the same class
+
+  it's the speed at which you can create an instance of a class that the factory constructor shines at
+
+  ```dart
+  class Cat {
+      final String name;
+      Cat(this.name);
+      factory Cat.meow() {
+          return Cat('meow');
+      }
+  }
+  
+  final cat = Cat.meow();
+  ```
+
+- custom operators
+
+  you can define custom operators on your own classes in Dart. you can override particular operator at the language level only for your class.
+
+  an object internally already defines an operator called `==` that returns boolean.
+
+  ```dart
+  class Cat {
+      @override 
+      bool operator ==(covariant Cat other) => other.name == name;
+  
+      @override
+      int get hashCode => name.hashCode;
+  }
+  ```
+
+  covariant tells dart that forget what the super class which is object defines as the parameter type for this parameter.
+
+  :bulb: hashcode
+
+  hashcode is a special number or a special identifier that you assign to your instance of classes 
+
+## 7. Advanced Dart
+
+- extensions
+
+  adding logic to existing classes. extend or add functionality to an existing class.
+
+  ```dart
+  class Person {
+      final String firstName;
+      final String lastName;
+      Person(this.firstName, this.lastName);
+  }
+  
+  extension FullName on Person {
+      String get fullName => '$firstName $lastName';
+  }
+  ```
+
+  you're extending class `Cat` with a new functionality that is called `Run`. this is not the name of the function itself it's just the name of your extension. and you don't have to really know about the name right now so much it's just when you can go and become more advanced in dart and you for instance create libraries for yourself and people who use your libraries then they can in basically include specific extensions that you've included in your library in their code or they can exclude them.
+
+  just know that it's just a name on the extensions so it doesn't mean so much right now. extensions are great tool for you to use if you believe that there is a functionality that you're adding to an existing class which it doesn't really belong in that class itself but it may for instance belong in the current source file that you're working with.
+
+- Future
+
+  Data to be returned in the future, as its name suggets.
+
+  :bulb: synchronous vs. asynchronous
+
+  synchronous task is a task that happens when you ask for it and it returns with the data that you ask for immediately. asynchronous task is basically a task that whose result are not returned immediately. 
+
+- async / await
+
+  mechanism for controlling asynchronous flow of data
+
+- Stream
+
+  an asynchronous "pipe" of data
+
+  ```dart
+  Stream<String> getName() {
+    return Stream.value('foo');
+  }
+  
+  void test() async {
+    await for (final value in getName()) {
+        print(value);
+    }
+  }
+  ```
+
+- generator
+
+  for generating "iterables", marked with sync* and async*
+
+  ```dart
+  Iterable<int> getOneTwoThree() sync* {
+      yield 1;
+      yield 2;
+      yield 3;
+  }
+  for (final value in getOneTwoThree()) {
+      print(value); // 1 2
+      if (value == 2) break;
+  }
+  ```
+
+  `sync*` it is a generator function that returns a list of things but it calculates that list of things asynchronously. `async*` is equivalent of the `sync*` it does the same thing but it returns Stream which means it's asynchronously calculating its result.
+
+  :bulb: List vs. Iterable(lazy collection)
+
+  list in dart is an already packaged list it means that it's as if like you go to a supermarket and then you buy ready to go food that's already packaged 30 packs of that. however Iterable is like restaurant. it listens to orders of its customers and then it generates the food based on the orders.
+
+  Iterable is a list of like things that gets calculated on the go on the fly.
+
+- generics
+
+  to avoid re-writing similar code
+
+  ```dart
+  class PairOfIntegers {
+      final int value1;
+      final int value2;
+      PairOfIntegers(this.value1, this.value2);
+  }
+  
+  class Pair<A, B> {
+      final A value1;
+      final B value2;
+      Pair(this.value1, this.value2);
+  }
+  
+  final names = Pari('foo', 'bar');
+  ```
+
+  
   
   
