@@ -517,13 +517,13 @@ concept that is available in most modern languages such as dart, rust, swift ...
 
   flutter creates the skeleton or the scaffold of your flutter project but pretty much everything necessary for you to be able to run that project
 
-  ![image-20230130103921433](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130103921433.png)
+  ![image-20230130103921433](https://user-images.githubusercontent.com/77393619/215477037-76577f9b-d51a-4378-9639-62011f21f61b.png)
 
   flutter outputs a native binary on your phone a native fat binary basically for your ios application and it just puts one view on the screen and then it graphically renders all its contents using metal.
 
 - ios
 
-  ![image-20230130110123719](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130110123719.png)
+  ![image-20230130110123719](https://user-images.githubusercontent.com/77393619/215477130-ea1c4601-9311-46cf-845a-9b094c8da9f4.png)
 
   there are various tool available for ios developers to be able to bring in dependencies for web for instance if you're writing a node application you will just use npm(node package manager) if you're using swift you will probably just bring in for instance spm(swift package manager) or cocoapods. or android you will use gradle for bringing in external dependencies
 
@@ -533,7 +533,7 @@ concept that is available in most modern languages such as dart, rust, swift ...
 
 - test
 
-  ![image-20230130111029621](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111029621.png)
+  ![image-20230130111029621](https://user-images.githubusercontent.com/77393619/215477157-1ce42b09-987f-49dc-8bb2-a45da58dc34b.png)
 
   test folder is where you create your tests. automatically run a series of tests against their own code to make sure that everything is functioning as the programmer intended.
 
@@ -541,7 +541,7 @@ concept that is available in most modern languages such as dart, rust, swift ...
 
 - android
 
-  ![image-20230130111243943](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111243943.png)
+  ![image-20230130111243943](https://user-images.githubusercontent.com/77393619/215477199-b0005891-3f93-4fdd-988b-e55482364f6a.png)
 
   it is putting all the necessary files and folders that is required for your android project to be hosting your flutter application. so just know that flutter kind of is a series of tools is like a mobile kind it's like a sdk that gets injected into these native applications and natively also renders its content. 
 
@@ -549,23 +549,23 @@ concept that is available in most modern languages such as dart, rust, swift ...
 
 - web
 
-  ![image-20230130111806053](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111806053.png)
+  ![image-20230130111806053](https://user-images.githubusercontent.com/77393619/215477243-84c6e343-bf14-4144-96ed-95a8589a1124.png)
 
 - analysis
 
-  ![image-20230130111934035](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111934035.png)
+  ![image-20230130111934035](https://user-images.githubusercontent.com/77393619/215477277-a553411f-b3aa-4aa6-9e0f-a1aff08fde9c.png)
 
   think of analysis as a way for a flutter to be able to have a look at the code that you write. it allows you to basically define the roles that make sense for your project.
 
 - **pubspec.yaml**
 
-  ![image-20230130112237450](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130112237450.png)
+  ![image-20230130112237450](https://user-images.githubusercontent.com/77393619/215477314-83bbe805-cb81-4604-a26b-81ca9a64093d.png)
 
   this is a file that you'll need to know about flutter and the basic structure that it creates for you is that there are tons of documentations(information provided by the developers who created the tool for you in order to help you get better at that tool)
 
   - version
 
-    ![image-20230130142502549](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130142502549.png)
+    ![image-20230130142502549](https://user-images.githubusercontent.com/77393619/215477341-5e9382fc-baed-4341-8991-1f4d92d9fba2.png)
 
     major, minor, build number
 
@@ -575,7 +575,7 @@ concept that is available in most modern languages such as dart, rust, swift ...
     $ flutter --version
     ```
 
-    ![image-20230130143121308](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130143121308.png)
+    ![image-20230130143121308](https://user-images.githubusercontent.com/77393619/215477379-f38dcfdb-39cb-4e2a-864a-344c240edf33.png)
 
     if you share your source code with some other developer if they get your source code and they want to for instance be able to test this application on a simulator or emulator on a real device then they are required to have flutter sdk version this or less than this
 
@@ -593,7 +593,7 @@ concept that is available in most modern languages such as dart, rust, swift ...
 
   - firebase
 
-  ![image-20230130144717623](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130144717623.png)
+  ![image-20230130144717623](https://user-images.githubusercontent.com/77393619/215477405-9394dbf4-6b8f-4701-8caf-bf3b0ac2a6d1.png)
 
   ```bash
   $ flutter pub add firebase_core
