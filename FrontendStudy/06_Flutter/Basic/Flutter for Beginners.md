@@ -484,7 +484,185 @@ concept that is available in most modern languages such as dart, rust, swift ...
   
   final names = Pari('foo', 'bar');
   ```
+## 8. Basic Project Setup
 
+- create project
+
+  ```bash
+  $ flutter create --org xxx.domain appname
+  ex) $ flutter create --org se.pixelity mynotes
+  ```
+
+  `--org` : create app as an organization
+
+  `xxx.domain` : domain name like `se.pixelity`. we need to think this is like reverse domain identifer. so this domain name will be `pixelity.se` **your org needs to be the reverse of that. so reverse identifier.**(만약 원하는 도메인 이름이 `hello.com`일 경우 프로젝트 생성시에는 `--org com.hello`로 작성해준다. 도메인이 없을 경우에는 우선 원하는대로 작성해주자.)
+
+  `appname`
+
+  the main properties of flutter project is identifier. identifier is what **defines that applications as unique as on the app store **where ios users and ipad os users can download applications. so identifiers are kind of like **reverse domain identifier**. so if your website is `foobar.com` and your application is callbed `baz` then your reverse domain identifier for your application will become `dot foobar.baz`.
+
+  it's kind of like you take your domain name and reverse it so if `foobar.com` becomes `com.foobar` and then you put dots after that and then you put your actual application name.
+
+  so these identifiers need to be unique. if a developer on the ios app store or google play store is already gone and registered the reverse basically that item identifier.com.foobar.bass for any of their applications so they said okay here's my application called image gallery but it has a completely random identifier of `com.foobar.baz`.
+
+  then you as a new developer even if you want to do the same funky deployment to the app store you can't register that name anymore because it is already taken. so think of the identifier of your project as what is gonna carry on from the start of where you create your project all the way through to the app stores.
+
+- upgrade flutter
+
+  ```bash
+  $ flutter upgrade
+  ```
+
+- quick look around
+
+  flutter creates the skeleton or the scaffold of your flutter project but pretty much everything necessary for you to be able to run that project
+
+  ![image-20230130103921433](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130103921433.png)
+
+  flutter outputs a native binary on your phone a native fat binary basically for your ios application and it just puts one view on the screen and then it graphically renders all its contents using metal.
+
+- ios
+
+  ![image-20230130110123719](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130110123719.png)
+
+  there are various tool available for ios developers to be able to bring in dependencies for web for instance if you're writing a node application you will just use npm(node package manager) if you're using swift you will probably just bring in for instance spm(swift package manager) or cocoapods. or android you will use gradle for bringing in external dependencies
+
+  every ios or android or web application can bring with itself dependencies. and dependency is a way for your application to bring in code from other people in order to be able to achieve special functionalities
+
+  flutter sits on top of these(ios, android, web) so it can control all the small bits and pieces for these platforms to be able to be packed inside one flutter application which sits on top. and all these different platforms down here can have their own dependency management so the dependency managements kind of sit under one layer under so flutter then talks with these dependency managers and says okay you need to install this dependency for me to be able to work.
+
+- test
+
+  ![image-20230130111029621](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111029621.png)
+
+  test folder is where you create your tests. automatically run a series of tests against their own code to make sure that everything is functioning as the programmer intended.
+
+  integration tests, widget tests, unit tests etc inside.
+
+- android
+
+  ![image-20230130111243943](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111243943.png)
+
+  it is putting all the necessary files and folders that is required for your android project to be hosting your flutter application. so just know that flutter kind of is a series of tools is like a mobile kind it's like a sdk that gets injected into these native applications and natively also renders its content. 
+
+  just like we had a host ios application, you will alose have an android folder which contains all the bits and pieces required for your application to be run natively on android phones and tablet. 
+
+- web
+
+  ![image-20230130111806053](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111806053.png)
+
+- analysis
+
+  ![image-20230130111934035](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130111934035.png)
+
+  think of analysis as a way for a flutter to be able to have a look at the code that you write. it allows you to basically define the roles that make sense for your project.
+
+- **pubspec.yaml**
+
+  ![image-20230130112237450](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130112237450.png)
+
+  this is a file that you'll need to know about flutter and the basic structure that it creates for you is that there are tons of documentations(information provided by the developers who created the tool for you in order to help you get better at that tool)
+
+  - version
+
+    ![image-20230130142502549](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130142502549.png)
+
+    major, minor, build number
+
+  - sdk(software development kit)
+
+    ```bash
+    $ flutter --version
+    ```
+
+    ![image-20230130143121308](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130143121308.png)
+
+    if you share your source code with some other developer if they get your source code and they want to for instance be able to test this application on a simulator or emulator on a real device then they are required to have flutter sdk version this or less than this
+
+  - dependencies
+
+    ways for you as a software developer to bring in code that other people have written in order to make your application function better
+
+  - search for dependencies : pub.dev
+
+  - dev_dependencies
+
+    that will bring into your project which are useful only under development. normal dependencies will get linked to your project and then they will be shipped with your application whereas dev dependencies are only dependencies that under the development time you will use in order to make your sortware better
+
+- adding our dependencies
+
+  - firebase
+
+  ![image-20230130144717623](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230130144717623.png)
+
+  ```bash
+  $ flutter pub add firebase_core
+  $ flutter pub add firebase_auth
+  $ flutter pub add cloud_firestore
+  $ flutter pub add firebase_analytics
+  ```
+
+  firebase is a computer in the cloud just think of that is written by google so you control it with simple commands on your computer but it controls your data so your client your flutter application can connect to it and grab the data and read the data and manipulate the data on the client side.
+
+  we've brought in four dependencies.
+
+  `firebase_core` : the kernel the main important parts of firebase which is what we're going to use as our server where all the nodes for all users are going to sit
+
+  `firebase_auth` : for authentication is where our users will be able to register log into our application and log out and also get email confirmations to send to their emails in order to be able to verify the account
+
+  `cloud_firestore` : is used for when we actually store a logged in users notes in the firebase backend
+
+  `firebase_analytics` : if you use firebase analytics when you basically set up your firebase backend you will get some free analytics in for instance which screen did the user go to which button did they press and you can have a look at these analytics.
+
+## 9. iOS App Setup
+
+- we installed our Flutter app on a real iOS device
+
+- Developer account
+
+  in order to release the app for iOS and iPadOS you need a development account
+
+- profiles cetificates appids ...(5:51:00)
+
+- Certificates and Profiles
+
+  certificates identifies you, profiles identifies your app.
+
+- account walkthrough
+
+  https://developer.apple.com/acocunt
+
+- ~6:59:30
+
+## 10. Android App Setup
+
+setting up for running my application on a real phone or a real device
+
+- android emulator
+
+  emulator is quite different from a simulator in that an emulator as its name indicates it tries to emulate everything about the operating system and the device. it's a lot closer to the actual physical device
+
+- Scrcpy
+
+  https://github.com/Genymobile/scrcpy
+
+  we will be using scrcpy to mirror a real Android device on the screen. it's open source and free.
+
+  안드로이드 디바이스 화면을 미러링하기위해서 Scrcpy라는 앱을 받자. scrcpy를 사용하면 컴퓨터에서의 작용이 실제 디바이스에 적용된다는 장점이 있다.
+
+- ADB(Android Debug Bridge)
+
+  `brew install --cask android-platform-tools`
+
+  Scrcpy설치전에 먼저 ADB를 설치해줘야한다.
+
+  it actually stands for Android  debugger or something is great tool if you want to for instance be able to talk with your android telephone all from the command line so you can send it a message. so you basically send commands to your android telephone or tablet through your terminal.
+
+  having adb install your computer then you can actually install scrcpy which uses adb in order to talk to your telephone and send commands to it and recieve images from it etc.
+
+- USB Debugging(07:11:50)
+
+  you will need to enable USB debugging to mirror your screen
   
   
   
