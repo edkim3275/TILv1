@@ -36,7 +36,7 @@
 
     https://developer.apple.com/programs/enroll/
 
-    ![image-20230125125909567](./Flutter for Beginners.assets/image-20230125125909567.png)
+    ![image-20230125125909567](https://user-images.githubusercontent.com/77393619/215478336-4909bdb9-3067-4c34-a488-a654012c985f.png)
 
 - iOS - D.U.N.S Number for organizations
 
@@ -66,7 +66,7 @@
 
   so if you're trying to sell apps on the app store then you will have to fill in some forms with the u.s tax offices(Internal Revenue Service, IRS). have to send the forms to them then they will come back with some sort of identifier to you and then you will need to use that identifier on apple's website in order to basically say that yeah i know I'm selling stuff in the u.s I'm selling stuff in japan ... but I'm gonna pay taxes for them here in my country and that's what the forms says.
 
-  ![image-20230125133002361](./Flutter for Beginners.assets/image-20230125133002361.png)
+  ![image-20230125133002361](https://user-images.githubusercontent.com/77393619/215478363-40b94db3-e34c-4032-bf8b-5538efca05a4.png)
 
 ### Android
 
@@ -78,7 +78,7 @@
 
   https://play.google.com/console/u/O/signup
 
-  ![image-20230125133411310](./Flutter for Beginners.assets/image-20230125133411310.png)
+  ![image-20230125133411310](https://user-images.githubusercontent.com/77393619/215478385-f4e2fa6f-253f-4f45-9377-26af36480e72.png)
 
   - when we actually submit our apps to app store and play store. there are a few key data points that you have to provide to both stores. one is a **privacy policy url** and the other one is a **support url**. and there are also two other emails you have to provide. the emails the first one is the **support email** and the other one is a **contact email**. and if you're if you're setting up a business account then i really suggest that you actually set up a website
   - developer account를 생성하기위해서 웬만하면 자신(회사)만의 웹사이트를 보유한 상태에서 생성하는 것이 좋다.
