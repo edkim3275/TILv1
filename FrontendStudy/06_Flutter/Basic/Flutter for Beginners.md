@@ -664,5 +664,74 @@ setting up for running my application on a real phone or a real device
 
   you will need to enable USB debugging to mirror your screen
   
+- Android Mirroring
+
+- Disable screen sleeping
+
+  연동되어있는 디바이스가 lock되면 개발하는데 문제가생길 수 있으므로 disable시켜준다.
+
+  You can disable the feature so you don't have to turn the screen on all the time
+
+  screen > system > developer options > stay awake 활성화
+
+## 11. Firebase Backend Setup
+
+setting up our project on firebase for our backend(7:31:50)
+
+- firebase
+
+  it is kind of like severless so it is a server without you.
+
+  simplicity so that we can get the backend working up and running without so much work
+
+- FlutterFire initialization
+
+  https://firebase:flutter.dev/docs/overview
+
+- install FlutterFire CLI
+
+  ```bash
+  # Install the CLI if not already done so
+  dart pub global activate flutterfire_cli
+  
+  # Run the `configure` command, select a Firebase project and platforms
+  flutterfire configure
+  ```
+
+  ![image-20230131152554322](https://user-images.githubusercontent.com/77393619/215763386-ea646fb8-b064-431c-bdf4-ab3f8030e1cd.png)
+
+  - make sure the path is updated(PATH를 지정해주어야만 global에서 flutterfire 명령어 사용이 가능해진다. 리눅스의 경우 `.bashrc`파일에 추가해주면 됨.)
+
+    ![image-20230131153031970](https://user-images.githubusercontent.com/77393619/215763422-c219b58e-082a-4141-8cb9-306dea91ad9f.png)
+
+    `vim ~/.zshrc => export PATH ="$PATH":"$HOME/.pub-cache/bin"`
+
+- what is Firebase CLI
+
+  a CLI to help us interact with Firebase right from our terminal.
+
+- install or update Firebase CLI
+
+  you need to have a look at this documentation on how you can install the firebase CLI on your computer whether you're using mac, linux, windows...
+
+  https://firebase.google.com/docs/cli#install-cli-mac-linux or `curl -sL firebase.tools | upgrade-true bash`
+
+- Login / Logout
+
+  you need to log in into your account using that firebase cli
+
+  firebase integrate를 위해서 firebase console이라고 불리는 firebase project를 생성해야한다.
+
+  this project is pretty much the configuration of your firebase backend on firebase's console on their website so you need to configure a backend so what we need to do here is now before we can actually configure it back in your terminal you need to tell firebase what user you have. because firebase projects are linked to your google accounts.
+
+  in order for our firebase cli to understand where it needs to create the project you need to tell it to log in with an account.
+
+  `firebase login`
+
+  ![image-20230131155258957](https://user-images.githubusercontent.com/77393619/215763460-fcf06340-6142-4cd7-ad58-f405103a52fe.png)
+
+  `firebase logout`
+
+
   
   
