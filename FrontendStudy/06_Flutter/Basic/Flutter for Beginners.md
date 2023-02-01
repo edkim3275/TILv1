@@ -856,5 +856,156 @@ setting up our project on firebase for our backend(7:31:50)
 
   you need to kind of try to stick to stateless widget(stateless 위젯을 고수하려고 노력해야 합니다. 08:22:30)
 
+- login button
+
+  Button on home page in the center to register
+
+  ```dart
+  class HomePage extends StatelessWidget {
+      const HomePage({Key? key}) : super(key: key);
+      @override
+      Widget build(BiildContext context) {
+          return Scaffold(
+          	appBar: AppBar(
+              	title: const Text('Register'),
+              ),
+              body: Center(
+                  child: TextButton(
+                      onPressed: () {}, 
+                      child: const Text('Register')
+                  ),
+              ),
+          );
+      }
+  }
+  ```
+
+   you can go and wrap your widgets with other widgets
+
+- Login upon button press
+
+  Change onPressed to async
+
+  버튼이 눌리면, 유저를 firebase에 등록해야함(asynchronous한 작업)
+
+  ```dart
+  TextButton(
+  	onPressed: () async {
+          ...
+      }
+  )
+  ```
+
+- Firebase sign in methods
+
+  https://firebase.flutter.dev/docs/auth/usage/#other-sign-in-methods
+
+  firebase allows you to enable various sign-in methods for your users.
+
+  ![image-20230201212714073](https://user-images.githubusercontent.com/77393619/216047785-5e89031f-88e7-4248-ae06-32f1913b1301.png)
+
+  fierbase has a concept of anonymous users.
+
+- Column with 2 text field
+
+  Let's add username and password text fields
+
+  ```dart
+  class HomePage extends StatelessWidget {
+      const HomePage({Key? key}) : super(key: key);
+      @override
+      Widget build(BiildContext context) {
+          return Scaffold(
+          	appBar: AppBar(
+              	title: const Text('Register'),
+              ),
+              body: Column(
+                  children: [
+                      TextField(),
+                      TextField(),
+                      TextButton(
+                          onPressed: () {}, 
+                          child: const Text('Register')
+                  	),
+                  ],
+              ),
+          );
+      }
+  }
+  ```
+
+  ![image-20230201213213833](https://user-images.githubusercontent.com/77393619/216047807-928ff6e7-32d2-49b6-b3fd-2a54658d1dd3.png)
+
+  you need to pass information from this text field. and the way to do that is using something called a text controller or a text editing controller is kind of like a proxy.
+
+- Stateless -> stateful(convert to stateful widget)
+
+  we need to grab the text from our controllers
+
+  ```dart
+  class _HomePageState extends State<HomePage> {
+      ...
+  }
+  ```
+
+- TextEditingController
+
+  We need 2 of them for email and password text fields
+
+  ```dart
+  class _HomePageState extends State<HomePage> {
+      
+      late final TextEditingController _email;
+      late final TextEditingController _password;
+      
+      @override
+      void initState() {
+          _email = TextEditingController();
+          _password = TextEditingController();
+          super.initState();
+      }
+      
+      @override
+      void dispose() {
+          _email.dispose();
+          _password.dispose();
+          super.dispose();
+      }
+      
+      @override
+      Widget build(BiildContext context) {
+          return Scaffold(
+          	appBar: AppBar(
+              	title: const Text('Register'),
+              ),
+              body: Column(
+                  children: [
+                      TextField(
+                      	controller: _email,
+                      ),
+                      TextField(
+                      	controller: _password,
+                      ),
+                      TextButton(
+                          onPressed: () {}, 
+                          child: const Text('Register')
+                  	),
+                  ],
+              ),
+          );
+      }
+  }
+  ```
+
+  late is keyword in dart that tells your program that although this variable has no value right now but I promise to assign a value to it before it is used. so it's kind of like a contract.
+
+- stateful widget
+
+  you need to also know something about stateful widgets. it will have two great functions one is called **init state** and the other one called is **disposed**.
+
+  init state will be called by flutter automatically when it creates your home page.
+
+  now whenever this homepage then dies and goes out of the memory or it's trying to go out the memory it will also get a function called dispose. (08:38:20)
+
   
   
