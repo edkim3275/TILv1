@@ -642,7 +642,7 @@ setting up for running my application on a real phone or a real device
 
   emulator is quite different from a simulator in that an emulator as its name indicates it tries to emulate everything about the operating system and the device. it's a lot closer to the actual physical device
 
-- Scrcpy
+- **Scrcpy**
 
   https://github.com/Genymobile/scrcpy
 
@@ -650,20 +650,67 @@ setting up for running my application on a real phone or a real device
 
   안드로이드 디바이스 화면을 미러링하기위해서 Scrcpy라는 앱을 받자. scrcpy를 사용하면 컴퓨터에서의 작용이 실제 디바이스에 적용된다는 장점이 있다.
 
-- ADB(Android Debug Bridge)
+  your computer will be able to mirror your android phone on your computer's screen. scrcpy allows you to interact with your phone from your computer screen.(예를들어, 컴퓨터화면상에서 휴대폰 버튼을 클릭하면 실제 디바이스의 버튼을 누르는 효과를 볼 수 있다.)
+
+- **ADB(Android Debug Bridge)**
 
   `brew install --cask android-platform-tools`
 
-  Scrcpy설치전에 먼저 ADB를 설치해줘야한다.
+  Scrcpy설치전에 먼저 ADB를 설치해줘야한다.(Scrcpy가 디바이스에 명령을 전달하기 위해서 ADB를 사용하기 때문.) `android-platfrom-tools`내에 ADB가 존재하기 때문에 `android-platfrom-tools`를 설치해주면된다. 
 
-  it actually stands for Android  debugger or something is great tool if you want to for instance be able to talk with your android telephone all from the command line so you can send it a message. so you basically send commands to your android telephone or tablet through your terminal.
+  it actually stands for Android  debugger or something is great tool if you want to for instance be able to talk with your android telephone all from the command line so you can send it a message. so you basically **send commands to your android telephone or tablet through your terminal.**
 
   having adb install your computer then you can actually install scrcpy which uses adb in order to talk to your telephone and send commands to it and recieve images from it etc.
 
+  ADB를 설치했다면 Scrcpy를 설치해주자. https://github.com/Genymobile/scrcpy
+
 - USB Debugging(07:11:50)
 
+  scrcpy를 실행시키기 전에 안드로이드 디바이스를 우선 컴퓨터와 연결시켜줘야한다.(개발자모드)
+
   you will need to enable USB debugging to mirror your screen
-  
+
+  `scrcpy`를 실행하면 연결된 디바이스를 확인할 수 있다.
+
+  ![image-20230201103633896](https://user-images.githubusercontent.com/77393619/216038189-6d5538d5-6fc3-4729-b593-6684a3970e6b.png)
+
+  :bug: `adb server version (41) doesn't match this client (39); killing...`에러가 확인되어 [검색](https://forum.qt.io/topic/123945/qtcreator-wifi-debugging-error-adb-server-version-41-doesn-t-match-this-client-39-killing/2)후 아래와같이 진행
+
+  ```
+  adb kill-server
+  sudo cp ~/Android/Sdk/platform-tools/adb /usr/bin/adb
+  sudo chmod +x /usr/bin/adb
+  adb start-server
+  ```
+
+  하지만 여전히 오류발생하여 좀 더 [검색](https://github.com/Genymobile/scrcpy/issues/527)진행
+
+  ![image-20230201104846178](https://user-images.githubusercontent.com/77393619/216038226-55d41cca-9032-4b13-8361-5955939c72f4.png)
+
+  ```
+  여러 adb 버전이 실행 중입니다. 시스템의 무언가가 adb 41로 서버를 시작합니다. 그리고 scrcpy는 adb 39를 사용합니다. adb 41 바이너리가 있는 위치를 찾고 강제로 실행할 수 있습니다.
+  ```
+
+  adb version을 확인해보니 41로 확인된다
+
+  ![image-20230201104425385](https://user-images.githubusercontent.com/77393619/216038260-2f62ad81-8bdf-4d47-a35b-371cd67b973d.png)
+
+  `ADB=/path/to/some/adb scrcpy`에 대한 추가설명
+
+  ![image-20230201105039074](https://user-images.githubusercontent.com/77393619/216038286-2cc515f8-90c4-4c61-85d0-c44aa1a949e4.png)
+
+  adb 경로
+
+  ![image-20230201105629037](https://user-images.githubusercontent.com/77393619/216038331-f5fd2268-3d32-48fd-8869-de7e74132f1a.png)
+
+  시스템의 서로 다른 ADB 버전으로 인해 발생하는 문제. 하나는 `/usr/bin`에 있고, 다른 하나는 sdk 도구 폴더에 있으므로 `/usr/bin`에 존재하는 adb를 삭제하고 sdk platform-tools에 존재하는 adb로 바꾼다.
+
+  아직해결이 안됨.. 찾아본 사이트만 우선 남겨둠
+
+  - https://github.com/Genymobile/scrcpy/blob/master/FAQ.md#conflicts-between-adb-versions
+
+  - https://github.com/Genymobile/scrcpy/issues/527
+
 - Android Mirroring
 
 - Disable screen sleeping
@@ -731,7 +778,83 @@ setting up our project on firebase for our backend(7:31:50)
   ![image-20230131155258957](https://user-images.githubusercontent.com/77393619/215763460-fcf06340-6142-4cd7-ad58-f405103a52fe.png)
 
   `firebase logout`
+  
+- Configuring our backend
 
+  need to configure a firebase project. we do that with the flutter fire cli(which we installed in using command `dart pub global activate flutterfire_cli`)
+
+  - issue the flutter fire configure command
+
+    `flutterfire configure`
+
+    ![image-20230201082331827](https://user-images.githubusercontent.com/77393619/216038355-13d42b08-9637-4d67-886a-f11f721d023e.png)
+
+    위 명령어 사용전 firebase console 페이지로 이동하여 프로젝트를 생성해야한다.
+
+    globally하게 동일한 아이디로 이미 프로젝트가 만들어져있다면 아래와같은 에러가 발생한다.
+
+    ![image-20230201082457525](https://user-images.githubusercontent.com/77393619/216038378-e6d26a45-63a1-495a-9acd-4885abf20bd7.png)
+
+    순차적으로 진행시
+
+    ![image-20230201083224525](https://user-images.githubusercontent.com/77393619/216038400-ec8c6391-e27f-4850-bad9-d862acc81574.png)
+
+    안드로이드, iOS앱의 identifier확인이 가능하다.
+
+    ```
+    android   1:1060967167971:android:fd1d4ef3faf3f8529852d6
+    ios       1:1060967167971:ios:338382e9e8b83ec79852d6
+    ```
+
+    ![image-20230201083519795](https://user-images.githubusercontent.com/77393619/216038440-ee28f5e0-7f66-46c6-a924-14c928f3be95.png)
+
+- App IDs
+
+  make sure these identifiers are correct and that the bundle identifier that we provided to the cli is also placed in the configuration file correctly.
+
+  - identifier 검색시(`firebase_options.dart`)
+
+    ![image-20230201083851276](https://user-images.githubusercontent.com/77393619/216038453-ba5cbe5f-6202-43ee-b8a4-16df4f5d63fd.png)
+
+    iOS identifier 혹은 안드로이드 identifier검색해보면 위처럼 검색결과를 확인할 수 있는데, this is where android and ios are configured
+
+    ![image-20230201084138409](/home/myounjunkim/TIL/Flutter for Beginners.assets/image-20230201084138409.png)
+
+    위의 정보들은 프로젝트참여자들끼리만 공유되어야함.
+
+## 12. Basic register user screen
+
+- 8:01:30 ~
+
+- hot reload vs. hot restart
+
+  actually looking the changes that we don't have to press any publish button.
+
+  보통의 경우 hot reload가 작동하지만, changes가 so drastic하거나 너무 클경우 hot restart를 해야한다. rebuild your application(hot restart)
+
+- MaterialApp inside runApp & HomePage widget
+
+- Stateless and Stateful
+
+  what kind of widget do we need?
+
+  Stateful widget can keep that information so it has state and it keeps hold of that data. and upon this data being changed it can redraw itself. so stateful widget is something that is on the screen and it can contain data upon who's changing it can redraw itself.
+
+  stateless widget wouldn't necessarily be able to redraw itself to contain any mutable data. it means even stateless widgets can be redrawn depending on what you're trying to do but they **cannot contain mutable variables**. it can only contain read-only data.
+
+  정리하자면, stateful widget은 유저 상호작용으로 변동될 수 있는 데이터를 가질 수 있는 위젯이고, stateless widget은 변동될 수 없는 조회만 가능한 데이터를 가질 수 있는 위젯이다.
+
+- Scaffold
+
+  we need a Scaffold inside our HomePage widget
+
+  Scaffold it itself is a stateful widget and also appBar it itself is a stateful widget.
+
+  so the main widget we're returning from our build function it should return a widget.
+
+  Text widget which is stateless widget it means internally its state can't change and it doesn't have any mutable variables.
+
+  you need to kind of try to stick to stateless widget(stateless 위젯을 고수하려고 노력해야 합니다. 08:22:30)
 
   
   
