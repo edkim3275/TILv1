@@ -999,13 +999,596 @@ setting up our project on firebase for our backend(7:31:50)
 
   late is keyword in dart that tells your program that although this variable has no value right now but I promise to assign a value to it before it is used. so it's kind of like a contract.
 
-- stateful widget
+- stateful widget(08:38:20)
 
   you need to also know something about stateful widgets. it will have two great functions one is called **init state** and the other one called is **disposed**.
 
   init state will be called by flutter automatically when it creates your home page.
 
-  now whenever this homepage then dies and goes out of the memory or it's trying to go out the memory it will also get a function called dispose. (08:38:20)
+  now whenever this homepage then dies and goes out of the memory or it's trying to go out the memory it will also get a function called dispose.
+
+- Hint on text fields
+
+  To help the user understand what the text fields are for.
+
+  hint will automatically be removed as soon as the user types at least one character on that text field
+
+  ![image-20230202013347062](https://user-images.githubusercontent.com/77393619/216258363-c5b76eab-66e1-4034-a49f-25046636a1c3.png)
+
+- Let's do authentication
+
+  import `package:firebase_auth/firebase_auth.dart`
+
+- Button click
+
+  버튼을 누르면 컨트롤러에 있는 이메일과 비밀번호 데이터를 가져와야한다. we're going to our email and password controllers and grabbing their text which is the latest text that the user entered in those field.
+
+- create the user
+
+  `FirebaseAuth.instance.crateUserWithEmailAndPassword`
+
+  ```dart
+  TextButton(
+      onPressed: () async {
+          final email = _email.text;
+          final password = _password.text;
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: email, password: password);
+      },
+      child: const Text('Register'))
+  ```
+
+  this function return the Future of a user credential
+
+  ![image-20230202014253986](https://user-images.githubusercontent.com/77393619/216258423-d80de38f-f5d5-4e65-bca2-20c70522098e.png)
+
+  바로 확인을 해보면 아래와 같은 에러가 나온다. `No Firebase App '[DEFAULT]' has been created ...`
+
+  ![image-20230202014449724](https://user-images.githubusercontent.com/77393619/216258468-bedbfb7c-e752-4cb0-a01d-ce22de3b558b.png)
+
+  발생이유를 살펴보면 firebase configure을 했을 때 `lib > firebase_options.dart`파일이 생긴게 생각날 것이다. you've created this configuration but you've never actually told me about it
+
+  - Firebase needs initialization before other calls to Firebase
+
+    `Firebase.initializeApp`
+
+    ```dart
+    onPressed: () async {
+        await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+        );
+        final email = _email.text;
+        final password = _password.text;
+    
+        final userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+            email: email, password: password);
+        print(userCredential);
+    },
+    ```
+
+  이번에는 다른 에러가 발생[CONFIGURATION_NOT_FOUND]
+
+  ![image-20230202021043787](https://user-images.githubusercontent.com/77393619/216258514-19a5ea29-09f4-4af6-8136-6d1d52829a9e.png)
+
+  이유 : firebase에서는 다양한 등록방법을 제공하는데 어떠한 방법을 사용할 것인지 정하지 않았기 때문에 발생한 에러. firebase console 사이트에서 설정해줘야 한다. we haven't enabled email/password sign in combination
+
+  ![image-20230202021757575](https://user-images.githubusercontent.com/77393619/216258572-de332dcd-94da-44c7-982c-db933611b05f.png)
+
+  해결 : https://stackoverflow.com/questions/41124178/com-google-firebase-firebaseexception-an-internal-error-has-occurred-configu
+
+  이제 다시 register해보면 userCredential을 반환받는 것을 확인할 수 있다.
+
+  ![image-20230202021900572](https://user-images.githubusercontent.com/77393619/216258604-14bac1ce-a6d4-4998-a416-b10d19d02f66.png)
+
+- Make our password text field secure
+
+  obscureText: true, 
+
+  enableSuggestions: false, - as you're typing in a text field depending on your operating system it will provide you suggestions.
+
+  autocorrect: false - when you try to type something you're disabling autocorrect based on your password field
+
+  ```dart
+  TextField(
+      controller: _email,
+      enableSuggestions: false,
+      autocorrect: false,
+      keyboardType: TextInputType.emailAddress,
+      decoration: const InputDecoration(
+          hintText: 'Enter your email here',
+      ),
+  ),
+  TextField(
+      controller: _password,
+      obscureText: true,
+      enableSuggestions: false,
+      autocorrect: false,
+      decoration:
+      const InputDecoration(hintText: 'Enter your password here'),
+  ),
+  ```
+
+- Enabling widget binding before Firebase.initializeApp
+
+  https://docs.flutter.dev/resources/architectural-overview#architectural-layers
+
+  initializing you firebase application before you start with everything else on your screen and phone so what we need to do is take advantage of something called widgets flutter binding
+
+  firebase needs to kick start its process before everything else is rendered on the screen and in order for that to happen it needs to have some sort of that like the core flutter engine to be in place. and so that it can make its call to the core flutter engine and say that I'm done with my work so in order to do that then you need something called widgets flutter binding
+
+  ```dart
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+  );
+  ```
+
+  버튼을 누를 때 위 작업을 하는 것이 아니라 다른곳에서 이 작업을 하자. 그 작업을 위해서 we have to first take care of this widget binding.
+
+  ```dart
+  void main() {
+    WidgetsFlutterBinding.ensureInitialized();
+    runApp(const MyApp());
+  }
+  ```
+
+- **FutureBuilder**
+
+  HomePage can initializeApp using a FutureBuilder
+
+  ```dart
+  onPressed: () async {
+      await Firebase.initializeApp(
+      	options: DefaultFirebaseOptions.currentPlatform,
+      )
+  }
+  ```
+
+  what you need to do is kind of like you want to tell flutter to **not build Column before it has finished doing that Future** and the way to do that is using flutter's FutureBuilder widget
+
+  it takes a **future**, it performs the future and once this future has succeeded or it has failed doing its work it will give a call back and in that callback it asks you to produce a widget you want to display to the user depending of the state of that futures result.
+
+  futurebuilder doesn't have an actual future to perform. 
+
+  ```dart
+  FutureBuilder(
+  	future: Firebase.initialzieApp(
+      	options: DefaultFirebaseOptions.currentPlatform,
+      ),
+      builder: (context, snapshot) {
+          return Column()
+      }
+  )
+  ```
+
+  :bulb: ctrl + space 하면 vs code에서 작성가능한 코드를 추천해주므로 코드가 기억안날 때 사용해보자.
+
+- Loading screen while waiting
+
+  we can use **connection states** to determine the state of a Future
+
+  we told future builder to perform a future. the future was firebase initialize app. 
+
+  now if you look at the builder, we're returning from it now is a Column. the second parameter that gets passed your builder is something called a **snapshot** of data type async snapshot. an **async snapshot of an object is the state of the object right now**. so that object itself is actually the result of you future in this case firebase app. so this snapshot is an async snapshot of your firebase app.
+
+  so one thing you do need in this snapshot is its **state you see a future** has a start point it has a line where it processes its information and it has an end point. it either ends successfully or it fails. now the snapshot is your way of getting the results of your **future whether it has it started, is it processing, is it done or did it fail**.
+
+  ```dart
+  FutureBuilder(
+  	future: Firebase.initializeApp(
+      	options: ...,
+      ),
+      builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+              // future가 완료된 경우
+              case ConnectionState.done:
+                  return ...;
+              // future가 끝나지 않은경우
+              default:
+                  return ....;
+          }
+      }
+  )
+  ```
+
+  4가지 상태가 존재. `ConnectionState.none`, `ConnectionState.waiting`, `ConnectionState.active`, `ConnectionState.done`
+
+- We have a basic Firebase set up now
+
+  We now need to do refactoring and work on login/register views
+
+## 13. Login View
+
+- simple register view
+
+  But nothing more. Let's devide logics into register and login views.
+
+- create a stateful registerview widger
+
+  this will be used as the base of our register view
+
+  stateful widget생성하기위해 `stf`을 쳐주면 된다.
+
+  ```dart
+  // base of our register view
+  class RegisterView extends StatefulWidget {
+    const RegisterView({super.key});
+  
+    @override
+    State<RegisterView> createState() => _RegisterViewState();
+  }
+  
+  class _RegisterViewState extends State<RegisterView> {
+    @override
+    Widget build(BuildContext context) {
+      return Container();
+    }
+  }
+  ```
+
+- HomePage is going to become LoginView
+
+  Rename HomePage to LoginView. `f2`키를 눌러서 변경하거나, 해당 위젯 이름에 커서를 대고 우클릭 `Rename Symbol`로 변경하면된다.
+
+- Move LoginView into its own file
+
+  `lib/views/login_view.dart`로 코드를 옮겨준다. 이때 import관련하여 빨간줄이 여러개 뜨게 되는데 `ctrl + .`을 활용하여 해당 코드에 대한 라이브러리 등을 가져와주자.
+
+  ![image-20230202095340320](https://user-images.githubusercontent.com/77393619/216258688-abf6c68b-faed-422b-a14b-519d5a4ba329.png)
+
+- LoginView code goes into RegisterView
+
+  Grab the source code from LoginView and paste it inside RegisterView
+
+- Login instead of register in LoginView
+
+  Chnage `createUserWithEmailAndPassword` to `signInWithEmailAndPassword`.
+
+  `signInWithEmailAndPassword` also return the Future which has user credentials
+
+  ![image-20230202100749880](https://user-images.githubusercontent.com/77393619/216258742-e2b30d97-f508-4edf-8d06-9784ff5ed34f.png)
+
+- LoginView, Handling **user-not-found**
+
+  `e.code == 'user-not-found'`
+
+  로그인시에 등록되지 않은 사용자의 경우 아래와 같은 에러를 뱉어준다.
+
+  `[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.`
+
+  ![image-20230202101110302](https://user-images.githubusercontent.com/77393619/216258772-b9be4611-d0a3-45a4-a680-f9c12b4f9085.png)
+
+  we need to handle a thing called an exception(try - catch문으로 예외처리를 해줘야함)
+
+  ```dart
+  try {
+      final userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+          email: email, password: password);
+      print(userCredential);
+  } catch (e) {
+      print("something bad happened");
+  }
+  ```
+
+  `e.runtime` gives you information about which class of exception this is. `FirebaseAuthException`
+
+  ![image-20230202101722348](https://user-images.githubusercontent.com/77393619/216258776-1eccec48-f93e-4d45-9e53-5a784d7680cb.png)
+
+  and we will handle the FirebaseAuthException not just any exception. there's a format of catching specific exceptions you prefix your catch statement with the keyword `on`. and now we can use `e.code` for FirebaseAuthException.
+
+  ```dart
+  try {
+      ...
+  } on FirebaseAuthException catch (e) {
+      print(e.code); // user-not-found
+  }
+  ```
+
+- LoginView, Handling **wrong-password**
+
+  `e.code == 'wrong-password'`
+
+  ```dart
+  try {
+      ...
+  } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+          print('User not found');
+      } else {
+          print('Something else happend');
+          print(e.code); // wrong-password
+      }
+  }
+  ```
+
+  one of those erros is wrong password. 이메일을 맞추고 비밀번호를 틀려보면 아래와같은 에러가 발생한다.
+
+  ![image-20230202104132869](https://user-images.githubusercontent.com/77393619/216258779-d905f44c-4831-4d6e-b573-51d4d95a3ed4.png)
+
+  ```dart
+  try {
+      ...
+  } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+          print('User not found');
+      } else if (e.code == 'wrong-password') {
+          print('Wrong password');
+      }
+  }
+  ```
+
+- RegisterView, handle **weak-password**
+
+  `e.code == 'weak-password'`
+
+  there are some default security rules set up on firebase for credentials. 비밀번호를 너무 간단하게 설정할 경우 `e.code`가 `weak-password`가된다.
+
+  ![image-20230202104825424](https://user-images.githubusercontent.com/77393619/216258780-765cea25-158d-4b88-bf91-3de1a9cbf0a7.png)
+
+- RegisterView, handle **email-already-in-use**
+
+  `e.code == 'email-already-in-use'`
+
+  이미 사용된 이메일이라면 발생하는 코드.
+
+  ![image-20230202130500188](https://user-images.githubusercontent.com/77393619/216258785-0c509a4f-c8d1-489a-ae1f-eb1d60b59916.png)
+
+- RegisterView, handle **invalid-email**
+
+  `e.code == 'invalid-email'`
+
+  유효하지 않은 이메일을 작성할 경우 발생하는 에러코드
+
+  ![image-20230202130747292](https://user-images.githubusercontent.com/77393619/216258788-ab0e84e1-0cae-49c5-85bc-067a5a6086a1.png)
+
+- show error message to user
+
+  upcoming chapters
+
+- Ensure we are logged in
+
+  We need this login-session before next chapter
+
+  ```
+  사용자가 로그인을 한 이후에도 그대로 loginView에 있게되면 이상하다. 실제 로그인관련 state를 핸들링함으로써 서비스를 이용하도록 해주어야한다.
+  ```
+
+  make sure that we are logged in to the application. you can be a logged in user but still end up being in a login view so if you send a login user to a loginView doesn't mean that the user logged in. instead it means well that user is logged in but may want to log in as a different user so that is the case in our application as well we have a register screen a login view but I personally don't know what the state of the application at the moment is. 
+
+  next chapter, we're working on seperating the app initialization from the login and register screen because you can see at the moment we have this futureBuilder that is initializing firebase and it is doing lots of work comes with snapshots stay done etc. and we're doing the exact same thing in two views.(loginView and RegisterView) so what we need to do is kind of like seperate that logic and ensure that we display the correct view depending on what the state of the application is. and before we start, we need to make sure that the user the current user is logged in. 
+
+- Ensure we are logged in
+
+  this ensures that the firebase instance that is running in this application right now is going to cache that information locally on ios is going to cache that information in a secure storage called keychain and on android it's called shared preferences or st. so that information is going to be securely stored now on that telephone which is an android telephone right now and when we restart the application whenever if I like shut down my telephone restart it the telephone come back up that information is already saved on that telephone so my user is logged in. so just ensure that before we continue with the next chapter that you've registered the user first and that you've logged in with that user from your application so that information is cached inside the applicaiton.
+
+## 14. Seperating app initialization from login/register
+
+- seperate the app initialization from the login and register screen (9:53:00)
+
+  At the moment app initialization is bound to our widgets
+
+- Widgets that are doing app initialization
+
+  This is usually not a good idea, we need to clean this up.
+
+  we will just have one initialization and bring the register view in its own file
+
+- RegisterView needs its own file
+
+  Move RegisterView into `views/register_view.dart`
+
+- Dedicated HomePage stateless widget
+
+  This widget needs to do the initialization. 
+
+  dedicated homepage does the app initialization and depending on whether the user is logged in or logged out or if the user is verified or not then it's going to display the correct widget on the screen.
+
+  just to explain that a little bit more is that you see in your main function in `main.dart`
+
+  ```dart
+  void main() {
+      // main function
+      runApp(
+      	MaterialApp(
+          	title: '...',
+              theme: ThemeData(
+              	primarySwatch: Colors.blue,
+              ),
+              // first you're going to LoginView
+              home: const LoginView(),
+         	)
+      )
+  }
+  ```
+
+  that when your application run, it runs you're telling it to go to loginView but why are we saying go to loginView. we have no logic at the moment that says are you logged in then show the loginView or if you're not logged in show the registerView. that's we're going to do with our homePage.
+
+  so the HomePage is kind of being the manager of the different routes that your application can manage.(조건에 따라서 각각의 다른 view를 제공하는 역할을 하는 HomePage)
+
+  조건에 따라 다른 view를 라우팅해주므로 개발자마다 이름칭하는게 조금씩 다르다. routePage라고 불리기도함.
+
+- Use HomePage in main function
+
+  Instead of going directly to another widget.
+
+  - it needs to initialize firebase. 
+
+    FutureBuilder를 사용하는 모든 View마다 firebase를 initialize하는 것은 너무 비효율적이기 때문에 이를 한번에 해주기위해서 HomePage를 활용한다.
+
+- Non-null and verified user
+
+  Let's see the properties of the user
+
+  **make sure that the user is not null** and that also the user is verified. under some rare circumstances with firebase such as when you haven't initialized your firebase applicaiton using  initialize app the user that is stored in the firebase code or in the instance of firebase running inside you application may actually be null.
+
+  what we need to do is to ensure that the current user in the application is non-null meaning that it should be present and also that the user's email should be verified.
+
+- Email verificaiton
+
+  why email verification is important for a user's email to be verified. the reason
+
+  what we need to do in our applicatoin is to make sure that whenever someone comes and registers a user using the email address and a password of their choosing then **we're gonna send a real email using firebase to that email address** and say hey you just registered a user here make sure that you click on this link that says verify blah blah to actually verify your user with our application or with our file with our applicatoins firebase instance that sits on firebase clud.
+
+  so let's then check the current user actually is logged into the application.(https://stackoverflow.com/questions/54000825/how-to-get-the-current-user-id-from-firebase-in-flutter)
+
+  ```dart
+  FirebaseAuth.instance.currentUser
+  ```
+
+  ![image-20230202142535975](https://user-images.githubusercontent.com/77393619/216258790-548e9491-07db-48d3-ba17-39b92180ec35.png)
+
+  :bulb: anonymous user is a user who hasn't really logged into the application yet
+
+  emailVerified로 로그인 유무를확인하려고하는데 아래와 같이 붉은줄이 나온다. 이유는 받아오려는 user가 null이 될 수 있기때문에(`User?` 즉, optional user라는 것). if something goes wrong and firebase can't calculate your current user for instance if you disable anonymous users then firebase will be saying oops null user. the user is absent and I don't know who this user is.
+
+  ![image-20230202143216840](https://user-images.githubusercontent.com/77393619/216258794-2358f9a0-d4fc-4346-bf82-b0660486486d.png)
+
+  that is firebase API telling your application that if you're using my API then you need to handle this case you can't just ask me if the email is verified because the user may actually be null the user may be absent.
+
+  그래서 여기서 제안하는 방식은 you can conditionally access that property using the `?.` but as you do that you see you'll get another problem. it means ok you're asking me to compare an optional boolean with an actual boolean because remember if conditions need to resolve into a true or false.
+
+  ![image-20230202143827390](https://user-images.githubusercontent.com/77393619/216258796-12ddfc91-1944-4511-a107-2c454b9430ce.png)
+
+  위의 경우는 조건에 boolean이 들어가야하므로 조건문을 만들기 전에 따로 boolean을 받을 변수를 만들어주어야한다.
+
+  ![image-20230202144156887](https://user-images.githubusercontent.com/77393619/216258798-2b9f6764-7d3f-4dbe-82a4-f2cc9cd1fcef.png)
+
+## 15. Git and GitHub
+
+- (10:19:48~)
+
+- Git and GitHub
+
+  Version control and why we need it
+
+  store you code in a safe place and always retrieve it later
+
+- Git
+
+  piece of software on your computer that allows you to manage various changes that you make to a code base  such as our project at different times keeping track of the date those changes were made the person who made the changes and the changes themselves. and also it will be able to provide you the difference between your recent changes and what was already provided in the or what was already committed into this git repository.
+
+  **git repository** is an empty bucket initially where there is nothing in there and as you interact with your source code then you'd be like okay now I want to turn this source code that I've written into a bucket so then there's a bucket created around your source code called a git repository which keeps track of all the changes that you're making or anybody else that works on the same source code is making to the code and it will allow you to save snapshots of those changes at specific times of your choosing.
+
+- practice
+
+  - `mkdir testing`
+
+  - `cd testing`
+
+  - `ls -la` 폴더내 파일확인
+
+  우선 git 활용전에 git 사이트로가서 설치해야한다.
+
+  - `which git` 설치된 git 위치 확인(윈도우에서는 그냥 `git`이라고 치면됨)
+
+  - 원하는 폴더에서 `git init .` tell the git that this current directory in itself is a git's repository.(루트폴더에서 하면 안된다 !)
+
+    `.git`파일이 생기는데 이것은 keeps track of its internal like the changes to this directory and like what you save when you save it who is it that saved the work etc.
+
+    이렇게 되면 이제 you can issue various diff git commands such as `git status`
+
+  - `git status` will give you the current status on this directory
+
+  - git whenever you're working git doesn't just save your work automatically. you need to tell git to save your work. those points where you save your work there are call **commmits**
+
+  - tracked files vs. untracked files
+
+    tracked file is a file that you've told git about before. so it's tracking the changes being made to that file.
+
+    untracked file is a file that you have not told git before about. so it says oh here's a file you're doing something with it but i'm not gonna even look at it i'm not gonna keep track of it because you don't you didn't tell me to do so.
+
+  - a file basically can be in 3 states in git right now. tracked, untracked and staged
+
+  - `git add <file>` to include in what will be committed. commit means that you're going to save this work in git.
+
+    `git rm --cached <file>` to unstage
+
+  - `git commit -m "message"` 
+
+  - `git log` if you want to see the commit that you just made. and you can see all the commits that were made and who they were made by and also be able to see the date that were made and the commit message. and there's the email of the person who basically did that commit
+
+  - `git config --global` or `git config` how you tell get who you are (user information)
+
+- Git
+
+  so it is a piece of software that allows groups of people work on the same piece of code without losing their changes.
+
+- GitHub
+
+  It's our Git provider in simple words. it is simply said a cloud service for storing your git repositories.
+
+  it's not the same thing with git. git is a software that actually manages all your commits and etc but github is the cloud service that holds on these things in repositories for you.
+
+  - register a github account
+
+    https://github.com/signup
+
+  - set up git on linux, mac and windows
+
+    we need git in the terminal
+
+  - SSH keys
+
+    Google "github ssh keys"
+
+    로컬 컴퓨터에서 커밋을 하기위해 SSH키가 필요하다. 그렇지않으면 커밋을 항상 github interface를 사용하여 해야하는 번거로움.
+
+    you can actually commit your work without setting up ssh keys on your computer you can always go to github and actually commit your work right on github itself like you can write some text and then change that text right in the github interface like the web interface. so then they will do all of that work for you because they will commit it from kind of like their key their own ssh keys. but if you on your computer want to be able to commit your work from your hard disk or your ssc or whatever into github you will need something called ssh keys.
+
+    ssh keys are cryptographically signed pieces of signature that will **allow you to identify yourself as a person or as a committer**. 
+
+    so ssh key is a piece of key that is a signature that you as a developer or a committer of code create on your computer and whenever you make a commit and you wanna send that commit then to github then github knows who you are. so you need your ssh key set up.
+
+    https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
+- SSH Keys vs. GPG Signature
+
+  One is to authenticate against GitHub, the other is to sign a commit.
+
+  GPG(GNU Privacy Guard) was new privacy piece of software that you download on your computer.
+
+  when you sign your commits with you ssh key with your private key and then you push your changes to github and github just verifies okay this commit is comming from someone who has access to this repository. when you create your GPG keys and then you sign your commits with the GPG keys then that actually verifies that you are who you say you are. so a lot of software developers are still continuing with ssh keys and to be honest with you that's not good enough because anybody getting a hold of your ssh keys can literally just do anything they want with your commits and change anything they want but with the GPG keys you'll ensure that you are who you are and anyone else even if they have hold of like your ssh keys their commits won't be signed as you.
+
+- GPG and why you need it
+
+  https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work
+
+  ```
+  Git은 암호학적으로 안전하지만 완벽하지는 않습니다. 인터넷에서 다른 사람의 작업을 가져오고 커밋이 실제로 신뢰할 수 있는 소스에서 온 것인지 확인하려는 경우 Git에는 GPG를 사용하여 작업에 서명하고 확인하는 몇 가지 방법이 있습니다
+  ```
+
+  - gpg download
+
+    https://gnupg.org/download/
+
+    ![image-20230202155541920](https://user-images.githubusercontent.com/77393619/216258802-d92ab904-c39c-4686-b0bc-375da215e2dc.png)
+
+- Set up GPG for GitHub
+
+  https://docs.github.com/en/authentication/managing-commit-signature-verification
+
+  ![image-20230202155717409](https://user-images.githubusercontent.com/77393619/216258808-89637797-b56e-4339-a207-13383b899b54.png)
+
+- GitHub repo for our project
+
+  Let's create a repository for our project's code
+
+  `.gitignore` is a file that dictates to get on your computer or on the computer of whoever has cloned your repository about what files shuold not be committed to your git repository.
+
+  - `git init .` make our local repository a Git repository
+
+  - `git push` 하기전에 push 목적지를 설정해주어야 한다.
+
+    `git remote add <name> <url>` and then push using the remote name `git push <name>`
+
+    `git remote add origin <복사한 레포주소>`를 하고 `git push`를 하면되는데
+
+    `git push --set-upstream origin main`을 해주면 this main branch which is on your local computer is actually mapping to the main branch on github. you don't have to do this complicated code you could actually say `git push -u origin HEAD` and that will do the same thing for you.
+
+    
+
+
 
   
   
