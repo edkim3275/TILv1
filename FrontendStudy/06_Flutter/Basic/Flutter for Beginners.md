@@ -1585,6 +1585,91 @@ setting up our project on firebase for our backend(7:31:50)
     `git remote add origin <복사한 레포주소>`를 하고 `git push`를 하면되는데
 
     `git push --set-upstream origin main`을 해주면 this main branch which is on your local computer is actually mapping to the main branch on github. you don't have to do this complicated code you could actually say `git push -u origin HEAD` and that will do the same thing for you.
+- Tagging
+
+  `git tag "step-1"` 
+
+  `git push --tags` push to tags to github server
+
+- Verify that our commit it signed
+
+  gpg키 사용하면 github에서 인증배지 확인이 가능(현재는 인터페이스 변경되었을 수 있음)
+
+## 16. Email verification view
+
+- Pushing VerifyEmailView into the screen
+
+  Push the View into the stack with MaterialPageRoute(causes an error we will fix soon)
+
+  ![image-20230207104647769](https://user-images.githubusercontent.com/77393619/217169217-c2effe6f-9782-4048-a96e-8cc840fa94ff.png)
+
+  builder function is in itself a widget that performs a future and once that future is done or errors out or whatever then it calls the builder function and the builder function it is expected to return that builder function itself is expected to return a widget
+
+- CTA Button and text
+
+  Display Column, Text and a TextButton to send verification email
+
+  ```dart
+  TextButton(
+      onPressed: () async {
+          final user = FirebaseAuth.instance.currentUser;
+          await user?.sendEmailVerification();
+      },
+      child: Text('Send email verification')),
+  ```
+
+  클릭시 가입했던 이메일로 인증을위한 메일이 전송된다.
+
+- Change LoginView and RegisterView
+
+  They shouldn't return a Scaffold, that's the of HomePage
+
+- Return LoginView in HomePage
+
+  if user is not logged in, return LoginView
+
+## 17. Link between login and register views
+
+- We need to go between views
+
+  right now they are not linked and need manual display.
+
+- Register button on login view
+
+  Add a TextButton to login view to send us to register view
+
+- Named routes
+
+  https://docs.flutter.dev/cookbook/navigation/navigation-basics
+
+  anonymous routes are not as reusable
+
+- Define login and register routes
+
+  in main.dart, define /login/ and /register/
+
+- Go from login to register view
+
+  Using `Navigator.of(context).pushNamedAndRemoveUntil`
+
+  ![image-20230207130850798](https://user-images.githubusercontent.com/77393619/217169220-0134737a-7502-4967-92de-25d268e6ad74.png)
+
+  error for lack of scaffold. 이동하려는 페이지가 Scaffold구조로 이루어져있어야한다.
+
+- Move verify email view to its own file
+
+  lib/views/verify_email_view.dart
+
+## 18. Logout View
+
+- Main UI of the app
+
+  https://api.flutter.dev/flutter/material/AppBar-class.html
+
+- Return NotesView in HomePage
+
+  We shouldn't have any print in HomePage
+
 
     
 
