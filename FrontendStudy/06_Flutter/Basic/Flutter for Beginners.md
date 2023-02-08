@@ -1669,6 +1669,80 @@ setting up our project on firebase for our backend(7:31:50)
 - Return NotesView in HomePage
 
   We shouldn't have any print in HomePage
+- We need popup items enumeration(soon)
+
+  An enumeration that describes our popup menu items
+
+- PopupMenuButton vs. PopupMenuItem
+
+  They are usually used together
+
+- PopupMenuItem has a value
+
+- Add your popup menu button
+
+  ```dart
+  enum MenuAction { logout }
+  ```
+
+  `PopupMenuButton<MenuAction>`
+
+  ```dart
+  PopupMenuButton<MenuAction>(
+      onSelected: (value) {},
+      itemBuilder: (context) {
+          return const [
+              PopupMenuItem<MenuAction>(
+                  value: MenuAction.logout, child: Text('Log out'))
+          ];
+      },
+  )
+  ```
+
+  ![image-20230208134034035](https://user-images.githubusercontent.com/77393619/217567749-321fb4c8-c946-4e69-8a95-d5fa6f8c7a3d.png)
+
+- print vs. log(12:45:00)
+
+  print is usually called a poor man's debugger. 디버거 자체가 속도가 너무 느리거나 디버깅 자체에 시간이 지체되는 경우 미봉책으로 할 수 있는 방안이 print라고 볼 수 있는데 poor man's debugger라고 불리는 이유는 it actually place in your code so sometimes print isn't the desirable thing to do. in banking applications for instance you should be extremly careful what you print.
+
+  다른 방법으로 log가 존재.
+
+  ```dart
+  import "dart:developer" as devtools show log;
+  
+  devtools.log(value.toString());
+  ```
+
+  more trustworthy and more even configurable version of print.
+
+  `show log` : 해당 패키지에서 특정 기능만을 사용하기위해서 사용(이경우엔 `log` 기능만 특정지어서 사용하기위해서 `show` 키워드를 사용)
+
+  `as devtools`  : 해당 프로젝트 내부에서만 임의로 이름을 정해서 사용할 경우 `as`를 쓸 수 있다.(이 경우에는 dart:developer 패키지에서 가져오는 기능을 devtools 이름을 쓰면서 사용하겠다는 의미) 따라서 `devtools.log`와 같이 사용할 수 있다.
+
+- Tapping on "sing/log out" should display dialog
+
+  We can use showDialog and AlertDialog
+
+- Let's display our dialog upon logout
+
+  Using our PopupMenuButton.onSelected callback and await on our dialog
+
+- Log out from firebase
+
+  `await FirebaseAuth.instance.signOut();`
+
+  and go back to login view upon logging out `Navigator.of(context).pushNamedAndRemoveUntil('/login/')`
+
+## 19. New route for NotesView
+
+- add a new route
+
+  called `'/notes'` that goes to NotesView
+
+  :bulb: **the main function does not get recompiled when you do a hot reload** 따라서 main.dart를 수정할 경우 **hot restart**해줘야한다. 
+
+  
+
 
 
     
