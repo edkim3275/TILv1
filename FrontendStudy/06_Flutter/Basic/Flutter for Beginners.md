@@ -1741,6 +1741,387 @@ setting up our project on firebase for our backend(7:31:50)
 
   :bulb: **the main function does not get recompiled when you do a hot reload** 따라서 main.dart를 수정할 경우 **hot restart**해줘야한다. 
 
+- Avoid hardcoding everywhere(13:36:00)
+
+  What is hardcoding and why programmers don't like that
+
+  so let's put our route names in one file `lib/constants/routes.dart`
+
+  Define 3 constants, loginRoute, registerRoute and notesRoute
+
+## 20. Error handling in login view
+
+- We need a generic dialog function
+
+  `future<void> showErrorDialog(context, String text)`
+
+  what we need to do is create dialog and then display it.
+
+- Handle other Firebase authentication example
+
+  You can use `e.code` to get the error code
+
+- handle other errors that might arise
+
+  Use `e.toString()` and call the same function
+
+- commit and tag
+
+  ```
+  git add --all
+  git commit -m "step-6"
+  git tag "step-6"
+  git push
+  git push --tags
+  ```
+
+## 21. Error handling in register view
+
+we need error handling in register view and go to next screen after registration
+
+- Use showErrorDialog instead of log
+
+- We need to confirm email
+
+  After every registration, we need to confirm the user's email
+
+- show confirm view(push, don't replace)
+
+  After successful registration, show verifyEmailRoute
+
+- Let's send confirmation email after registration
+
+  In register_view, directly after registering, send a verification email
+
+  ```dart
+  try {
+      final userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+          email: email, password: password);
+      final user = FirebaseAuth.instance.currentUser;
+      await user?.sendEmailVerification();
+      Navigator.of(context).pushNamed(verifyEmailRoute);
+  }
+  ```
+
+- Add restart button
+
+  Add restart button to end of verify email view and sign the user out with `FirebaseAuth.instance.signOut()`
+
+  and send user to register page by `Navigator.of(context).pushNamedAndRemoveUntil()`
+
+- login
+
+  We can login with a user who hasn't confirmed thefir email (we will fix this soon)
+
+## 22. Confirming Identity Before Going to Main UI
+
+- Users need to verify email before going to the main UI
+
+- Check if user is verified
+
+  Add an if-statement in login_view right after signInWithEmailAndPassword
+
+## 23. Auth Service
+
+- Auth provider and auth service
+
+  We need an auth provider abstract class and AuthService
+
+- Let's clean up our exceptions first
+
+  Create file `lib/services/auth/auth_exceptions.dart`
+
+- UserNotFoundAuthException
+
+  Add it in `lib/services/auth/auth_exceptions.dart`
+
+- Create auth userdart file
+
+  `lib/services/auth/auth_user.dart`
+
+- Import the Firebase user
+
+  `import 'package:firebase_auth/firebase_auth.dart' show User;`
+
+- AuthUser class
+
+  AuthUser with isEmailVerified field
+
+  ```dart
+  @immutable
+  class AuthUser {...}
+  ```
+
+  `@immutable` : like an annotation telling that this class and any subclasses of this class are going to be immutable meaning that their internals are never going to be changed upon initialization.
+
+  해당 키워드를 사용한 클래스 혹은 클래스의 하위클래스는 immutable하다는 것. immutable한 field만 가질 수 있다.
+
+- We need a factory initializer(15:17:00)
+
+  facotry `AuthUser.fromFirebase(User user) => AuthUser(user.emailVerified)`
+
+  we need a factory constructor that creates our auth user from a firebase user and factory constructors  are really useful for this purpose
+
+  ```dart
+  @immutable
+  class AuthUser {
+      final bool isEmailVerified;
+      const AuthUser(this.isEmailVerified);
+  
+      factory AuthUser.fromFirebase(User user) => AuthUser(user.emailVerified);
+  }
+  ```
+
+- We also need an auth provider
+
+  `lib/services/auth/auth_provider.dart`
+
+  It can provide us with the current user now. Remember that we've abstracted away the firebase user with our own auth user which we just created(방금 생성한 자체 인증 사용자를 사용하여 firebase 사용자를 추상화했습니다.)
+
+  and import our auth user
+
+  `import 'package:learningdart/services/auth/auth_user.dart';`
+
+- We shoulb be able to get the current user
+
+  `AuthUser? get currentUser;`
+
+- We need a login function
+
+  `Future<AuthUser> login()`
+
+- We also need a function to create a new user
+
+  `Future<AuthUser> createUser()`
+
+- we should be able to log out as well
+
+  `Future<void> logOut()`
+
+- we also need to be able to send a verification email
+
+  `Future<void> sendEmailVerification()`
+
+- Now we implement a concrete class of our auth providier
+
+  `lib/services/auth/firebase_auth_provider.dart`
+
+  then we create our class
+
+  `class
+
+- Implementing sendEmailVerification
+
+  `Future<void> sendEmailVerification() async`
+
+- We need an auth service
+
+  Our auth service should implement AuthProvider
+
+- Create the basic AuthService class
+
+  `class AuthService implements AuthProvider`
+
+  why ? It relays the messages of the given auth provider, but can have more logic
+
+- From AuthService, delegate to AuthProvider
+
+  We might then need additional logic later on our auth service
+
+## 24. Migrating to Auth Service
+
+we need to migrate our existing code to using our own auth service
+
+- AuthService.firebase
+
+  we need this so we don't have to instantiate it everywhere
+
+- Add firebase factory to Auth Service
+
+  `  factory AuthService.firebase() => AuthService(FirebaseAuthProvider());`
+
+- We need to clean up MenuAction and NotesView
+
+  They are just in main.dart right now
+
+- Moving MenuAction
+
+  Move MenuAction enum to `lib/enums/menu_action.dart`
+
+## 25. Unit Testing our Auth Service :star2:
+
+- Why do we need unit tests(16:37:00 ~)
+
+  Our auth service has no tests. We need to guard ourselves against unintentional edits.
+
+- TDD(Test Driven Development)
+
+  Tests need to always be written before code, not the other way around
+
+- Time limits
+
+  We aren't going to go too deep into tests because of time limits. basic한 부분한 진행할 예정
+
+- Different types of tests
+
+  **Unit, widget and integration tests**
+
+- widget test
+
+  some sort of like an end to end test. `ui > service > provider > firebase > firebase backend > services > ...`
+
+- mocking
+
+- dev dependencies
+
+  Not used in the final product. 즉, 개발시에만 사용되고 실제 배포되는 product 상에는 포함되지않는 dependencies
+
+- We need our test dependencies
+
+  `flutter pub add test --dev`
+
+- Delete existing tests
+
+  Delete `test/widget_test.dart` and create `test/auth_test.dart`
+
+- Main function of tests
+
+  In `auth_test.dart` add `void main() {}`
+
+- Let's recompile
+
+  when you bring in a new dependency in your project you need to always ensure that you rebuild your project.
+
+- Make `isEmailVerified` required
+
+  Go to AuthUser and make the isEmailVerified required beause it's not otherwise clear when we construct it.
+
+- We need a mock auth provider
+
+  Why do we use mocks
+
+- Add MockAuthProvidier
+
+  In `test/auth_test.dart`
+
+  - Mock createUser
+
+    `Future<AuthUser> crateUser`
+
+  - Mock currentUser(17:10:00)
+
+    `AuthUser? get currentUser => _user;`
+
+  - Mock initialize
+
+    `Future<void> initialize() async`
+
+  - Mock login
+
+    `Future<AuthUser> login`
+
+  - Mock logOut
+
+    `Future<void> logOut() async`
+
+  - Mock sendEmailVerification
+
+    `Future<void> sendEmailVerification() async`
+
+- test groups
+
+  For grouping together similar tests
+
+  you can actually group your test functionalities into a group that has a name and then you can ask flutter to run that entire group of tests for you.
+
+  - Create your mock provider
+
+    Do this in the main() function of your tests
+
+    ```dart
+    void main() {
+        group('desc', () {});
+    }
+    ```
+
+    we're gonna create an instance of our mock Auth provider
+
+  - Testing `provider.isInitialized`
+
+    Provider shouldn't be initialized to begin with
+
+  - Test logging out before initialization
+
+    The provider should throw a NotInitializedException
+
+  - Testing provider initialization
+
+    `provider.isInitialized`
+
+  - Testing null user to begin with
+
+    The user should be null upon initialization
+
+  - Testing time required to initialize
+
+    We can user timeouts in this case
+
+  - Test creating a user
+
+    And Test all edge cased that might occur
+
+  - Test email verification
+
+    A logged in user should be able to send email verificaiton
+
+  - Test logging out and in again
+
+    This is a normal scenario that should just work.
+
+  - Now run your tests
+
+    `flutter test test/auth_test.dart`
+
+## 26. CRUD Local Storage
+
+We need a database to store user notes before we use Firebase for storage(17:43:40 ~ )
+
+- What is SQLite
+
+  database or a library created in C that allows us to see as a language c that allows to store data inside a file.
+
+  just think of SQLite as the databse engine that we're going to use in our application and it's not something that is built in inside flutter we will have to use a so-called plug-in for it. but that's okay I mean not many languages have support for talking with a database and natively so but we'll get to that point.
+
+  how we're actually going to integrate with sqlite and to start with.
+
+- DB Browser
+
+  Let's download DB Browser for SQLite
+
+  a free program called DB Browser for SQLite. If you think of SQLite has different components first you have your database which is just a file that sits on a disk and then you will have the sqlite engine that can read from this file and write to this file so that's the engine and then this engine should run somewhere so it's either going to run inside an application such as the one here a DB Browser for SQLite. so SQLite's like baked into that applicaiton or you can also bring SQLite into your terminal so that you can actually talk with SQLite databases from within your terminal.
+
+  SQLite is the engine that talks to the SQLite files which are your databases but then it this engine should run somewhere. it's not just an executable that like you say here take this file you now have some sort of a container where the SQLite engine basically resides.
+
+  we're going to bring this engine into the flutter application so our app can talk with that database. but for now we're going to look at a program called db browser for SQLite.https://sqlitebrowser.org/
+
+- Creating our user table
+
+  `CREATE TABLE IF NOT EXISTS "user" ...`
+
+  ![image-20230215153753301](https://user-images.githubusercontent.com/77393619/218953348-bef94e1b-4067-4d45-87b5-fee327caaefd.png)
+
+  `NN` : Not Null. this field should always be present. it should never allow the value emptiness of the value or the absence of a value to be present there.
+
+  `PK` : Primary Key. it is the key using which is a unique key in this table using which we should be able to then easily query different users from this table.
+
+  `AI` : Auto Increment. it is a great functionality in SQLite and many other databases that allows you as the name suggests and the name indicates that by you creating for instance a user with a specific email and you insert that user into the database in this table and you don't even have to assign an id to that user you just say here is the user email 'boo' put it in the database then SQLite is smart enough to oh but I need an id field as well you haven't provided it and then it looks at the field and says oh id is auto increment so it's going to create that id for you and increment the previously generated id and assign the new id to your object. for instance if you have no objects inside this table and then you add a new user then it automatically gets the id of zero. and then if you generate the next user and put it in there then it will get the id of one.
+
+  ![image-20230215154354163](https://user-images.githubusercontent.com/77393619/218953362-cbb6d5e6-94ac-4b4f-97f8-d873d0fbcca1.png)
+
+  `U` : Unique. this filed needs to be unique. but if you indicate something as primary key implicitly it is a unique field.(18:00~)
+
+- notes table
   
 
 
