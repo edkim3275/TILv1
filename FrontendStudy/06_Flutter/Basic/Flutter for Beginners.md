@@ -2121,7 +2121,684 @@ We need a database to store user notes before we use Firebase for storage(17:43:
 
   `U` : Unique. this filed needs to be unique. but if you indicate something as primary key implicitly it is a unique field.(18:00~)
 
-- notes table
+- creating note table
+
+  user_id는 user table id field와 bind된다. foreign key
+
+  ![image-20230217100313397](https://user-images.githubusercontent.com/77393619/219594346-b6c3933b-6643-4d06-a2b0-23ddadcef9e4.png)
+
+  `is_synced_with_clud`가 0(기본값)이라면 sync되지 않은 것.
+
+  ![image-20230217100605965](https://user-images.githubusercontent.com/77393619/219594356-6da2ddd1-1746-4dd3-9de5-cc31167bd3fc.png)
+
+- Creating these programmatically
+
+  We need to create this programmatically otherwise we have to move it to docs folder manually
+
+  we have a file called testdb. it has the database for our application with some tables. however we need to able to create these tables programmatically if they don't exist inside our application. now this testDB has absolutely nothing to do with our flutter application. and you could drag this db into your flutter application and then copy it to the right place when the application is executed in the user's telephone on the tablet and then try to read from that database it is possible.
+
+  이러한 과정을 flutter application에서 진행해볼거다. how can you integrate with sqlite inside your flutter application.
+
+- We need a few dependencies
+
+  그러기위해서는 dependencies를 받아줘야하는데. `flutter pub add => sqflite, path_provider, path`
+
+  - `sqflite` : For storage of our data.
+
+    it is a package it's a third party package that we need to add to our application in order for our flutter application to be able to talk with sqflite.
+
+    so it is a **actual storage and talking with the database**
+
+  - `path_provider` : To get our app's documents directly for database storage.
+
+    path is used for us to be able to grab the applications documents folder so that we can actually create a file inside a documents folder and place our data inside that file just like we placing the data for note and user inside the testDB file.
+
+    path_provider **allows us to grab the applications documents folder**. if you're not familiar with mobile application development, you may not know this but applications that sit on an android phone etc they have their own file structure. so every application in itself has a document directory so whereas on your computer you have a documents folder that other applications that run on your operating system could get access to. so it's one documents folder every application can request access to and store information in it and read from it. But that's not the same concept in mobile devices and on tablets in that every application runs inside something called sandbox.
+
+    sandbox is like a cage inside where the application resides and all the application data resides in that sandbox. so every application can request access from the operating system to read its own documents folder.
+
+    it **allows to find our applications documents folder**
+
+  - `path` : It has a useful "join" function
+
+    `path_provider`를 통해서 application documents folder에 접근하면 we want to create a file in this documents folder and get the full path of this file documents folder/file.  and that's what we need the path package because **it has a great function called `join`  that allows us to take the path of a directory or folder** and join that path with a file name and it gives us the entire path back so we can access the file.
+
+  - 모두 pub dev를 통해 받아주고 `pubspec.yaml`파일에서 확인해보자.
+
+    `flutter pub add sqflite`
+
+    `flutter pub add path_provider`
+
+    `flutter pub add path`
+
+    ![image-20230217102943199](https://user-images.githubusercontent.com/77393619/219594361-b451a7db-466b-4b0c-a74b-66e131bd8f09.png)
+
+- Create our `notes_service.dart` file
+
+  `lib/services/crud/notes_service.dart`
+
+  이걸로 basically grab a hold of our database it is **the primary service that is gonna work with our sqlite database**. it's gonna grab users, create new users, delete users, find users, create notes, delete notes, update notes ... everything we need from our user interface this notes service is going to facilitate(가능하게 하다) that for us
+
+- import our dependencies
+
+  Import all 3 dependencies in `notes_service.dart`
+
+  ```dart
+  import 'package:sqflite/sqflite.dart';
+  import 'package:path_provider/path_provider.dart' show getApplicationDocumentsDirectory;
+  import 'package:path/path.dart' show join;
+  ```
+
+- We need to construct our db path
+
+  User `path` and `path_provider` to do that
+
+  we need to **grab a hold of our current database path**. every application that you develop with flutter for mobile devices such as android, ios, ipad os they have their own documents directory and we're going to create and get the path the documents directory and then we're going to join that using `path` dependency with a name that we are going to specify for our database.
+
+- We need database users
+
+  Create `DatabaseUser` class inside `notes_service.dart`
+
+  ```dart
+  @immutable
+  class DatabaseUser {
+    final int id;
+    final String email;
+  
+    const DatabaseUser({
+      required this.id,
+      required this.email,
+    });
+  
+    // this is a row inside the user table
+    // Map<String, Object?>
+    DatabaseUser.fromRow(Map<String, Object?> map)
+        : id = map[idColumn] as int,
+          email = map[emailColumn] as String;
+      /*
+    covariant allows you to change the behavior of your input parameters so that they do
+    not necessarily confirm to the signature of that parameter in the super class.
+    we're doing override here meaning that there this functionality operator is already defined
+    at the object level.
+    so if you don't put covariant in here you'll get an error from the analyzer.
+    in here we're saying that we're going to compare our class with == and instance of our class with ==
+    and we're going to compare with another user of the same class.
+    이후 covariant는 지워준다.
+   */
+      @override
+      bool operator ==(covariant DatabaseUser other) => id == other.id;
+  }
+  
+  const idColumn = "id";
+  const emailColumn = "email";
+  ```
+
+  covariant 삭제시
+
+  ![image-20230217105604859](https://user-images.githubusercontent.com/77393619/219594363-971c56ef-1385-4c1c-8ae4-03f175b0084e.png)
+
+  ```dart
+  /* error saying that accoring to object == should compare the current object with another object
+    but using covariant you're telling dart that hey I'm not comparable with other objects of any other class
+    I'll only comparable with database user instances so make that happen.
+    so then after you implement == you have to also implement hascode as is suggetsted by the analyer. */
+  @override
+  bool operator ==(DatabaseUser other) => id == other.id;
+  ```
+
+  ![image-20230217105640779](https://user-images.githubusercontent.com/77393619/219594364-0e208669-7690-49a4-b543-cc05aa18e41e.png)
+
+  ```dart
+  @override
+  bool operator ==(covariant DatabaseUser other) => id == other.id;
+  
+  /*
+    we're just going to return our id's hashcode
+    this basically the id is becoming the primary key of this class using which it will hash itself
+    so it can be placed inside maps or hash node
+  */
+  @override
+  int get hashCode => id.hashCode;
+  ```
+
+- We also need a class for our notes
+
+  Create `DatabaseNote` class inside `notes_service.dart`
+
+  만들기전 table field확인
+
+  ![image-20230217110109097](https://user-images.githubusercontent.com/77393619/219594368-4dbcd5ae-da13-4758-a0cc-0d77ac2d0541.png)
+
+  :star: SQLite convention은 field 이름에 camelCase를 사용하지않고 `user_id`와 같이 작성한다. 다만 flutter에서 해당 변수를 사용할 경우 `userId`와 같이 받아온다.
+
+  ```dart
+  class DatabaseNote {
+      final int id;
+      final int userId;
+      final String test;
+      // remember we're not going to user this input cloud it's just for you to understand we create different fields in the database.
+      final bool isSyncedWithCloud; 
+  
+      DatabaseNote(this.id, this.userId, this.test, this.isSyncedWithCloud);
+  }
+  ```
+
+  override, initialize
+
+  ```dart
+  class DatabaseNote {
+      final int id;
+      final int userId;
+      final String text;
+      final bool isSyncedWithCloud;
+  
+      DatabaseNote({
+          required this.id,
+          required this.userId,
+          required this.text,
+          required this.isSyncedWithCloud,
+      });
+      DatabaseNote.fromRow(Map<String, Object?> map)
+          : id = map[idColumn] as int,
+      userId = map[userIdColumn] as int,
+      text = map[textColumn] as String,
+      isSyncedWithCloud =
+          (map[isSyncedWithCloudColumn] as int) == 1 ? true : false;
+  
+      @override
+      String toString() => 'Note, Id = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
+  
+      @override
+      bool operator ==(covariant DatabaseNote other) => id == other.id;
+  
+      @override
+      int get hashCode => id.hashCode;
+  }
+  
+  const idColumn = "id";
+  const emailColumn = "email";
+  const userIdColumn = "user_id";
+  const textColumn = "text";
+  const isSyncedWithCloudColumn = "is_synced_with_cloud";
+  ```
+
+- Let's make sure we have all our constants in place
+
+  DB name, column and table names
+
+  ```dart
+  const dbName = "notes.db";
+  const noteTable = "note";
+  const userTable = "user";
+  ```
+
+- Let's open our DB
+
+  `Future<void> open() async`
+
+  ```dart
+  Future<void> open() async {
+      if (_db != null) {
+          throw DatabaseAlreadyOpenException();
+      }
+      try {
+          final docsPath = await getApplicationDocumentsDirectory();
+          final dbPath = join(docsPath.path, dbName);
+          final db = await openDatabase(dbPath);
+          _db = db;
+          // create the user table
+          await db.execute(createUserTable);
+          // create the note table
+          await db.execute(createNoteTable);
+      } on MissingPlatformDirectoryException {
+          throw UnableToGetDocumentDirectory();
+      }
+  }
+  const createUserTable = '''CREATE TABLE IF NOT EXISTS "user" (
+    "id"	INTEGER NOT NULL,
+    "email"	TEXT NOT NULL UNIQUE,
+    PRIMARY KEY("id" AUTOINCREMENT)
+  );
+  ''';
+  
+  const createNoteTable = '''CREATE TABLE IF NOT EXISTS "note" (
+    "id"	INTEGER NOT NULL,
+    "user_id"	INTEGER NOT NULL,
+    "text"	TEXT,
+    "is_synced_with_cloud"	INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY("id" AUTOINCREMENT),
+    FOREIGN KEY("user_id") REFERENCES "user"("id")
+  );
+  ''';
+  ```
+
+- Closing the DB
+
+  `Future<void> close() async`
+
+  ```dart
+  Future<void> close() async {
+      final db = _db;
+      if (db == null) {
+          throw DatabaseIsNotOpen();
+      } else {
+          await db.close();
+          _db = null;
+      }
+  }
+  ```
+
+- Convenience function for getting current DB
+
+  `Database _getDatabaseOrThrow() {}`
+
+  ```dart
+  Database _getDatabaseOrThrow() {
+      final db = _db;
+      if (db == null) {
+          throw DatabaseIsNotOpen();
+      } else {
+          return db;
+      }
+  }
+  ```
+
+- Allowing users to be deleted
+
+  `Future<void> deleteUser({required String email}) async`
+
+  ```dart
+  Future<void> deleteUser({required String email}) async {
+      final db = _getDatabaseOrThrow();
+      final deltedCount = db.delete(
+          userTable,
+          where: 'email = ?',
+          whereArgs: [email.toLowerCase()],
+      );
+      if (deltedCount != 1) {
+          throw CouldNotDelteUser();
+      }
+  }
+  ```
+
+- Allowing users to be created
+
+  `Future<DatabaseUser> createUser({required Stirng email}) async`
+
+  ```dart
+  Future<DatabaseUser> createUser({required String email}) async {
+      final db = _getDatabaseOrThrow();
+      final results = await db.query(
+          userTable,
+          limit: 1,
+          where: 'email = ?',
+          whereArgs: [email.toLowerCase()],
+      );
+      if (results.isNotEmpty) {
+          throw UserAlreadyExists();
+      }
+  
+      final userId = await db.insert(userTable, {
+          emailColumn: email.toLowerCase(),
+      });
+  
+      return DatabaseUser(id: userId, email: email);
+  }
+  ```
+
+- Ability to fetch users
+
+  `Future<DatabaseUser> getUser({required String email}) async`
+
+  ```dart
+  Future<DatabaseUser> getUser({required String email}) async {
+      final db = _getDatabaseOrThrow();
+      final results = await db.query(
+          userTable,
+          limit: 1,
+          where: 'email = ?',
+          whereArgs: [email.toLowerCase()],
+      );
+      if (results.isEmpty) {
+          throw CouldNotFindUser();
+      } else {
+          return DatabaseUser.fromRow(results.first);
+      }
+  }
+  ```
+
+- Allow creation of new notes
+
+  `Future<DatabaseNote> createNot({required DatabaseUser owne}) async`
+
+  ```dart
+  Future<DatabaseNote> createNote({required DatabaseUser owner}) async {
+      final db = _getDatabaseOrThrow();
+  
+      // make sure owner exists in the database with the correct id
+      final dbUser = await getUser(email: owner.email);
+      if (dbUser != owner) {
+        throw CouldNotFindUser();
+      }
+      const text = '';
+      // create the note.
+      final noteId = await db.insert(noteTable, {
+        userIdColumn: owner.id,
+        textColumn: text,
+        isSyncedWithCloudColumn: 1,
+      });
+  
+      final note = DatabaseNote(
+        id: noteId,
+        userId: owner.id,
+        text: text,
+        isSyncedWithCloud: true,
+      );
+      return note;
+    }
+  ```
+
+- Allow notes to be deleted
+
+  `Future<void> deleteNote({required int id}) async`
+
+  ```dart
+  Future<void> delteNote({required int id}) async {
+      final db = _getDatabaseOrThrow();
+      final deltedCount = await db.delete(
+          noteTable,
+          where: 'id = ?',
+          whereArgs: [id],
+      );
+      if (deltedCount == 0) {
+          throw CouldNotDelteNote();
+      }
+  }
+  ```
+
+- And ability to delete all notes
+
+  `Future<int> deleteAllNotes() async`
+
+  ```dart
+  Future<int> deleteAllNotes() async {
+      final db = _getDatabaseOrThrow();
+      return await db.delete(noteTable);
+  }
+  ```
+
+- Fetching a specific note
+
+  `Future<DatabaseNote> getNote({required int id}) async`
+
+  ```dart
+  Future<DatabaseNote> getNote({required int id}) async {
+      final db = _getDatabaseOrThrow();
+      final notes = await db.query(
+          noteTable,
+          limit: 1,
+          where: 'id = ?',
+          whereArgs: [id],
+      );
+      if (notes.isEmpty) {
+          throw CouldNotFindNote();
+      } else {
+          return DatabaseNote.fromRow(notes.first);
+      }
+  }
+  ```
+
+- Fetching all notes
+
+  `Future<Iterable<DatabaseNote>> getAllNotes() async`
+
+  ```dart
+  Future<Iterable<DatabaseNote>> getAllNotes() async {
+      final db = _getDatabaseOrThrow();
+      final notes = await db.query(noteTable);
+  
+      return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+  }
+  ```
+
+- Updating existing notes
+
+  `Future<DatabaseNote> updateNote`
+
+  ```dart
+  Future<DatabaseNote> updateNote(
+      {required DatabaseNote note, required String text}) async {
+      final db = _getDatabaseOrThrow();
+  
+      await getNote(id: note.id);
+  
+      final updatesCount = await db.update(noteTable, {
+          textColumn: text,
+          isSyncedWithCloudColumn: 0,
+      });
+      if (updatesCount == 0) {
+          throw CouldNotUpdateNote();
+      } else {
+          return await getNote(id: note.id);
+      }
+  }
+  ```
+
+- Let's put all our CRUD exceptions in one file
+
+  `lib/services/crudcrud_exceptions.dart`
+
+  and just import and change existing code
+
+  ```dart
+  class DatabaseAlreadyOpenException implements Exception {}
+  class UnableToGetDocumentDirectory implements Exception {}
+  class DatabaseIsNotOpen implements Exception {}
+  class CouldNotDelteUser implements Exception {}
+  class UserAlreadyExists implements Exception {}
+  class CouldNotFindUser implements Exception {}
+  class CouldNotDelteNote implements Exception {}
+  class CouldNotFindNote implements Exception {}
+  class CouldNotUpdateNote implements Exception {}
+  ```
+
+- next chapter
+
+  now we need a stream of notes to display in our app UI
+
+  we've done a lot of work on the data so we need to fuse it together with our UI. and in order to do that we need to talk about streams and stream controllers.
+
+## 27. Working with Streams in Notes Service
+
+- Caching data
+
+  We need the stream and stream controller to cache data.
+
+  - `stream` is just a point of time or basically an entity that controls data. just something that keeps hold data. then you perform things on it like add this data, remove this data .. so it keeps hold of its data and it has a timeline so it starts at some point manipulates its data and then it either errors out at the end saying that I can't do this and it just dies.
+
+    so just think of streams as **pipes of data types of information** that you can manipulate and you can also perform operations on.
+
+  - `stream controllers` is your interface to your streams. stream controllers를 통해서 stream의 data를 수정하고 가져올 수 있다. 
+
+- Local list of fetched notes
+
+  `List<DatabaseNote> _notes = [];`
+
+  goal for the note servers to be able to expose a list of notes that the ui can then render on this on the user screen. if the user goes and presses the plus button then that plus button is then gonna send a message here to our note servers we're going to then go to this function createNote and  this function internally is then gonna manipulate that list of notes inside note service hey here's a new note add that and then our ui is going to listen to a list of these notes available in note service and if things change in that list then the ui is just going to automatically update itself. and this interface between the ui and the note servers is going to be done through a stream.
+
+- StreamController(19:41:00 ~)
+
+  `final _notesStreamController = StreamController<List<DatabaseNote>>.broadcast();`
+
+  what we need is for the note service to be able to control a stream of notes. so when the list of this notes changes we need to tell our stream in the note servers that hey some element got added, deleted ... then the ui can then reactively listen for these changes in the note service and we that through the our stream controller 
+
+  ```dart
+  final _notesStreamController =
+      StreamController<List<DatabaseNote>>.broadcast();
+  ```
+
+  broadcast : it's okay for us to create new listeners that listen to the changes to this stream controller.
+
+- Reading and caching notes
+
+  `Future<void> _cacheNotes() async`
+
+  read all the available notes from our database and then cache them inside both the notes cache right here and our controller.
+
+  so you see what our goal in this chapter is to make sure that this is the source of truth that our notes list contains all the notes for for instance the current user. then the `stream controller` is our **interface to the outside world. the UI is going to be listening to changes that occur in this stream controller.**
+
+  so whenever you see **`_notes`, this is not something that's going to be read from the outside**. **everything's going to be read from the outside through `_notesStreamController`.**
+
+  ![image-20230217162650829](https://user-images.githubusercontent.com/77393619/219594537-48b1062e-a7f0-45e6-991f-fb82e78de5b5.png)
+
+  - so we create function called `_cacheNotes`
+
+    its purpose is just to read all the notes from the database and place it both in here internally and in our note stream controller which is going to be read externally.
+
+    ```dart
+    Future<void> _cacheNotes() async {
+        final allNotes = await getAllNotes();
+        // iterable to list
+        _notes = allNotes.toList();
+        _notesStreamController.add(_notes);
+    }
+    ```
+
+- Read all notes upon opening DB
+
+  In open(), call _cacheNotes
+
+  ```dart
+  Future<void> open() async {
+      if (_db != null) {
+          throw DatabaseAlreadyOpenException();
+      }
+      try {
+          // ...
+          await _cacheNotes();
+      } on MissingPlatformDirectoryException {
+          throw UnableToGetDocumentDirectory();
+      }
+  }
+  }
+  ```
+
+- Cache note in createNote
+
+  In createNote, add the new note to _notes and _notesStreamControlller
+
+  ```dart
+  Future<DatabaseNote> createNote({required DatabaseUser owner}) async {
+      // ...
+      _notes.add(note);
+      _notesStreamController.add(_notes);
+  
+      return note;
+  }
+  ```
+
+- Delete note from cache in deleteNote()
+
+  `_notes.removeWhere((note) => note.id == id);`
+
+  ```dart
+  Future<void> delteNote({required int id}) async {
+      // ...
+      if (deltedCount == 0) {
+          throw CouldNotDelteNote();
+      } else {
+          _notes.removeWhere((note) => note.id == id);
+          _notesStreamController.add(_notes);
+      }
+  }
+  ```
+
+- Invalidate cache upon deleteAllNotes()
+
+  `Future<int> deleteAllNotes() async`, delete cache as well
+
+  ```dart
+  Future<int> deleteAllNotes() async {
+      final db = _getDatabaseOrThrow();
+      final numberOfDeletions = await db.delete(noteTable);
+      _notes = [];
+      _notesStreamController.add(_notes);
+      return numberOfDeletions;
+  }
+  ```
+
+- Update cache in getNote({required int id}) (19:54 ~)
+
+  Remove old note with same id and add the new one and update stream
+
+  ```dart
+  Future<DatabaseNote> getNote({required int id}) async {
+  	// ...
+      if (notes.isEmpty) {
+          throw CouldNotFindNote();
+      } else {
+          final note = DatabaseNote.fromRow(notes.first);
+          _notes.removeWhere((note) => note.id == id);
+          _notes.add(note);
+          _notesStreamController.add(_notes);
+          return note;
+      }
+  }
+  ```
+
+- Update the cache in updateNote()
+
+  `Future<DatabaseNote> updateNote`, update _notes and stream
+
+  ```dart
+  Future<DatabaseNote> updateNote(
+      {required DatabaseNote note, required String text}) async {
+      final db = _getDatabaseOrThrow();
+  
+      // make sure note exists
+      await getNote(id: note.id);
+  
+      // update DB
+      final updatesCount = await db.update(noteTable, {
+          textColumn: text,
+          isSyncedWithCloudColumn: 0,
+      });
+  
+      if (updatesCount == 0) {
+          throw CouldNotUpdateNote();
+      } else {
+          final updatedNote = await getNote(id: note.id);
+          _notes.removeWhere((note) => note.id == updatedNote.id);
+          _notes.add(updatedNote);
+          _notesStreamController.add(_notes);
+          return updatedNote;
+      }
+  }
+  ```
+
+- Get or create user in notes_service.dart
+
+  `Future<DatabaseUser> getOrCreateUser({required String email}) async`
+
+  ```dart
+  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+      try {
+          final user = await getUser(email: email);
+          return user;
+      } on CouldNotFindUser {
+          final createdUser = await createUser(email: email);
+          return createdUser;
+      }
+  }
+  ```
+
+- next chapter
+
+  Upon logging in , we need to call our getOrCreateUser() function and have the user ready
+
+
+
+
   
 
 
