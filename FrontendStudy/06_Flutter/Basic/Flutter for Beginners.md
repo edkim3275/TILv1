@@ -3337,8 +3337,90 @@ We need a database to store user notes before we use Firebase for storage(17:43:
 - next chapter
 
   we will work on deleting existing notes
-
+  
 ## 33. Deleting Existing Notes in Notes View
+
+- Delete dialog
+
+  Remember that we already have an error dialog? Can we make this generic?
+
+- Let's get rid of our error dialog
+
+  Delete `lib/utilities/show_error_dialog.dart`
+
+- Remove showLogOutDialog
+
+  Remove showLogOutDialog from NotesView since we are going to have a generic one.
+
+- And we use our NotesListView
+
+  Use the new NotesListView in NotesView
+
+  ![image-20230218194844105](https://user-images.githubusercontent.com/77393619/219865004-3553d427-f0f5-4f84-8c0e-9334621d07e4.png)
+
+  `trailing` is a property of list tile that as its name indicates it's going to **allow you to specify a widget that needs to be displayed at the end or the trail of every list tile** and this is where we're going to use an icon button. so to display our little trash can.
+
+  ![image-20230218195139673](https://user-images.githubusercontent.com/77393619/219865005-af1a986d-3bee-40d3-bb04-9c3c785cd39b.png)
+
+  onPressed we need to take care of the displaying of a dialogue.
+
+  ![image-20230218195416632](https://user-images.githubusercontent.com/77393619/219865006-a8d72d97-09df-4705-ade5-722478319884.png)
+
+- Our own generic dialog
+
+  `lib/utilities/dialogs/generic_dialog.dart`
+
+  ![image-20230218195601246](https://user-images.githubusercontent.com/77393619/219865007-0df7d9e6-48ba-4ccc-8a79-36062e6f98a5.png)
+
+  여러가지 dialog를 통합하기위한 dialog.
+
+- Generic error dialog
+
+  `lib/utilities/dialogs/error_dialog.dart`
+
+  - Let's use error dialog everywhere
+
+    We have a few places where we are displaying error dialogs
+
+- And reuse again for log-out dialog
+
+  `lib/utilities/dialogs/logout_dialog.dart`
+
+  ![image-20230218203142454](https://user-images.githubusercontent.com/77393619/219865009-abbbd943-584c-4c93-8ea8-b2d6d06f6e87.png)
+
+  remember on some platforms you're able to dismiss your dialogs without actually responding to any of the options presented in the dialog. in those platforms **you actually need to guard yourself against that case by returning a default value.** in this case, you can say `then` so if we get this value which is an optional bool then we say either return that or just return false.
+
+  - Put the log out dialog to use
+
+    We removed the old code, now we should bring the new one in
+
+- Put NotesListView to use
+
+  Let's bring it to NotesView
+
+  ![image-20230218203912168](https://user-images.githubusercontent.com/77393619/219865012-d9909916-a97e-4e2f-bc41-51e975cfbae1.png)
+
+- 이제 삭제가 가능하다
+
+  ![image-20230218204148290](https://user-images.githubusercontent.com/77393619/219865014-95bbfee5-592b-4fc7-9972-b30d44b159d7.png)
+
+  먼저 휴지통을 클릭하여 삭제를 할 경우
+
+  ![image-20230218204241882](https://user-images.githubusercontent.com/77393619/219865015-4cfb641d-d77b-4e7f-b21b-eaa7740ea061.png)
+
+  and our note_view is getting notified of that information from its StreamBuilder 
+
+  ![image-20230218204340284](https://user-images.githubusercontent.com/77393619/219865016-86736231-1a63-42ca-8924-e4d020e06007.png)
+
+  because remember notes_service(`lib/services/crud/notes_service.dart`) and upon deleteNote it actually removes it from its array of notes and it notifies the stream controller
+
+  ![image-20230218204517512](https://user-images.githubusercontent.com/77393619/219865018-455c653b-146c-4336-b843-b4724b6ca4dc.png)
+
+- next chapter
+
+  We will talk about updating existing notes
+
+  
 
 
 
