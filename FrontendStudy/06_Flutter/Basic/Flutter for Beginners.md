@@ -2795,6 +2795,557 @@ We need a database to store user notes before we use Firebase for storage(17:43:
 - next chapter
 
   Upon logging in , we need to call our getOrCreateUser() function and have the user ready
+  
+## 28. Preparing Notes View to Read All Notes
+
+- We have almost everything in place
+
+  so we can strat reading notes in our UI
+
+- Our AuthUser doesn't have an email
+
+  we need an email field to create the user in our DB
+
+- Email in AuthUser
+
+  Add `final String? email;` to AuthUser
+
+- Read current user's email field in notes_view.dart
+
+  `String get userEmail => AuthService.firebase().currentUser!.email!;`
+
+- open DB
+
+  `void ininState() in notes_view.dart`
+
+  ```dart
+  @override
+  void initState() {
+      _notesService = NoteService();
+      _notesService.open();
+      super.initState();
+  }
+  ```
+
+- close DB
+
+  `void dispose() in notes_view.dart`
+
+  ```dart
+  @override
+  void dispose() {
+      _notesService.close();
+      super.dispose();
+  }
+  ```
+
+- We need the DB to be open
+
+  Before any operation on the DB, it should be open
+
+- Add check in notes_service for db opening
+
+  `Future<void> _ensureDblsOpen() async`
+
+- Use _ensureDbIsOpen()
+
+  Make sure all operations use `_ensureDbIsOpen`
+
+- FutureBuilder and AsyncSnapshot
+
+  `FutureBuilder` subscribes to a future that wil return its value in the future if you're familiar with javascript then you'll know it as promises.
+
+  so FutureBuilder allows you to submit a future and it will allow you to submit a builder meaning that it takes that chunk of code that produces a value as a future.
+
+  FutureBuilder that subscribes itself to the value that is returned by function and then it will tell us about various updates. and these various updates are going to be provided to us as something called an AsyncSnapshot.
+
+  `AsyncSnapshot` is a wrapper as a snapshot around an asynchronous functionality.
+
+- Return FutureBilder in notes_view.dart
+
+  FutureBuilder of _notesService.getOrCreateUser(email: userEmail)
+
+- We need a way of grabbing all notes
+
+  we can achieve this with our stream controller
+
+- Get all notes in notes_service.dart
+
+  `Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream`
+
+- StreamBuilder inside FutureBuilder
+
+  In notes_view.dart, user StreamBuilder to display all notes
+
+- What are .waiting and .done flags? Stream vs. Future
+
+  ![image-20230218142840295](https://user-images.githubusercontent.com/77393619/219849228-8cde9d80-b272-4026-9ba3-e57e94a2c6b4.png)
+
+  both a stream builder and a future builder work with something called an async snapshot.
+
+  ![image-20230218142939478](https://user-images.githubusercontent.com/77393619/219849229-b9971d72-7cd9-493d-a62f-a3f93f1a3e91.png)
+
+  if you're waiting for a future or a stream then you're gonna get `waiting` flag. and it `done` is gonna happen for your a future that has completed its task. but a stream usually it just keeps living so you can't like hook into or you shouldn't hook into the done event for a stream but you should actually hook into your waiting connection state.
+
+  connectionstate for a future and a connection state are waiting for the stream.
+
+- NotesService should be a singleton
+
+  what is a singleton and why do we need it now?
+
+  instance를 여러번 만들어질 수 있지만 App내에서 **단 한번만** 사용되어야하는 instance도 존재한다. 이 경우 재생성되지않도록 코드를 작성해주어야하는데 이러한 방법을 싱글톤패턴이라고 한다.
+
+  **a pattern used in software development where you create a service for instance or a class instance where that class instance is only one inside the entire application.** for instance, note service should only exist as one copy in the entire application. it shouldn't be like made new copies of this note service over and over again. that's what a **singleton** is and what we're going to do with our note service.
+
+- Make NotesService a singleton
+
+  `static final NotesService _shared = NotesService._sharedInstance();`
+
+  ```dart
+  // create a private constructor
+  static final NoteService _shared = NoteService._sharedInstance();
+  NoteService._sharedInstance();
+  factory NoteService() => _shared;
+  ```
+
+- next chapter
+
+  we are done with the basics of the notes_view but we have no data.
+
+## 29. Preparing to Create New Notes
+
+- Change title of notes_view.dart
+
+  Let's change title to "Your Notes"
+
+  ![image-20230218145018474](https://user-images.githubusercontent.com/77393619/219849232-62ee216c-9a54-4234-9a5c-95935d6f20f3.png)
+
+- Adding a `+` button to our menu
+
+  We can either add + to menu or next to menu
+
+- Adding is an important action
+
+  The + button will sit next to our menu, and not in it.
+
+  중요한 작업이기 때문에 한번에 제 역할을 할 수 있도록 ... 메뉴 옆에 위치시키도록하자. 
+
+  - Create a new file for our view
+
+    `lib/views/notes/new_note_view.dart`
+
+  - Move NotesView
+
+    Move `note_view` under our new folder as well
+
+    ![image-20230218145509226](https://user-images.githubusercontent.com/77393619/219849233-bd966965-ea9d-401a-b04d-77101c166b80.png)
+
+  - Our tests are broken
+
+    We've broken the test since we introduced email into AuthUser, let's fix that.
+
+    ```dart
+    // auth_user.dart
+    @immutable
+    class AuthUser {
+      final String? email;
+      final bool isEmailVerified;
+      const AuthUser({
+        required this.email,
+        required this.isEmailVerified,
+      });
+    
+      factory AuthUser.fromFirebase(User user) => AuthUser(
+            email: user.email,
+            isEmailVerified: user.emailVerified,
+          );
+    }
+    ```
+
+    Add email to our tests and run `flutter test test/auth_test.dart` to make sure they still work.
+
+    ![image-20230218145849291](https://user-images.githubusercontent.com/77393619/219849234-61ced949-dc46-4599-9041-f5da0ba54cb4.png)
+
+    ![image-20230218145923675](https://user-images.githubusercontent.com/77393619/219849235-1e50a0ec-f9a8-4677-9508-119c25f26301.png)
+
+  - Add a new route for NewNoteView
+
+    In `main.dart` routes, add newNoteRoute: (context) => const NewNoteView(), and don't forget to import
+
+    ```dart
+    // routes.dart
+    const newNoteRoute = '/notes/new-note';
+    ```
+
+    ```dart
+    // main.dart
+    void main() {
+        WidgetsFlutterBinding.ensureInitialized();
+        runApp(MaterialApp(
+            title: 'MyApp',
+            home: HomePage(),
+            routes: {
+    			// ...
+                newNoteRoute: (context) => const NewNoteView(),
+            },
+        ));
+    }
+    ```
+
+    ```dart
+    // new_note_view.dart
+    import 'package:flutter/material.dart';
+    import 'package:flutter/src/widgets/container.dart';
+    import 'package:flutter/src/widgets/framework.dart';
+    
+    class NewNoteView extends StatefulWidget {
+      const NewNoteView({super.key});
+    
+      @override
+      State<NewNoteView> createState() => _NewNoteViewState();
+    }
+    
+    class _NewNoteViewState extends State<NewNoteView> {
+      @override
+      Widget build(BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('New Note'),
+          ),
+          body: const Text('Write your new note here...'),
+        );
+      }
+    }
+    ```
+
+  - Showing our new widget
+
+    In notes_view.dart, onPressed of icon button show new_note_view
+
+    ```dart
+    IconButton(
+        onPressed: () {
+            Navigator.of(context).pushNamed(newNoteRoute);
+        },
+        icon: const Icon(Icons.add)),
+    ```
+
+- next chapter
+
+  we have the view now, let's create the logic inside it.
+
+## 31. Creating New Notes
+
+- 21:00:18
+
+- what we gonna do
+
+  create an actual note and modify its text and then be able to go back to the main user interface
+
+- Let's first fix our notes_view.dart
+
+  We have to make sure notes_view listens for `ConnectionState.active` as well as  `.waiting`. now we're only listening for the connection state `waiting`. 
+
+  ![image-20230218151439347](https://user-images.githubusercontent.com/77393619/219849236-cd880c14-98e3-41c0-94fe-23462fb5fac0.png)
+
+  if you look at our stream, stream of all notes can either be empty in the beginning or it could contain some notes. let's go with the stream being empty. when the stream is empty meaning that the user hasn't created any notes yet that have been populated in a note service then the connection state of that stream will be **waiting** because dart is now waiting for that stream to return the first value.
+
+  ```dart
+  // notes_view.dart
+  StreamBuilder(
+      stream: _notesService.allNotes,
+      builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+              case ConnectionState.active:
+                  return const Text('Waiting for all notes...');
+              default:
+                  return const CircularProgressIndicator();
+          }
+      });
+  ```
+
+  as soon as the stream actually returns one value then its connection state is gonna be **active** and what we've done is just we waited for waiting state but as soon as it goes to active then we're showing a circular progress indicator and that's not the right logic. so we need to fix that.
+
+  - Keep hold of our current note in new_note_view.dart
+
+    `DatabaseNote? _note;`
+
+    여기서 실제 note를 생성하고 DB에 저장하는 로직을 작성할 건데 로직작성중 저장(Ctrl + s)를 하게되면 hot reload가 되면서 build function을 재실행하기 때문에 매저장시마다 note를 생성하게되므로 이를 막아줘야한다.
+
+    what we're going to do in this new note view upon coming to the screen we are **actually going to create a new note for you.** and keep hold of that new note
+
+    the goal for our new_note_view here is to use future builder inside the body of the function. we're going to say as soon as this new note view state has been created then it also needs to crate a new note in the database.
+
+  - Keep reference to NoteService
+
+    `late final NotesService _notesService;`
+
+    what we also need is to keep hold of our note service 
+
+    ```dart
+    class _NewNoteViewState extends State<NewNoteView> {
+      DatabaseNote? _note;
+      late final NoteService _noteService;
+      
+      @override
+      Widget build(BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('New Note'),
+          ),
+          body: const Text('Write your new note here...'),
+        );
+      }
+    }
+    ```
+
+    we need a text editing controller to keep track of the text changes.
+
+  - We also need to track text changes
+
+    `late final TextEditingController _textController;`
+
+  - Let's create a new note
+
+    `Future<DatabaseNote> createNewNote() async {}`
+
+    첫번째로 해야할 것은 have we created this note before inside the `_note` variable에 대한 확인이다. if we have created this note before then we don't have to create it again. we just return. but if we haven't created it then we go to the note service and say create the note and then get that note back to us.
+
+    ```dart
+    Future<DatabaseNote> createNewNote() async {
+        final existingNote = _note;
+        // already have a note
+        if (existingNote != null) {
+            return existingNote;
+        }
+        final currentUser = AuthService.firebase().currentUser!;
+        final email = currentUser.email!;
+        final owner = await _noteService.getUser(email: email);
+        return _noteService.createNote(owner: owner);
+    }
+    ```
+
+  - Upon disposal, we need to delete the note if text is empty
+
+    `code => void _deleteNoteIfTextIsEmpty() {}`
+
+    when this view is disposed of meaning that for instance the user presses the back button on this view, we need to ensure that the current note in the database gets deleted if there is no text entered for that note.
+
+    ```dart
+    void _deleteNoteIfTextIsEmpty() {
+        final note = _note;
+        if (_textController.text.isEmpty && note != null) {
+            _noteService.deleteNote(id: note.id);
+        }
+    }
+    ```
+
+  - And also save the note if text is not empty
+
+    `void _saveNoteIfTextNotEmpty() async {}`
+
+    ```dart
+    void _saveNoteIfTextNotEmpty() async {
+        final note = _note;
+        final text = _textController.text;
+        if (note != null && text.isNotEmpty) {
+            await _noteService.updateNote(
+                note: note,
+                text: text,
+            );
+        }
+    }
+    ```
+
+  - Take care of our view's disposal
+
+    `void dispose() {}`
+
+    now we have to put these functions in use.
+
+    ```dart
+    @override
+    void dispose() {
+        _deleteNoteIfTextIsEmpty();
+        _saveNoteIfTextNotEmpty();
+        _textController.dispose();
+        super.dispose();
+    }
+    ```
+
+  - Let's take care of the init function
+
+    `void intiState() {}`
+
+    ```dart
+    @override
+    void initState() {
+        _noteService = NoteService();
+        _textController = TextEditingController();
+        super.initState();
+    }
+    ```
+
+  - Update our current note upon text changes
+
+    `void _textControllerListener() async {}`
+
+    ```dart
+    void _textControllerListener() async {
+        final note = _note;
+        if (note == null) {
+            return;
+        }
+        final text = _textController.text;
+        await _noteService.updateNote(
+            note: note,
+            text: text,
+        );
+    }
+    ```
+
+  - Let's hook our text field changes to the listner
+
+    `void _setupTextControllerListener() {}`
+
+    we also need to have a function that first removes this listener from our text editing controller if it has already been added and then it adds it again.
+
+    ```dart
+    void _setupTextControllerListener() {
+        _textController.removeListener(_textControllerListener);
+        _textController.addListener(_textControllerListener);
+    }
+    ```
+
+- Let's program the main UI of new_note_view.dart
+
+  We need a simple text field on the screen
+
+  ```dart
+  body: FutureBuilder(
+      future: createNewNote(),
+      builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                  _note = snapshot.data as DatabaseNote;
+                  _setupTextControllerListener();
+                  return TextField(
+                      controller: _textController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                  );
+              default:
+                  return const CircularProgressIndicator();
+          }
+      },
+  ),
+  ```
+
+- next chapter
+
+  we have new notes, we now need to display them on notes_view
+
+## 32. Displaying Notes in Notes View
+
+- 21:35:45
+
+- Our notes are not populated in the stream controller
+
+  In notes_service.dart, our broadcast controller doesn't get populated with default values
+
+  ![image-20230218162121471](https://user-images.githubusercontent.com/77393619/219849237-52cf901a-4a10-421d-9d82-04aa36478090.png)
+
+  noteservice parenthesis then they're actually not creating any instance of noteservice but they're going through this factory initializer which in turn calls this `_shared` static final which in turn calls this internal or private constructor. that means we've created a singleton. **so creating a new noteService over and over again is not gonna create a new instance. it's just gonna get the same shared instance.**
+
+  ![image-20230218162558715](https://user-images.githubusercontent.com/77393619/219849238-acc29eb2-5934-44b6-93a0-38c0e1fc3ce0.png)
+
+  and then whoever then starts talk reading or allNotes here properly allNotes is delegating its responsibility to the notesStreamController or stream. 
+
+  ![image-20230218162656228](https://user-images.githubusercontent.com/77393619/219849239-e56c4bfe-980e-4c34-b3ab-e15768c43664.png)
+
+  however our `notesStreamController` is a broadcast stream controller. and what that means is that a stream controller that doesn't really hold on to its current value for new listeners so let's say you have a stream controller that is sitting here and you start listening to events to that stream controller from one place and then an event comes into the stream controller and stream controller says oh I have one listener right here I'm gonna delegate this information to that's listener.
+
+  however after the propagation of this event into the stream controller the stream controller is not going hold on to this value when a new listener comes in from another side so any new listener to your broadcast stream controller is not gonna be informed of the current information which is populated in that stream controller.
+
+  - Late final variable(21:41:00)
+
+    Make _noteStreamController a late final value
+
+    we need to remedy that and the way to do that is just to move the initialization of note stream controller to our
+
+    ![image-20230218163412256](https://user-images.githubusercontent.com/77393619/219849242-1177cd1a-50c8-4267-a648-966e5d561cc8.png)
+
+    to
+
+    ```dart
+    late final StreamController<List<DatabaseNote>> _notesStreamController;
+    ```
+
+    now it is our responsibility to ensure that this noteStreamController is actually initialized upon constructor upon constructing a new instance of our noteService.
+
+  - Populate notes in our stream controller
+
+    Move creation of _noteStreamController into the _sharedInstance() function and add _notes to the controller
+
+    ![image-20230218163738798](https://user-images.githubusercontent.com/77393619/219849243-0075e720-9120-42a1-a413-2b04e6f6c0ab.png)
+
+    this ensures anyone who starts listening to our to this property allNotes which in turn uses the notesStreamController if it's a new subscriber then it's gonna the onListen callback is gonna get called and then we're gonna populate our stream controller a stream with those notes that we've already read from the database.
+
+- We shouldn't close the DB upon hot reload
+
+  After opening DB, we shouldn't close it otherwise upon every reload it gets closed.
+
+  - No more dispose for now
+
+    Remove dispose() in notes_view.dart
+
+- Let's build our tiles
+
+  We can use ListView.builder for this
+
+  what we need to do is to make sure that we have a list that we can grab the data that comes from our stream builder and now we're just saying waiting for all notes
+
+  ![image-20230218164351199](https://user-images.githubusercontent.com/77393619/219849244-349c35a6-a06a-43e9-b77f-ff7b4a559c1d.png)
+
+  we're gonna change that and instead we're actually gonna start using something called a ListView.
+
+  `ListView` in flutter is an amazing widget. it has some great funtionality that it exposese using is builder. first how many items it has to render on the screen `itemCount`. and for itemCount we need to actually listen for snapshots data.
+
+  StreamBuilder가 현재 `allNotes`를 listening하고있고, 말인즉슨 snapshot의 정보는 allNotes에서 오는 정보라는 것. 따라서 snapshot에 data가 있는지 먼저 확인후 반환을 한다.
+
+  ![image-20230218165255562](https://user-images.githubusercontent.com/77393619/219849247-6339441b-14aa-43f3-8195-726c2279aaa5.png)
+
+  - Let's build our tiles
+
+    We can use ListView.builder for this
+
+    ![image-20230218165727235](https://user-images.githubusercontent.com/77393619/219849249-20c74f17-722c-4cd2-8b96-092552bff9cf.png)
+
+    `note.text` : allNotes 배열내부의 하나를 가져와서 해당 text data를 가져오기위함
+
+    `maxLines` : 최대 text line을 설정. `null`로 지정하면 계속 줄이 늘어날 수 있다.
+
+    `softWrap : true`, `overflow: TextOverflow.ellipsis` : content가 너무 길어서 우선 생략을 했는데 뒤에 내용이 더 있다는 것을 사용자에게 알려주기 위해서(UX향상) 설정하는 property
+
+    ![image-20230218170002053](https://user-images.githubusercontent.com/77393619/219849250-996c4220-62c8-4f90-a278-ded3539541bc.png)
+
+- Let's demo
+
+  We can now see that all notes are displayed on the screen
+
+- next chapter
+
+  we will work on deleting existing notes
+
+## 33. Deleting Existing Notes in Notes View
+
+
+
+
+
+
+
 
 
 
